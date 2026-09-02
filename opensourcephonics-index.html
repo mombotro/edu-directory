@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Open Source Phonics — Site Index</title>
+<style>
+  :root {
+    --bg: #f2f6f5;
+    --card: #ffffff;
+    --ink: #202826;
+    --muted: #6b7674;
+    --accent: #1f6f78;
+    --accent-soft: #dcefef;
+    --border: #dde6e4;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  header { padding: 2rem 1.5rem 1rem; text-align: center; }
+  header h1 { margin: 0 0 .25rem; font-size: 1.8rem; }
+  header p { margin: 0; color: var(--muted); font-size: .95rem; }
+  .search-box { max-width: 480px; margin: 1rem auto 0; padding: 0 1.5rem; }
+  #filter {
+    width: 100%; padding: .6rem .9rem; font-size: 1rem;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--card); color: var(--ink);
+  }
+  main {
+    max-width: 1100px; margin: 0 auto; padding: 1.5rem;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;
+  }
+  section.card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem 1.2rem 1.2rem;
+  }
+  section.card h2 {
+    font-size: 1.05rem; margin: 0 0 .3rem; color: var(--accent);
+    border-bottom: 1px solid var(--accent-soft); padding-bottom: .4rem;
+  }
+  section.card .sub { color: var(--muted); font-size: .8rem; margin: 0 0 .5rem; }
+  ul { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 1rem; }
+  section.wide ul { columns: 3; }
+  li a {
+    display: block; padding: .25rem .3rem; color: var(--ink);
+    text-decoration: none; border-radius: 5px; font-size: .88rem;
+    break-inside: avoid;
+  }
+  li a:hover { background: var(--accent-soft); color: var(--accent); }
+  li[hidden] { display: none; }
+  section.card[hidden] { display: none; }
+  .full-pdf {
+    margin-top: .8rem; padding-top: .6rem; border-top: 1px dashed var(--border);
+  }
+  footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 2rem 1rem 3rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Open Source Phonics — Site Index</h1>
+  <p>Free 120-lesson phonics program + decodable stories</p>
+</header>
+
+<div class="search-box">
+  <input id="filter" type="text" placeholder="Filter (e.g. silent e, lesson 40, soft c)...">
+</div>
+
+<main id="main">
+
+<section class="card">
+<h2>Start Here</h2>
+<ul style="columns:1;">
+<li><a href="https://www.opensourcephonics.org/who-we-are/" target="_blank">Who We Are</a></li>
+<li><a href="https://www.opensourcephonics.org/why-open-source-phonics/" target="_blank">Why Open Source Phonics</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/09/Tutoring-Tips-for-the-Lessons-8-31.pdf" target="_blank">Tutoring Tips for the Lessons (PDF)</a></li>
+<li><a href="https://www.opensourcephonics.org/contact/" target="_blank">Contact</a></li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Decodable Story Groups</h2>
+<p class="sub">Read aloud alongside matching lesson range</p>
+<ul style="columns:1;">
+<li><a href="https://www.opensourcephonics.org/short-syllable-stories/" target="_blank">Group 1 — Short-Syllable Stories</a></li>
+<li><a href="https://www.opensourcephonics.org/silent-e-stories/" target="_blank">Group 2 — Silent-E Stories</a></li>
+<li><a href="https://www.opensourcephonics.org/open-and-closed-stories/" target="_blank">Group 3 — Open-and-Closed-Syllable Stories</a></li>
+<li><a href="https://www.opensourcephonics.org/first-vowel-team-stories/" target="_blank">Group 4 — First Vowel Teams Stories</a></li>
+<li><a href="https://www.opensourcephonics.org/r-controlled-stories/" target="_blank">Group 5 — R-Controlled Vowel Stories</a></li>
+<li><a href="https://www.opensourcephonics.org/snow-cow-cloud-stories/" target="_blank">Group 6 — Snow, Cow &amp; Cloud Stories</a></li>
+<li><a href="https://www.opensourcephonics.org/consonant-le-stories/" target="_blank">Group 7 — Consonant-le Stories</a></li>
+<li><a href="https://www.opensourcephonics.org/y-as-a-vowel-stories/" target="_blank">Group 8 — "Y" as a Vowel Stories</a></li>
+<li><a href="https://www.opensourcephonics.org/soft-g-and-c-stories/" target="_blank">Group 9 — Soft "c" &amp; "g" Stories</a></li>
+<li><a href="https://www.opensourcephonics.org/advanced-phonics-stories/" target="_blank">Group 10 — Advanced Phonics Stories</a></li>
+</ul>
+</section>
+
+<section class="card wide" style="grid-column: 1 / -1;">
+<h2>120 Lessons (PDFs)</h2>
+<p class="sub">In order — each is a printable lesson sheet</p>
+<div class="full-pdf">
+<a href="https://www.opensourcephonics.org/wp-content/uploads/2021/09/all-1-120-lessons-8-31.pdf" target="_blank"><strong>→ All 120 Lessons in one PDF</strong></a>
+</div>
+<ul>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/amt-Lesson-1.pdf" target="_blank">1. a, m, t</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/f-LESSON-2.pdf" target="_blank">2. f</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/b-Lesson-3.pdf" target="_blank">3. b</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/h-lesson-4.pdf" target="_blank">4. h</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/i-Lesson-5.pdf" target="_blank">5. i</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/p-lesson-6.pdf" target="_blank">6. p</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/c-lesson-7.pdf" target="_blank">7. c</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/n-LESSON-8.pdf" target="_blank">8. n</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/l-LESSON-9.pdf" target="_blank">9. l</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/j-LESSON-10.pdf" target="_blank">10. j</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/s-LESSON-11.pdf" target="_blank">11. s</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/d-LESSON-12.pdf" target="_blank">12. d</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/g-LESSON-13.pdf" target="_blank">13. g</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/o-LESSON-14.pdf" target="_blank">14. o</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/v-LESSON-15.pdf" target="_blank">15. v</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/r-LESSON-16.pdf" target="_blank">16. r</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/e-LESSON-17.pdf" target="_blank">17. e</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/c-ckLESSON-18.pdf" target="_blank">18. k, ck</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/w-LESSON-19.pdf" target="_blank">19. w</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/LESSON-20-u.pdf" target="_blank">20. u</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/qu-LESSON-21.pdf" target="_blank">21. qu</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/x-LESSON-22.pdf" target="_blank">22. x</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/y-LESSON-23.pdf" target="_blank">23. y</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/z-LESSON-24.pdf" target="_blank">24. z</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/second-s-LESSON-25.pdf" target="_blank">25. second sound of s</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/Floss-LESSON-26.pdf" target="_blank">26. FLOSS rule</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/th-LESSON-27.pdf" target="_blank">27. th</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ch-LESSON-28.pdf" target="_blank">28. ch</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/sh-LESSON-29.pdf" target="_blank">29. sh</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/wh-LESSON-30.pdf" target="_blank">30. wh</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ang-LESSON-31.pdf" target="_blank">31. ang, ing, ong, ung</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ank-LESSON-32.pdf" target="_blank">32. ank, ink, onk, unk</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/bl-cl-LESSON-33.pdf" target="_blank">33. blends bl, cl, gr</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/sc-st-LESSON-34.pdf" target="_blank">34. blends sc, sn, tw</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/spl-LESSON-35.pdf" target="_blank">35. blends spl, scr</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/nd-LESSON-36.pdf" target="_blank">36. final blends nd, nt, lk</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/st-LESSON-37.pdf" target="_blank">37. final blends st, pt, mp</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ed-LESSON-38.pdf" target="_blank">38. "ed" ending</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ing-LESSON-39.pdf" target="_blank">39. "ing" ending</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/es-Lesson-40.pdf" target="_blank">40. "es" ending</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/compound-LESSON-41.pdf" target="_blank">41. compound words</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/2-syllable-LESSON-42.pdf" target="_blank">42. 2-syllable words, schwa</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/LESSON-43-two-syll.pdf" target="_blank">43. syllable division</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/old-LESSON-44.pdf" target="_blank">44. old, ost, olt</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ild-LESSON-45.pdf" target="_blank">45. ind, ild</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/silent-b-LESSON-46.pdf" target="_blank">46. silent b</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/open-syll-LESSON-47.pdf" target="_blank">47. -all, -oll, -ull</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/bake-LESSON-48.pdf" target="_blank">48. open syllables</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/LESSON-49-bike.pdf" target="_blank">49. a_e</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/poke-LESSON-50.pdf" target="_blank">50. i_e</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/eve-LESSON-51.pdf" target="_blank">51. o_e</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/tube-LESSON-52.pdf" target="_blank">52. e_e</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/silent-e-2-syll-Lesson-53.pdf" target="_blank">53. u_e</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/spelling-with-v-Lesson-54.pdf" target="_blank">54. prefixes/suffixes</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/open-closed-LESSON-55.pdf" target="_blank">55. spelling -ve, -se</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/spelling-en-est-LESSON-56.pdf" target="_blank">56. open/closed syllables</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/notes-split-vowel-Lesson-57.pdf" target="_blank">57. a as "uh"</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ph-LESSON-58.pdf" target="_blank">58. spelling -ing, -en, -est</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/kn-LESSON-59.pdf" target="_blank">59. split vowel teams</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/wr-LESSON-60.pdf" target="_blank">60. ph</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ful-ness-Lesson-61.pdf" target="_blank">61. kn</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/un-dis-LESSON-62.pdf" target="_blank">62. wr</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/up-in-LESSON-63.pdf" target="_blank">63. suffixes</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ai-LESSON-64.pdf" target="_blank">64. prefixes</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ay-LESSON-65.pdf" target="_blank">65. more prefixes/suffixes</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/tea-LESSON-66.pdf" target="_blank">66. ai</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/LESSON-67-tree.pdf" target="_blank">67. ay</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/night-LESSON-68.pdf" target="_blank">68. ea</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/boat-LESSON-69.pdf" target="_blank">69. ee</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/toe-LESSON-70.pdf" target="_blank">70. igh</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ue-LESSON-71.pdf" target="_blank">71. oa</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/09/LESSON-72-8-31-1.pdf" target="_blank">72. oe</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/er-ir-ur-LESSON-73.pdf" target="_blank">73. ue</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/suffix-er-LESSON-74.pdf" target="_blank">74. multi-syllable vowel teams</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ar-LESSON-75.pdf" target="_blank">75. r-controlled er, ir, ur</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/or-LESSON-76.pdf" target="_blank">76. er as suffix</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/r-control-prefixes-LESSON-77.pdf" target="_blank">77. r-controlled ar</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/multi-syll-r-control-LESSON-78.pdf" target="_blank">78. r-controlled or</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/cow-LESSON-79.pdf" target="_blank">79. r-controlled prefixes/suffixes</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/snow-LESSON-80.pdf" target="_blank">80. multi-syllable r-controlled</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/LESSON-81.pdf" target="_blank">81. ow (cow)</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/contractions-LESSON-82.pdf" target="_blank">82. ow (snow)</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ize-ment-LESSON-83.pdf" target="_blank">83. ou</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/consonant-le-LESSON-84.pdf" target="_blank">84. contractions</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ible-able-LESSON-85.pdf" target="_blank">85. prefixes/suffixes</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/baby-LESSON-86.pdf" target="_blank">86. consonant-le syllables</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/suffixes-with-y-LESSON-87.pdf" target="_blank">87. suffixes -ible, -able</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/zoo-LESSON-88.pdf" target="_blank">88. y (baby)</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/book-LESSON-89.pdf" target="_blank">89. suffixes with y</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/cry-LESSON-90.pdf" target="_blank">90. oo (zoo)</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/gym-LESSON-91.pdf" target="_blank">91. oo (book)</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/Spelling-with-Y-Lesson-92.pdf" target="_blank">92. y (cry)</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/medium-LESSON-93.pdf" target="_blank">93. y (gym)</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ice-LESSON-94.pdf" target="_blank">94. spelling endings with y</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/soft-c-suffix-LESSON-95.pdf" target="_blank">95. medial i</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/soft-g-LESSON-96.pdf" target="_blank">96. soft c</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/gu-LESSON-97.pdf" target="_blank">97. soft c suffixes</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ge-dge-LESSON-98.pdf" target="_blank">98. soft g</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ch-tch-LESSON-99.pdf" target="_blank">99. spelling with gu</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/aw-LESSON-100.pdf" target="_blank">100. spelling -ge, -dge</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/au-LESSON-101.pdf" target="_blank">101. spelling -ch, -tch</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/walk-LESSON-102.pdf" target="_blank">102. aw</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/warm-LESSON-103.pdf" target="_blank">103. au</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/ive-ate-LESSON-104.pdf" target="_blank">104. a after w, qu</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/cial-LESSON-105.pdf" target="_blank">105. wor, war</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/panda-LESSON-106.pdf" target="_blank">106. suffixes</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/boil-LESSON-107.pdf" target="_blank">107. -cial, -tial, -cian</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/boy-LESSON-108.pdf" target="_blank">108. oi</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/grew-LESSON-109.pdf" target="_blank">109. oy</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/LESSON-110-ie.pdf" target="_blank">110. ew</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/youth-LESSON-111.pdf" target="_blank">111. ie</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/chorus-LESSON-112.pdf" target="_blank">112. ou, ui</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/chef-LESSON-113.pdf" target="_blank">113. ch (school)</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/cherry-LESSON-114.pdf" target="_blank">114. ch (chef)</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/head-LESSON-115.pdf" target="_blank">115. err, er</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/great-LESSON-116.pdf" target="_blank">116. ea (head)</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2024/10/LESSON-117-1.pdf" target="_blank">117. ea, eigh</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/LESSON-118-ceiling.pdf" target="_blank">118. ought, aught</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2024/10/LESSON-119-2.pdf" target="_blank">119. ei</a></li>
+<li><a href="https://www.opensourcephonics.org/wp-content/uploads/2021/08/tion-LESSON-120.pdf" target="_blank">120. tion, sion</a></li>
+</ul>
+</section>
+
+</main>
+
+<footer>
+  Personal index built from opensourcephonics.org navigation. Not affiliated with the site.
+</footer>
+
+<script>
+document.getElementById('filter').addEventListener('input', function(e) {
+  var q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('main .card').forEach(function(card) {
+    var anyVisible = false;
+    card.querySelectorAll('li').forEach(function(li) {
+      var match = li.textContent.toLowerCase().indexOf(q) !== -1;
+      li.hidden = !match;
+      if (match) anyVisible = true;
+    });
+    var headingMatch = card.querySelector('h2').textContent.toLowerCase().indexOf(q) !== -1;
+    card.hidden = !(anyVisible || headingMatch);
+    if (headingMatch) {
+      card.querySelectorAll('li').forEach(function(li) { li.hidden = false; });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
