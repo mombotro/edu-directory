@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>OER Commons — Site Index</title>
+<style>
+  :root {
+    --bg: #f3f1ec;
+    --card: #ffffff;
+    --ink: #24221c;
+    --muted: #726d5f;
+    --accent: #8a5a2b;
+    --accent-soft: #f0e6d4;
+    --border: #e5ded0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  header { padding: 2rem 1.5rem 1rem; text-align: center; }
+  header h1 { margin: 0 0 .25rem; font-size: 1.8rem; }
+  header p { margin: 0; color: var(--muted); font-size: .95rem; }
+  .search-box { max-width: 480px; margin: 1rem auto 0; padding: 0 1.5rem; }
+  #filter {
+    width: 100%; padding: .6rem .9rem; font-size: 1rem;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--card); color: var(--ink);
+  }
+  main {
+    max-width: 1100px; margin: 0 auto; padding: 1.5rem;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;
+  }
+  section.card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem 1.2rem 1.2rem;
+  }
+  section.card h2 {
+    font-size: 1.05rem; margin: 0 0 .3rem; color: var(--accent);
+    border-bottom: 1px solid var(--accent-soft); padding-bottom: .4rem;
+  }
+  section.card .sub { color: var(--muted); font-size: .8rem; margin: 0 0 .5rem; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li a {
+    display: block; padding: .3rem .3rem; color: var(--ink);
+    text-decoration: none; border-radius: 5px; font-size: .92rem;
+  }
+  li a:hover { background: var(--accent-soft); color: var(--accent); }
+  li[hidden] { display: none; }
+  section.card[hidden] { display: none; }
+  footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 2rem 1rem 3rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>OER Commons — Site Index</h1>
+  <p>Free digital library of open educational resources, curated by ISKME</p>
+</header>
+
+<div class="search-box">
+  <input id="filter" type="text" placeholder="Filter (e.g. history, high school, hubs)...">
+</div>
+
+<main id="main">
+
+<section class="card">
+<h2>Start Here</h2>
+<ul>
+<li><a href="https://oercommons.org/about" target="_blank">About OER Commons</a></li>
+<li><a href="https://oercommons.org/oer-101" target="_blank">OER 101 (what is open content?)</a></li>
+<li><a href="https://oercommons.org/help-center" target="_blank">Help Center</a></li>
+<li><a href="https://oercommons.org/advanced-search" target="_blank">Advanced Search</a></li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Browse</h2>
+<ul>
+<li><a href="https://oercommons.org/oer" target="_blank">All Resources</a></li>
+<li><a href="https://oercommons.org/curated-collections" target="_blank">Curated Collections</a></li>
+<li><a href="https://oercommons.org/oer/providers" target="_blank">Providers</a></li>
+<li><a href="https://oercommons.org/hubs/" target="_blank">All Hubs</a></li>
+<li><a href="https://oercommons.org/groups/" target="_blank">All Groups</a></li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Featured Hubs</h2>
+<ul>
+<li><a href="https://www.oercommons.org/hubs/common-core" target="_blank">Common Core Hub</a></li>
+<li><a href="https://www.oercommons.org/hubs/stem-literacy" target="_blank">STEM Literacy Hub</a></li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Browse by Subject</h2>
+<ul>
+<li><a href="https://oercommons.org/search?f.general_subject=applied-science" target="_blank">Applied Science</a></li>
+<li><a href="https://oercommons.org/search?f.general_subject=arts-and-humanities" target="_blank">Arts and Humanities</a></li>
+<li><a href="https://oercommons.org/search?f.general_subject=business-and-communication" target="_blank">Business and Communication</a></li>
+<li><a href="https://oercommons.org/search?f.general_subject=career-and-technical-education" target="_blank">Career and Technical Education</a></li>
+<li><a href="https://oercommons.org/search?f.general_subject=education" target="_blank">Education</a></li>
+<li><a href="https://oercommons.org/search?f.general_subject=english-language-arts" target="_blank">English Language Arts</a></li>
+<li><a href="https://oercommons.org/search?f.general_subject=history" target="_blank">History</a></li>
+<li><a href="https://oercommons.org/search?f.general_subject=law" target="_blank">Law</a></li>
+<li><a href="https://oercommons.org/search?f.general_subject=life-science" target="_blank">Life Science</a></li>
+<li><a href="https://oercommons.org/search?f.general_subject=mathematics" target="_blank">Mathematics</a></li>
+<li><a href="https://oercommons.org/search?f.general_subject=physical-science" target="_blank">Physical Science</a></li>
+<li><a href="https://oercommons.org/search?f.general_subject=research-and-scholarship" target="_blank">Research and Scholarship</a></li>
+<li><a href="https://oercommons.org/search?f.general_subject=social-science" target="_blank">Social Science</a></li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Browse by Education Level</h2>
+<ul>
+<li><a href="https://oercommons.org/search?f.sublevel=preschool" target="_blank">Preschool</a></li>
+<li><a href="https://oercommons.org/search?f.sublevel=lower-primary" target="_blank">Lower Primary</a></li>
+<li><a href="https://oercommons.org/search?f.sublevel=upper-primary" target="_blank">Upper Primary</a></li>
+<li><a href="https://oercommons.org/search?f.sublevel=middle-school" target="_blank">Middle School</a></li>
+<li><a href="https://oercommons.org/search?f.sublevel=high-school" target="_blank">High School</a></li>
+<li><a href="https://oercommons.org/search?f.sublevel=community-college-lower-division" target="_blank">Community College / Lower Division</a></li>
+<li><a href="https://oercommons.org/search?f.sublevel=college-upper-division" target="_blank">College / Upper Division</a></li>
+<li><a href="https://oercommons.org/search?f.sublevel=graduate-professional" target="_blank">Graduate / Professional</a></li>
+<li><a href="https://oercommons.org/search?f.sublevel=career-technical" target="_blank">Career / Technical</a></li>
+<li><a href="https://oercommons.org/search?f.sublevel=adult-education" target="_blank">Adult Education</a></li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Account &amp; Contribute</h2>
+<ul>
+<li><a href="https://oercommons.org/login" target="_blank">Sign In / Register</a></li>
+<li><a href="https://oercommons.org/my" target="_blank">My Items</a></li>
+<li><a href="https://oercommons.org/authoring-overview" target="_blank">Create OER (Open Author)</a></li>
+<li><a href="https://oercommons.org/courses/add" target="_blank">Submit a Resource</a></li>
+</ul>
+</section>
+
+</main>
+
+<footer>
+  Personal index built from oercommons.org navigation. Not affiliated with the site. Subject/level filter URLs were confirmed by testing the site's search form.
+</footer>
+
+<script>
+document.getElementById('filter').addEventListener('input', function(e) {
+  var q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('main .card').forEach(function(card) {
+    var anyVisible = false;
+    card.querySelectorAll('li').forEach(function(li) {
+      var match = li.textContent.toLowerCase().indexOf(q) !== -1;
+      li.hidden = !match;
+      if (match) anyVisible = true;
+    });
+    var headingMatch = card.querySelector('h2').textContent.toLowerCase().indexOf(q) !== -1;
+    card.hidden = !(anyVisible || headingMatch);
+    if (headingMatch) {
+      card.querySelectorAll('li').forEach(function(li) { li.hidden = false; });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
