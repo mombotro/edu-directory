@@ -23,177 +23,238 @@
   }
   header { padding: 2.2rem 1.5rem 1rem; text-align: center; }
   header h1 { margin: 0 0 .3rem; font-size: 2rem; }
-  header p { margin: 0; color: var(--muted); }
+  header p { margin: 0 0 1rem; color: var(--muted); }
+  header .toggle-all {
+    background: none; border: 1px solid var(--border); color: var(--accent);
+    padding: .4rem .9rem; border-radius: 7px; font-size: .85rem; cursor: pointer;
+  }
+  header .toggle-all:hover { background: var(--accent-soft); }
   main {
-    max-width: 900px; margin: 0 auto; padding: 1.5rem;
-    display: flex; flex-direction: column; gap: 1.2rem;
+    max-width: 800px; margin: 0 auto; padding: 1rem 1.5rem 2rem;
+    display: flex; flex-direction: column; gap: .7rem;
   }
-  section.site {
+
+  details.group {
     background: var(--card); border: 1px solid var(--border);
-    border-radius: 12px; padding: 1.3rem 1.5rem;
+    border-radius: 12px; overflow: hidden;
   }
-  section.site h2 { margin: 0 0 .3rem; font-size: 1.3rem; }
-  section.site .tagline { color: var(--muted); margin: 0 0 .8rem; font-size: .9rem; }
-  .links { display: flex; flex-wrap: wrap; gap: .6rem; }
-  .links a {
-    display: inline-block; padding: .5rem .9rem;
-    border-radius: 7px; text-decoration: none; font-size: .9rem;
+  details.group > summary {
+    list-style: none; cursor: pointer;
+    padding: .9rem 1.2rem; font-size: 1.15rem; font-weight: 600;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  details.group > summary::-webkit-details-marker { display: none; }
+  details.group > summary::before {
+    content: "▸"; display: inline-block; color: var(--accent);
+    transition: transform .15s ease; font-size: .8em;
+  }
+  details.group[open] > summary::before { transform: rotate(90deg); }
+  details.group > summary:hover { background: var(--accent-soft); }
+  .group-body { padding: .3rem .9rem .9rem; display: flex; flex-direction: column; gap: .5rem; }
+
+  details.site {
+    border: 1px solid var(--border); border-radius: 9px; background: var(--bg);
+  }
+  details.site > summary {
+    list-style: none; cursor: pointer;
+    padding: .6rem .9rem; display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap;
+  }
+  details.site > summary::-webkit-details-marker { display: none; }
+  details.site > summary::before {
+    content: "▸"; display: inline-block; color: var(--muted);
+    transition: transform .15s ease; font-size: .75em; align-self: center;
+  }
+  details.site[open] > summary::before { transform: rotate(90deg); }
+  details.site > summary:hover { background: var(--accent-soft); }
+  .site-name { font-weight: 600; }
+  .site-tagline { color: var(--muted); font-size: .85rem; }
+  .site-links { padding: 0 .9rem .8rem 1.7rem; }
+  .site-links ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+  .site-links a {
+    display: inline-block; padding: .4rem .8rem;
+    border-radius: 7px; text-decoration: none; font-size: .88rem;
     border: 1px solid var(--border);
   }
-  .links a.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .links a.secondary { background: var(--accent-soft); color: var(--accent); }
-  .links a.tertiary { background: transparent; color: var(--ink); }
-  .links a:hover { opacity: .85; }
-  footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 2rem 1rem 3rem; }
+  .site-links a.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .site-links a.secondary { background: var(--accent-soft); color: var(--accent); }
+  .site-links a.tertiary { background: transparent; color: var(--ink); }
+  .site-links a:hover { opacity: .85; }
+
+  footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 1rem 1rem 3rem; }
 </style>
 </head>
 <body>
 
 <header>
   <h1>Homeschool Wiki</h1>
-  <p>Every curriculum site we use, with a local nav directory for each</p>
+  <p>Every site we use, grouped and collapsible</p>
+  <button class="toggle-all" id="toggleAll">Expand all</button>
 </header>
 
-<main>
+<main id="tree">
 
-<section class="site">
-<h2>📐 Math Salamanders</h2>
-<p class="tagline">Printable math worksheets, K–6, by grade and topic</p>
-<div class="links">
-<a class="primary" href="math-salamanders-index.html">Local Directory</a>
-<a class="secondary" href="https://www.math-salamanders.com/" target="_blank">Original Site</a>
-<a class="tertiary" href="https://www.math-salamanders.com/number-line-worksheets.html" target="_blank">Number Line Worksheets</a>
-</div>
-</section>
+<details class="group">
+<summary>📚 Curriculum &amp; Coursework</summary>
+<div class="group-body">
 
-<section class="site">
-<h2>📚 AmblesideOnline</h2>
-<p class="tagline">Free Charlotte Mason curriculum, Year 0–12, all subjects</p>
-<div class="links">
-<a class="primary" href="amblesideonline-index.html">Local Directory</a>
-<a class="secondary" href="https://www.amblesideonline.org" target="_blank">Original Site</a>
-<a class="tertiary" href="https://www.amblesideonline.org/getting-started" target="_blank">Getting Started</a>
-</div>
-</section>
+<details class="site">
+<summary><span class="site-name">📐 Math Salamanders</span><span class="site-tagline">Printable math worksheets, K–6, by grade and topic</span></summary>
+<div class="site-links"><ul>
+<li><a class="primary" href="math-salamanders-index.html">Local Directory</a></li>
+<li><a class="secondary" href="https://www.math-salamanders.com/" target="_blank">Original Site</a></li>
+<li><a class="tertiary" href="https://www.math-salamanders.com/number-line-worksheets.html" target="_blank">Number Line Worksheets</a></li>
+</ul></div>
+</details>
 
-<section class="site">
-<h2>🔤 Open Source Phonics</h2>
-<p class="tagline">Free 120-lesson phonics program + decodable stories</p>
-<div class="links">
-<a class="primary" href="opensourcephonics-index.html">Local Directory</a>
-<a class="secondary" href="https://www.opensourcephonics.org" target="_blank">Original Site</a>
-<a class="tertiary" href="https://www.opensourcephonics.org/120-lessons/" target="_blank">120 Lessons</a>
-<a class="tertiary" href="https://www.opensourcephonics.org/decodable-stories/" target="_blank">Decodable Stories</a>
-</div>
-</section>
+<details class="site">
+<summary><span class="site-name">📚 AmblesideOnline</span><span class="site-tagline">Free Charlotte Mason curriculum, Year 0–12, all subjects</span></summary>
+<div class="site-links"><ul>
+<li><a class="primary" href="amblesideonline-index.html">Local Directory</a></li>
+<li><a class="secondary" href="https://www.amblesideonline.org" target="_blank">Original Site</a></li>
+<li><a class="tertiary" href="https://www.amblesideonline.org/getting-started" target="_blank">Getting Started</a></li>
+</ul></div>
+</details>
 
-<section class="site">
-<h2>🎓 Khan Academy</h2>
-<p class="tagline">Free courses, K–12 through college, video lessons + practice</p>
-<div class="links">
-<a class="primary" href="khanacademy-index.html">Local Directory</a>
-<a class="secondary" href="https://www.khanacademy.org" target="_blank">Original Site</a>
-<a class="tertiary" href="https://www.khanacademy.org/math" target="_blank">Math</a>
-<a class="tertiary" href="https://www.khanacademy.org/kids" target="_blank">Khan Kids</a>
-</div>
-</section>
+<details class="site">
+<summary><span class="site-name">🔤 Open Source Phonics</span><span class="site-tagline">Free 120-lesson phonics program + decodable stories</span></summary>
+<div class="site-links"><ul>
+<li><a class="primary" href="opensourcephonics-index.html">Local Directory</a></li>
+<li><a class="secondary" href="https://www.opensourcephonics.org" target="_blank">Original Site</a></li>
+<li><a class="tertiary" href="https://www.opensourcephonics.org/120-lessons/" target="_blank">120 Lessons</a></li>
+<li><a class="tertiary" href="https://www.opensourcephonics.org/decodable-stories/" target="_blank">Decodable Stories</a></li>
+</ul></div>
+</details>
 
-<section class="site">
-<h2>🗂️ OER Commons</h2>
-<p class="tagline">Free open educational resource library, all subjects &amp; levels</p>
-<div class="links">
-<a class="primary" href="oercommons-index.html">Local Directory</a>
-<a class="secondary" href="https://oercommons.org" target="_blank">Original Site</a>
-<a class="tertiary" href="https://oercommons.org/hubs/common-core" target="_blank">Common Core Hub</a>
-</div>
-</section>
+<details class="site">
+<summary><span class="site-name">🎓 Khan Academy</span><span class="site-tagline">Free courses, K–12 through college, video lessons + practice</span></summary>
+<div class="site-links"><ul>
+<li><a class="primary" href="khanacademy-index.html">Local Directory</a></li>
+<li><a class="secondary" href="https://www.khanacademy.org" target="_blank">Original Site</a></li>
+<li><a class="tertiary" href="https://www.khanacademy.org/math" target="_blank">Math</a></li>
+<li><a class="tertiary" href="https://www.khanacademy.org/kids" target="_blank">Khan Kids</a></li>
+</ul></div>
+</details>
 
-<section class="site">
-<h2>📖 Librarian Chick</h2>
-<p class="tagline">Giant curated link directory — 29 categories of free tools/resources</p>
-<div class="links">
-<a class="primary" href="librarianchick-index.html">Local Directory</a>
-<a class="secondary" href="https://librarianchick.org/index.php?title=Main_Page" target="_blank">Original Site</a>
-</div>
-</section>
+<details class="site">
+<summary><span class="site-name">🔢 AccessIM K-5 (Illustrative Math)</span><span class="site-tagline">Illustrative Mathematics K-5 curriculum app</span></summary>
+<div class="site-links"><ul>
+<li><a class="secondary" href="https://accessim.org/k5?a=teacher&lang=en" target="_blank">Open Site</a></li>
+</ul></div>
+</details>
 
-<section class="site">
-<h2>🔢 AccessIM K-5 (Illustrative Math)</h2>
-<p class="tagline">Illustrative Mathematics K-5 curriculum app</p>
-<div class="links">
-<a class="secondary" href="https://accessim.org/k5?a=teacher&lang=en" target="_blank">Open Site</a>
 </div>
-</section>
+</details>
 
-<section class="site">
-<h2>🧒 Good Sites for Kids</h2>
-<p class="tagline">Curated list of kid-safe educational websites</p>
-<div class="links">
-<a class="secondary" href="https://www.goodsitesforkids.org" target="_blank">Open Site</a>
-</div>
-</section>
+<details class="group">
+<summary>🗂️ Open Resource Libraries</summary>
+<div class="group-body">
 
-<section class="site">
-<h2>🔭 Astronomy Picture of the Day</h2>
-<p class="tagline">NASA — daily space image with expert explanation</p>
-<div class="links">
-<a class="secondary" href="https://apod.nasa.gov/apod/astropix.html" target="_blank">Open Site</a>
-</div>
-</section>
+<details class="site">
+<summary><span class="site-name">🗂️ OER Commons</span><span class="site-tagline">Free open educational resource library, all subjects &amp; levels</span></summary>
+<div class="site-links"><ul>
+<li><a class="primary" href="oercommons-index.html">Local Directory</a></li>
+<li><a class="secondary" href="https://oercommons.org" target="_blank">Original Site</a></li>
+<li><a class="tertiary" href="https://oercommons.org/hubs/common-core" target="_blank">Common Core Hub</a></li>
+</ul></div>
+</details>
 
-<section class="site">
-<h2>🛰️ SETI — PPOD</h2>
-<p class="tagline">SETI Institute's Picture of the Day tag feed</p>
-<div class="links">
-<a class="secondary" href="https://www.seti.org/search-by-tags/?tag=PPOD&page=1" target="_blank">Open Site</a>
-</div>
-</section>
+<details class="site">
+<summary><span class="site-name">📖 Librarian Chick</span><span class="site-tagline">Giant curated link directory — 29 categories of free tools/resources</span></summary>
+<div class="site-links"><ul>
+<li><a class="primary" href="librarianchick-index.html">Local Directory</a></li>
+<li><a class="secondary" href="https://librarianchick.org/index.php?title=Main_Page" target="_blank">Original Site</a></li>
+</ul></div>
+</details>
 
-<section class="site">
-<h2>🏺 Anthropeum</h2>
-<p class="tagline">Daily game — guess where &amp; when a Met museum artifact is from</p>
-<div class="links">
-<a class="secondary" href="https://anthropeum.com" target="_blank">Open Site</a>
-</div>
-</section>
+<details class="site">
+<summary><span class="site-name">🧒 Good Sites for Kids</span><span class="site-tagline">Curated list of kid-safe educational websites</span></summary>
+<div class="site-links"><ul>
+<li><a class="secondary" href="https://www.goodsitesforkids.org" target="_blank">Open Site</a></li>
+</ul></div>
+</details>
 
-<section class="site">
-<h2>🌍 EthnoGuessr</h2>
-<p class="tagline">Daily game — guess ethnic/geographic origin from photos</p>
-<div class="links">
-<a class="secondary" href="https://hbd.gg" target="_blank">Open Site</a>
 </div>
-</section>
+</details>
 
-<section class="site">
-<h2>📸 TimeGuessr</h2>
-<p class="tagline">Guess the year &amp; location of historical photos (free)</p>
-<div class="links">
-<a class="secondary" href="https://timeguessr.com" target="_blank">Open Site</a>
-</div>
-</section>
+<details class="group">
+<summary>🔭 Daily Science &amp; History</summary>
+<div class="group-body">
 
-<section class="site">
-<h2>🎨 HueDare</h2>
-<p class="tagline">Daily color-guessing game — match the target color (free)</p>
-<div class="links">
-<a class="secondary" href="https://huedare.com" target="_blank">Open Site</a>
-</div>
-</section>
+<details class="site">
+<summary><span class="site-name">🔭 Astronomy Picture of the Day</span><span class="site-tagline">NASA — daily space image with expert explanation</span></summary>
+<div class="site-links"><ul>
+<li><a class="secondary" href="https://apod.nasa.gov/apod/astropix.html" target="_blank">Open Site</a></li>
+</ul></div>
+</details>
 
-<section class="site">
-<h2>🧩 maze.game</h2>
-<p class="tagline">Multiplayer maze-building strategy game (free, sign-in needed)</p>
-<div class="links">
-<a class="secondary" href="https://maze.game" target="_blank">Open Site</a>
+<details class="site">
+<summary><span class="site-name">🛰️ SETI — PPOD</span><span class="site-tagline">SETI Institute's Picture of the Day tag feed</span></summary>
+<div class="site-links"><ul>
+<li><a class="secondary" href="https://www.seti.org/search-by-tags/?tag=PPOD&page=1" target="_blank">Open Site</a></li>
+</ul></div>
+</details>
+
+<details class="site">
+<summary><span class="site-name">🏺 Anthropeum</span><span class="site-tagline">Daily game — guess where &amp; when a Met museum artifact is from</span></summary>
+<div class="site-links"><ul>
+<li><a class="secondary" href="https://anthropeum.com" target="_blank">Open Site</a></li>
+</ul></div>
+</details>
+
 </div>
-</section>
+</details>
+
+<details class="group">
+<summary>🎮 Guessing Games</summary>
+<div class="group-body">
+
+<details class="site">
+<summary><span class="site-name">🌍 EthnoGuessr</span><span class="site-tagline">Daily game — guess ethnic/geographic origin from photos</span></summary>
+<div class="site-links"><ul>
+<li><a class="secondary" href="https://hbd.gg" target="_blank">Open Site</a></li>
+</ul></div>
+</details>
+
+<details class="site">
+<summary><span class="site-name">📸 TimeGuessr</span><span class="site-tagline">Guess the year &amp; location of historical photos (free)</span></summary>
+<div class="site-links"><ul>
+<li><a class="secondary" href="https://timeguessr.com" target="_blank">Open Site</a></li>
+</ul></div>
+</details>
+
+<details class="site">
+<summary><span class="site-name">🎨 HueDare</span><span class="site-tagline">Daily color-guessing game — match the target color (free)</span></summary>
+<div class="site-links"><ul>
+<li><a class="secondary" href="https://huedare.com" target="_blank">Open Site</a></li>
+</ul></div>
+</details>
+
+<details class="site">
+<summary><span class="site-name">🧩 maze.game</span><span class="site-tagline">Multiplayer maze-building strategy game (free, sign-in needed)</span></summary>
+<div class="site-links"><ul>
+<li><a class="secondary" href="https://maze.game" target="_blank">Open Site</a></li>
+</ul></div>
+</details>
+
+</div>
+</details>
 
 </main>
 
 <footer>
   Personal reference wiki. Not affiliated with any listed site.
 </footer>
+
+<script>
+var toggleBtn = document.getElementById('toggleAll');
+var allDetails = document.querySelectorAll('#tree details');
+var expanded = false;
+toggleBtn.addEventListener('click', function() {
+  expanded = !expanded;
+  allDetails.forEach(function(d) { d.open = expanded; });
+  toggleBtn.textContent = expanded ? 'Collapse all' : 'Expand all';
+});
+</script>
 
 </body>
 </html>
