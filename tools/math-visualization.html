@@ -3,18 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="light dark" />
+    
     <link rel="icon" href="data:," />
     <title>Interactive Math Visualization</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
     <style>
+@font-face{font-family:"Terminus";font-style:normal;font-weight:400;src:local("Terminus"),url("../fonts/Terminus-Regular.ttf") format("truetype");font-display:swap}
+@font-face{font-family:"Terminus";font-style:normal;font-weight:700;src:local("Terminus"),url("../fonts/Terminus-Bold.ttf") format("truetype");font-display:swap}
+@font-face{font-family:"Terminus";font-style:italic;font-weight:400;src:local("Terminus"),url("../fonts/Terminus-Italic.ttf") format("truetype");font-display:swap}
+
       :root {
-        color-scheme: light dark;
+        color-scheme: light;
         --bg: #f4f2ec;
         --grid-line: rgba(38, 52, 84, 0.07);
         --panel: #fffdf8;
@@ -66,7 +64,7 @@
       html { -webkit-text-size-adjust: 100%; }
       body {
         margin: 0;
-        font-family: "Archivo", system-ui, sans-serif;
+        font-family: "Terminus", "Terminus (TTF)", monospace;
         color: var(--ink);
         background-color: var(--bg);
         background-image:
@@ -80,7 +78,7 @@
         margin: 0 auto;
         padding: 20px 16px 40px;
       }
-      .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+      .mono { font-family: "Terminus", "Terminus (TTF)", monospace; }
 
       .intro { max-width: 68ch; margin: 4px 0 18px; }
       .intro h1 {
@@ -118,7 +116,7 @@
       .field input {
         width: 100%;
         box-sizing: border-box;
-        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-family: "Terminus", "Terminus (TTF)", monospace;
         font-size: 1.55rem;
         font-weight: 600;
         padding: 10px 12px;
@@ -141,7 +139,7 @@
         border: 0;
         background: var(--panel-2);
         color: var(--ink-soft);
-        font-family: "IBM Plex Mono", monospace;
+        font-family: "Terminus", "Terminus (TTF)", monospace;
         font-size: 1.35rem;
         font-weight: 700;
         width: 52px;
@@ -177,7 +175,7 @@
       .transport .btn.primary { font-size: 1.08rem; padding: 13px 28px; }
       .preset {
         appearance: none;
-        font-family: "IBM Plex Mono", monospace;
+        font-family: "Terminus", "Terminus (TTF)", monospace;
         font-size: 0.82rem;
         font-weight: 600;
         padding: 6px 11px;
@@ -235,7 +233,7 @@
         width: fit-content;
         max-width: 100%;
         margin: 0 auto;
-        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-family: "Terminus", "Terminus (TTF)", monospace;
         font-weight: 700;
         font-size: var(--fs);
       }
@@ -269,7 +267,7 @@
         min-width: 0;
         text-align: center;
         line-height: 1.1;
-        font-family: "Archivo", sans-serif;
+        font-family: "Terminus", "Terminus (TTF)", monospace;
         font-size: max(8px, 0.205em);
         font-weight: 700;
         letter-spacing: 0.01em;
@@ -338,7 +336,7 @@
         to { opacity: 1; }
       }
       .working-label, .answer-label {
-        font-family: "Archivo", sans-serif;
+        font-family: "Terminus", "Terminus (TTF)", monospace;
         font-size: 0.72rem;
         font-weight: 800;
         letter-spacing: 0.06em;
@@ -346,7 +344,7 @@
         margin: 0.5em 0 0.3em;
       }
       .empty-note {
-        font-family: "Archivo", sans-serif;
+        font-family: "Terminus", "Terminus (TTF)", monospace;
         font-weight: 500;
         font-size: 0.95rem;
         color: var(--ink-soft);
@@ -394,7 +392,7 @@
         position: absolute;
         top: -0.6em;
         right: 0.02em;
-        font-family: "Archivo", sans-serif;
+        font-family: "Terminus", "Terminus (TTF)", monospace;
         font-size: 0.3em;
         font-weight: 800;
         letter-spacing: 0.02em;
@@ -424,7 +422,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: "IBM Plex Mono", monospace;
+        font-family: "Terminus", "Terminus (TTF)", monospace;
         font-weight: 700;
         background: var(--accent-solid);
         color: #fff;
@@ -482,7 +480,7 @@
         transition: width 0.35s ease;
       }
       .step-count {
-        font-family: "IBM Plex Mono", monospace;
+        font-family: "Terminus", "Terminus (TTF)", monospace;
         font-size: 0.85rem;
         font-weight: 600;
         color: var(--ink-soft);
@@ -497,10 +495,41 @@
         .layer-rule-row { animation: none; }
         .progress > div, .lane { transition: none; }
       }
+
+      /* boccbo.cc look */
+      :root:root {
+        --bg:#fff; --panel:rgba(139,69,19,.05); --panel-2:#fff; --ink:#000; --ink-soft:#666;
+        --line:#ccc; --line-strong:#8B4513; --accent:#8B4513; --accent-ink:#8B4513; --accent-soft:rgba(139,69,19,.15);
+        --accent-solid:#8B4513; --chip:#fff; --shadow:none; --answer-bg:#fff;
+        --lane-a:rgba(139,69,19,.04); --lane-b:rgba(139,69,19,.09); --lane-line:rgba(139,69,19,.2); --lane-hi:rgba(139,69,19,.25);
+        --teal:#2E6F5E; --teal-soft:#e3f0ec;
+      }
+      body { background-image:none; background-color:#fff; font-size:16px; padding:20px 4px; }
+      .wrap { padding:0 16px 40px; }
+      .topnav { margin:0 0 10px; font-size:16px; }
+      .topnav a { color:#0000EE; } .topnav a:visited { color:#551A8B; }
+      .intro { border-bottom:2px dashed #8B4513; padding-bottom:10px; }
+      .intro h1 { font-size:18px; text-transform:uppercase; color:#8B4513; letter-spacing:0; }
+      .intro p { font-size:16px; }
+      .card { border:2px dashed #8B4513; border-radius:0; box-shadow:none; }
+      .field input, .op-toggle, .btn, .narration { border-radius:0; }
+      .field input { border:2px dashed #8B4513; font-size:1.6rem; }
+      .op-toggle { border:2px dashed #8B4513; }
+      .btn { border:2px dashed #8B4513; color:#8B4513; font-size:16px; }
+      .btn.primary { background:#8B4513; color:#fff; border-style:solid; }
+      .preset, .place-tag, .progress, .progress > div { border-radius:0; }
+      .preset { border:1px dashed #8B4513; color:#8B4513; font-size:14px; }
+      .place-tag { font-size:14px; }
+      .field label, .presets .lbl, .note, .narr-label, .step-count, .board-head .t, .explainer { font-size:16px; }
+      .narration { border:1px dashed #8B4513; font-size:18px; }
+      .answer-row .cell.first, .answer-row .cell.last { border-radius:0; }
+      .lane-label { font-size:max(11px,0.205em); }
+      .digtok, .digtok.transfer, .cell, .cell .borrowed, .borrow-tag { border-radius:0; box-shadow:none; }
     </style>
   </head>
   <body>
     <main class="wrap">
+      <p class="topnav"><a href="../index.html">← Directory</a> · <a href="https://boccbo.cc/">← boccbo.cc</a></p>
       <div class="intro">
         <h1>Addition &amp; Subtraction</h1>
         <p>Type two numbers, pick + or −, then press Step.</p>
