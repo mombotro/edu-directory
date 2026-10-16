@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <title>Homeschool Wiki</title>
 <style>
+@font-face{font-family:"Terminus";font-style:normal;font-weight:400;src:local("Terminus"),url("fonts/Terminus-Regular.ttf") format("truetype");font-display:swap}
+@font-face{font-family:"Terminus";font-style:normal;font-weight:700;src:local("Terminus"),url("fonts/Terminus-Bold.ttf") format("truetype");font-display:swap}
+@font-face{font-family:"Terminus";font-style:italic;font-weight:400;src:local("Terminus"),url("fonts/Terminus-Italic.ttf") format("truetype");font-display:swap}
+
   :root {
     --bg: #ffffff;
     --ink: #000;
@@ -18,7 +22,7 @@
   * { box-sizing: border-box; }
   body {
     margin: 0; padding: 20px;
-    font-family: monospace; font-size: 14px;
+    font-family: "Terminus", "Terminus (TTF)", monospace; font-size: 14px;
     background: var(--bg); color: var(--ink); line-height: 1.45;
   }
   header { max-width: 800px; margin: 0 auto 20px; padding-bottom: 10px; border-bottom: 2px dashed var(--brown); }

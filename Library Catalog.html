@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Shelf List</title>
 <style>
+@font-face{font-family:"Terminus";font-style:normal;font-weight:400;src:local("Terminus"),url("fonts/Terminus-Regular.ttf") format("truetype");font-display:swap}
+@font-face{font-family:"Terminus";font-style:normal;font-weight:700;src:local("Terminus"),url("fonts/Terminus-Bold.ttf") format("truetype");font-display:swap}
+@font-face{font-family:"Terminus";font-style:italic;font-weight:400;src:local("Terminus"),url("fonts/Terminus-Italic.ttf") format("truetype");font-display:swap}
+
 :root{
   --paper:#E9ECE1; --paper-alt:#F5F6EF; --paper-raised:#FFFFFF;
   --ink:#2B3226; --ink-soft:#5B6350; --rule:#C9CFB9; --rule-strong:#A9B096;
@@ -37,13 +41,13 @@
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--paper); color:var(--ink);
-  font-family:Georgia,'Palatino Linotype',Palatino,'Iowan Old Style',serif;
+  font-family:'Terminus', 'Terminus (TTF)', monospace;
   font-size:16px; line-height:1.5;
 }
 .wrap{max-width:920px; margin:0 auto; padding:2.5rem 1.25rem 4rem;}
 header{border-bottom:2px solid var(--rule-strong); padding-bottom:1.25rem; margin-bottom:1.5rem;}
 .eyebrow{
-  font-family:ui-monospace,Menlo,Consolas,monospace; font-size:0.7rem;
+  font-family:'Terminus', 'Terminus (TTF)', monospace; font-size:0.7rem;
   letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 0.5rem;
 }
 h1{font-size:clamp(1.8rem,4vw,2.5rem); margin:0 0 0.4rem; letter-spacing:-0.01em;}
@@ -58,13 +62,13 @@ h1{font-size:clamp(1.8rem,4vw,2.5rem); margin:0 0 0.4rem; letter-spacing:-0.01em
 .searchbox:focus{outline:2px solid var(--c-reading); outline-offset:1px;}
 .chips{display:flex; flex-wrap:wrap; gap:0.45rem;}
 .chip{
-  font-family:ui-monospace,Menlo,Consolas,monospace; font-size:0.72rem;
+  font-family:'Terminus', 'Terminus (TTF)', monospace; font-size:0.72rem;
   letter-spacing:0.03em; text-transform:uppercase; font-weight:600;
   border:1px solid var(--rule-strong); background:var(--paper-raised); color:var(--ink-soft);
   padding:0.35rem 0.7rem; border-radius:999px; cursor:pointer; user-select:none;
 }
 .chip[aria-pressed="true"]{ color:#fff; border-color:transparent; }
-.count{color:var(--ink-soft); font-size:0.88rem; margin:0.9rem 0 0.6rem; font-family:ui-monospace,Menlo,Consolas,monospace;}
+.count{color:var(--ink-soft); font-size:0.88rem; margin:0.9rem 0 0.6rem; font-family:'Terminus', 'Terminus (TTF)', monospace;}
 
 ul.list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.5rem;}
 li.item{
@@ -74,7 +78,7 @@ li.item{
 }
 li.item .title{flex:1; font-size:1rem;}
 li.item .badge{
-  font-family:ui-monospace,Menlo,Consolas,monospace; font-size:0.66rem; letter-spacing:0.05em;
+  font-family:'Terminus', 'Terminus (TTF)', monospace; font-size:0.66rem; letter-spacing:0.05em;
   text-transform:uppercase; font-weight:600; color:var(--accent,var(--ink-soft)); white-space:nowrap;
 }
 .empty{color:var(--ink-soft); padding:2rem 0; text-align:center; font-style:italic;}
@@ -84,10 +88,26 @@ li.item{flex-wrap:wrap;}
 li.item .title-group{flex:1; min-width:0;}
 li.item .author{display:block; font-size:0.82rem; color:var(--ink-soft); font-style:italic;}
 .shelf-tag{
-  font-family:ui-monospace,Menlo,Consolas,monospace; font-size:0.62rem; letter-spacing:0.04em;
+  font-family:'Terminus', 'Terminus (TTF)', monospace; font-size:0.62rem; letter-spacing:0.04em;
   text-transform:uppercase; font-weight:600; color:var(--ink-soft);
   border:1px solid var(--rule-strong); border-radius:999px; padding:0.1rem 0.45rem; white-space:nowrap;
 }
+
+/* boccbo.cc look */
+:root:root{ --paper:#fff; --paper-alt:#fff; --paper-raised:rgba(139,69,19,.05); --ink:#000; --ink-soft:#666; --rule:#ccc; --rule-strong:#8B4513; --shadow:none; }
+body{ font-size:14px; padding:20px; }
+.wrap{ max-width:920px; padding:0 0 2rem; }
+header{ border-bottom:2px dashed #8B4513; }
+h1{ font-size:16px; text-transform:uppercase; color:#8B4513; letter-spacing:0; }
+.eyebrow{ color:#8B4513; }
+.searchbox{ border:2px dashed #8B4513; border-radius:0; font-size:14px; background:#fff; padding:5px 8px; }
+.searchbox:focus{ outline:none; background:rgba(139,69,19,.05); }
+.chip{ border:1px dashed #8B4513; border-radius:0; color:#8B4513; background:#fff; }
+.chip[aria-pressed="true"]{ background:#8B4513; color:#fff; border-color:#8B4513; }
+li.item{ border:1px dashed #8B4513; border-left:4px solid var(--accent,#8B4513); border-radius:0; box-shadow:none; }
+li.item .title{ font-size:14px; }
+.shelf-tag{ border-radius:0; border:1px dashed #8B4513; }
+footer{ border-top:2px dashed #8B4513; }
 </style>
 </head>
 <body>
