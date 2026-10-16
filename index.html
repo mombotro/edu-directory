@@ -34,6 +34,7 @@
     background: none; border: 2px dashed var(--brown); color: var(--brown);
     padding: 4px 10px; font: inherit; cursor: pointer;
   }
+  header .toggle-all.on { background: var(--brown); color: #fff; }
   header .toggle-all:hover { background: var(--brown-bg); }
   main { max-width: 800px; margin: 0 auto; }
 
@@ -73,8 +74,8 @@
 <header>
   <a class="home-link" href="https://boccbo.cc/">← boccbo.cc</a>
   <h1>Homeschool Wiki</h1>
-  <p>Every site we use, as a simple list</p>
-  <button class="toggle-all" id="toggleAll">Expand all</button>
+  <p>Every site we use, as a simple list — by type or by subject</p>
+  <button class="toggle-all view-btn" data-view="type">By type</button> <button class="toggle-all view-btn" data-view="subject">By subject</button> <button class="toggle-all" id="toggleAll">Expand all</button>
 </header>
 
 <main><ul id="tree" class="tree">
@@ -82,21 +83,21 @@
 <li><details class="group"><summary><span class="name">📚 Curriculum &amp; Coursework</span></summary>
 <ul>
 
-<li><details><summary><span class="name">📐 Math Salamanders</span><span class="tag">Printable math worksheets, K–6, by grade and topic</span></summary>
+<li data-subj="math"><details><summary><span class="name">📐 Math Salamanders</span><span class="tag">Printable math worksheets, K–6, by grade and topic</span></summary>
 <ul>
 <li class="leaf"><a href="math-salamanders-index.html" target="_blank">Local Directory</a></li>
 <li class="leaf"><a href="https://www.math-salamanders.com/" target="_blank">Original Site</a></li>
 <li class="leaf"><a href="https://www.math-salamanders.com/number-line-worksheets.html" target="_blank">Number Line Worksheets</a></li>
 </ul></details></li>
 
-<li><details><summary><span class="name">📚 AmblesideOnline</span><span class="tag">Free Charlotte Mason curriculum, Year 0–12, all subjects</span></summary>
+<li data-subj="gen"><details><summary><span class="name">📚 AmblesideOnline</span><span class="tag">Free Charlotte Mason curriculum, Year 0–12, all subjects</span></summary>
 <ul>
 <li class="leaf"><a href="amblesideonline-index.html" target="_blank">Local Directory</a></li>
 <li class="leaf"><a href="https://www.amblesideonline.org" target="_blank">Original Site</a></li>
 <li class="leaf"><a href="https://www.amblesideonline.org/getting-started" target="_blank">Getting Started</a></li>
 </ul></details></li>
 
-<li><details><summary><span class="name">🔤 Open Source Phonics</span><span class="tag">Free 120-lesson phonics program + decodable stories</span></summary>
+<li data-subj="lang"><details><summary><span class="name">🔤 Open Source Phonics</span><span class="tag">Free 120-lesson phonics program + decodable stories</span></summary>
 <ul>
 <li class="leaf"><a href="opensourcephonics-index.html" target="_blank">Local Directory</a></li>
 <li class="leaf"><a href="https://www.opensourcephonics.org" target="_blank">Original Site</a></li>
@@ -104,7 +105,7 @@
 <li class="leaf"><a href="https://www.opensourcephonics.org/decodable-stories/" target="_blank">Decodable Stories</a></li>
 </ul></details></li>
 
-<li><details><summary><span class="name">🎓 Khan Academy</span><span class="tag">Free courses, K–12 through college, video lessons + practice</span></summary>
+<li data-subj="gen,math"><details><summary><span class="name">🎓 Khan Academy</span><span class="tag">Free courses, K–12 through college, video lessons + practice</span></summary>
 <ul>
 <li class="leaf"><a href="khanacademy-index.html" target="_blank">Local Directory</a></li>
 <li class="leaf"><a href="https://www.khanacademy.org" target="_blank">Original Site</a></li>
@@ -112,43 +113,43 @@
 <li class="leaf"><a href="https://www.khanacademy.org/kids" target="_blank">Khan Kids</a></li>
 </ul></details></li>
 
-<li class="leaf"><a href="https://accessim.org/k5?a=teacher&lang=en" target="_blank">🔢 AccessIM K-5 (Illustrative Math)</a><span class="tag">Illustrative Mathematics K-5 curriculum app</span></li>
+<li data-subj="math" class="leaf"><a href="https://accessim.org/k5?a=teacher&lang=en" target="_blank">🔢 AccessIM K-5 (Illustrative Math)</a><span class="tag">Illustrative Mathematics K-5 curriculum app</span></li>
 
-<li class="leaf"><a href="https://learn101.org/english.php" target="_blank">🗣️ Learn101 — English</a><span class="tag">Free English lessons with audio: alphabet, grammar, phrases, vocabulary</span></li>
+<li data-subj="lang,fl" class="leaf"><a href="https://learn101.org/english.php" target="_blank">🗣️ Learn101 — English</a><span class="tag">Free English lessons with audio: alphabet, grammar, phrases, vocabulary</span></li>
 
-<li class="leaf"><a href="https://ieltsonlinetests.com/ielts-grammar/ielts-grammar-101-iot" target="_blank">✍️ IELTS Grammar 101</a><span class="tag">Free 11-topic English grammar course (nouns through clauses/sentences)</span></li>
+<li data-subj="lang" class="leaf"><a href="https://ieltsonlinetests.com/ielts-grammar/ielts-grammar-101-iot" target="_blank">✍️ IELTS Grammar 101</a><span class="tag">Free 11-topic English grammar course (nouns through clauses/sentences)</span></li>
 
-<li class="leaf"><a href="https://213041466376228865.weebly.com/the-thirty-days.html" target="_blank">✏️ The Thirty Days — 30 Days of Poetry</a><span class="tag">Lesson plan: 30 daily poetry-writing prompts (concrete, synonym, list poems, and more)</span></li>
+<li data-subj="lang" class="leaf"><a href="https://213041466376228865.weebly.com/the-thirty-days.html" target="_blank">✏️ The Thirty Days — 30 Days of Poetry</a><span class="tag">Lesson plan: 30 daily poetry-writing prompts (concrete, synonym, list poems, and more)</span></li>
 
-<li class="leaf"><a href="https://www.linguavetusta.com" target="_blank">🏺 Lingua Vetusta</a><span class="tag">Learn Old English, Old Norse, Old French, Old Occitan, Old Tuscan &amp; Latin — AI tutor, flashcards, medieval texts</span></li>
+<li data-subj="fl" class="leaf"><a href="https://www.linguavetusta.com" target="_blank">🏺 Lingua Vetusta</a><span class="tag">Learn Old English, Old Norse, Old French, Old Occitan, Old Tuscan &amp; Latin — AI tutor, flashcards, medieval texts</span></li>
 
 </ul></details></li>
 
 <li><details class="group"><summary><span class="name">🗂️ Open Resource Libraries</span></summary>
 <ul>
 
-<li><details><summary><span class="name">🗂️ OER Commons</span><span class="tag">Free open educational resource library, all subjects &amp; levels</span></summary>
+<li data-subj="gen"><details><summary><span class="name">🗂️ OER Commons</span><span class="tag">Free open educational resource library, all subjects &amp; levels</span></summary>
 <ul>
 <li class="leaf"><a href="oercommons-index.html" target="_blank">Local Directory</a></li>
 <li class="leaf"><a href="https://oercommons.org" target="_blank">Original Site</a></li>
 <li class="leaf"><a href="https://oercommons.org/hubs/common-core" target="_blank">Common Core Hub</a></li>
 </ul></details></li>
 
-<li class="leaf"><a href="Library Catalog.html" target="_blank">📚 Library Catalog</a> <span class="mine">★ mine</span><span class="tag">Home library catalog</span></li>
+<li data-subj="gen,lang" class="leaf"><a href="Library Catalog.html" target="_blank">📚 Library Catalog</a> <span class="mine">★ mine</span><span class="tag">Home library catalog</span></li>
 
-<li><details><summary><span class="name">📖 Librarian Chick</span><span class="tag">Giant curated link directory — 29 categories of free tools/resources</span></summary>
+<li data-subj="gen"><details><summary><span class="name">📖 Librarian Chick</span><span class="tag">Giant curated link directory — 29 categories of free tools/resources</span></summary>
 <ul>
 <li class="leaf"><a href="librarianchick-index.html" target="_blank">Local Directory</a></li>
 <li class="leaf"><a href="https://librarianchick.org/index.php?title=Main_Page" target="_blank">Original Site</a></li>
 </ul></details></li>
 
-<li class="leaf"><a href="https://www.goodsitesforkids.org" target="_blank">🧒 Good Sites for Kids</a><span class="tag">Curated list of kid-safe educational websites</span></li>
+<li data-subj="gen" class="leaf"><a href="https://www.goodsitesforkids.org" target="_blank">🧒 Good Sites for Kids</a><span class="tag">Curated list of kid-safe educational websites</span></li>
 
-<li class="leaf"><a href="https://www.metmuseum.org/art/collection" target="_blank">🏛️ The Met — Collection</a><span class="tag">Metropolitan Museum of Art's open-access digital collection</span></li>
+<li data-subj="art,soc" class="leaf"><a href="https://www.metmuseum.org/art/collection" target="_blank">🏛️ The Met — Collection</a><span class="tag">Metropolitan Museum of Art's open-access digital collection</span></li>
 
-<li class="leaf"><a href="https://www.gutenberg.org" target="_blank">📗 Project Gutenberg</a><span class="tag">70,000+ free public-domain ebooks</span></li>
+<li data-subj="lang" class="leaf"><a href="https://www.gutenberg.org" target="_blank">📗 Project Gutenberg</a><span class="tag">70,000+ free public-domain ebooks</span></li>
 
-<li><details><summary><span class="name">🗃️ Internet Archive — Texts</span><span class="tag">Free digitized books &amp; texts library (millions of items)</span></summary>
+<li data-subj="gen,lang"><details><summary><span class="name">🗃️ Internet Archive — Texts</span><span class="tag">Free digitized books &amp; texts library (millions of items)</span></summary>
 <ul>
 <li class="leaf"><a href="https://archive.org/details/texts" target="_blank">Open Site</a></li>
 <li class="leaf"><a href="https://docs.google.com/forms/d/e/1FAIpQLScSBbT17HSQywTm-fQawOK7G4dN-QPbDWNstdfvysoKTXCjKA/viewform" target="_blank">Print Disability Checkout Request</a></li>
@@ -159,84 +160,84 @@
 <li><details class="group"><summary><span class="name">🔭 Daily Science &amp; History</span></summary>
 <ul>
 
-<li class="leaf"><a href="https://apod.nasa.gov/apod/astropix.html" target="_blank">🔭 Astronomy Picture of the Day</a><span class="tag">NASA — daily space image with expert explanation</span></li>
+<li data-subj="sci" class="leaf"><a href="https://apod.nasa.gov/apod/astropix.html" target="_blank">🔭 Astronomy Picture of the Day</a><span class="tag">NASA — daily space image with expert explanation</span></li>
 
-<li class="leaf"><a href="https://www.seti.org/search-by-tags/?tag=PPOD&page=1" target="_blank">🛰️ SETI — PPOD</a><span class="tag">SETI Institute's Picture of the Day tag feed</span></li>
+<li data-subj="sci" class="leaf"><a href="https://www.seti.org/search-by-tags/?tag=PPOD&page=1" target="_blank">🛰️ SETI — PPOD</a><span class="tag">SETI Institute's Picture of the Day tag feed</span></li>
 
-<li class="leaf"><a href="https://www.loc.gov/programs/poetry-and-literature/" target="_blank">📜 Poetry &amp; Literature (Library of Congress)</a><span class="tag">Poet Laureate, Poetry 180, prizes, audio archives, events</span></li>
+<li data-subj="lang" class="leaf"><a href="https://www.loc.gov/programs/poetry-and-literature/" target="_blank">📜 Poetry &amp; Literature (Library of Congress)</a><span class="tag">Poet Laureate, Poetry 180, prizes, audio archives, events</span></li>
 
 </ul></details></li>
 
 <li><details class="group"><summary><span class="name">🏛️ Explorable History</span></summary>
 <ul>
 
-<li class="leaf"><a href="ancient/ur.html" target="_blank">🏺 Walk Ancient Ur</a> <span class="mine">★ mine</span><span class="tag">Walkable 3D tour of Paternoster Row in ancient Ur, with info cards</span></li>
+<li data-subj="soc" class="leaf"><a href="ancient/ur.html" target="_blank">🏺 Walk Ancient Ur</a> <span class="mine">★ mine</span><span class="tag">Walkable 3D tour of Paternoster Row in ancient Ur, with info cards</span></li>
 
 </ul></details></li>
 
 <li><details class="group"><summary><span class="name">🗺️ Maps</span></summary>
 <ul>
 
-<li class="leaf"><a href="https://thecastlemap.com" target="_blank">🏰 Castlemap</a><span class="tag">Interactive map of 8,133 castles worldwide + CastleGuessr location game</span></li>
+<li data-subj="soc" class="leaf"><a href="https://thecastlemap.com" target="_blank">🏰 Castlemap</a><span class="tag">Interactive map of 8,133 castles worldwide + CastleGuessr location game</span></li>
 
-<li class="leaf"><a href="https://awmc.unc.edu" target="_blank">🗺️ AWMC</a><span class="tag">Ancient World Mapping Center — free ancient/classical world maps</span></li>
+<li data-subj="soc" class="leaf"><a href="https://awmc.unc.edu" target="_blank">🗺️ AWMC</a><span class="tag">Ancient World Mapping Center — free ancient/classical world maps</span></li>
 
-<li class="leaf"><a href="https://www.worldhistory.org/map/" target="_blank">🗺️ World History Encyclopedia — Maps</a><span class="tag">Historical maps by era, region, and civilization</span></li>
+<li data-subj="soc" class="leaf"><a href="https://www.worldhistory.org/map/" target="_blank">🗺️ World History Encyclopedia — Maps</a><span class="tag">Historical maps by era, region, and civilization</span></li>
 
-<li class="leaf"><a href="https://pleiades.stoa.org" target="_blank">🗺️ Pleiades</a><span class="tag">Gazetteer of ancient places — searchable database of the ancient world</span></li>
+<li data-subj="soc" class="leaf"><a href="https://pleiades.stoa.org" target="_blank">🗺️ Pleiades</a><span class="tag">Gazetteer of ancient places — searchable database of the ancient world</span></li>
 
-<li class="leaf"><a href="https://wikimapia.org" target="_blank">🗺️ Wikimapia</a><span class="tag">Collaborative map with user-added place descriptions worldwide</span></li>
+<li data-subj="soc" class="leaf"><a href="https://wikimapia.org" target="_blank">🗺️ Wikimapia</a><span class="tag">Collaborative map with user-added place descriptions worldwide</span></li>
 
-<li class="leaf"><a href="https://ngmdb.usgs.gov/mapview/?center=-97.768,35.08&zoom=5" target="_blank">🗺️ NGMDB MapView</a><span class="tag">USGS National Geologic Map Database viewer — geologic maps overlaid on US terrain</span></li>
+<li data-subj="sci" class="leaf"><a href="https://ngmdb.usgs.gov/mapview/?center=-97.768,35.08&zoom=5" target="_blank">🗺️ NGMDB MapView</a><span class="tag">USGS National Geologic Map Database viewer — geologic maps overlaid on US terrain</span></li>
 
 </ul></details></li>
 
 <li><details class="group"><summary><span class="name">🎮 Guessing Games</span></summary>
 <ul>
 
-<li class="leaf"><a href="https://anthropeum.com" target="_blank">🏺 Anthropeum</a><span class="tag">Daily game — guess where &amp; when a Met museum artifact is from</span></li>
+<li data-subj="soc,games,art" class="leaf"><a href="https://anthropeum.com" target="_blank">🏺 Anthropeum</a><span class="tag">Daily game — guess where &amp; when a Met museum artifact is from</span></li>
 
-<li class="leaf"><a href="https://hbd.gg" target="_blank">🌍 EthnoGuessr</a><span class="tag">Daily game — guess ethnic/geographic origin from photos</span></li>
+<li data-subj="soc,games" class="leaf"><a href="https://hbd.gg" target="_blank">🌍 EthnoGuessr</a><span class="tag">Daily game — guess ethnic/geographic origin from photos</span></li>
 
-<li class="leaf"><a href="https://timeguessr.com" target="_blank">📸 TimeGuessr</a><span class="tag">Guess the year &amp; location of historical photos (free)</span></li>
+<li data-subj="soc,games" class="leaf"><a href="https://timeguessr.com" target="_blank">📸 TimeGuessr</a><span class="tag">Guess the year &amp; location of historical photos (free)</span></li>
 
 
-<li class="leaf"><a href="https://maze.game" target="_blank">🧩 maze.game</a><span class="tag">Multiplayer maze-building strategy game (free, sign-in needed)</span></li>
+<li data-subj="games" class="leaf"><a href="https://maze.game" target="_blank">🧩 maze.game</a><span class="tag">Multiplayer maze-building strategy game (free, sign-in needed)</span></li>
 
 </ul></details></li>
 
 <li><details class="group"><summary><span class="name">🛠️ Tools</span></summary>
 <ul>
 
-<li class="leaf"><a href="tools/math-visualization.html" target="_blank">➕ Interactive Math Visualization</a> <span class="mine">★ mine</span><span class="tag">Step-by-step animated addition &amp; subtraction, with example problems</span></li>
+<li data-subj="math" class="leaf"><a href="tools/math-visualization.html" target="_blank">➕ Interactive Math Visualization</a> <span class="mine">★ mine</span><span class="tag">Step-by-step animated addition &amp; subtraction, with example problems</span></li>
 
 
-<li class="leaf"><a href="https://www.photopea.com" target="_blank">🖌️ Photopea</a><span class="tag">Free browser-based image editor (Photoshop-like, no signup)</span></li>
+<li data-subj="art" class="leaf"><a href="https://www.photopea.com" target="_blank">🖌️ Photopea</a><span class="tag">Free browser-based image editor (Photoshop-like, no signup)</span></li>
 
-<li class="leaf"><a href="https://www.vectorpea.com" target="_blank">✒️ Vectorpea</a><span class="tag">Free browser-based vector editor (Illustrator-like, no signup)</span></li>
+<li data-subj="art" class="leaf"><a href="https://www.vectorpea.com" target="_blank">✒️ Vectorpea</a><span class="tag">Free browser-based vector editor (Illustrator-like, no signup)</span></li>
 
-<li class="leaf"><a href="https://www.tinkercad.com" target="_blank">🧊 Tinkercad</a><span class="tag">Free 3D design, CAD &amp; electronics simulator (Autodesk, needs free account)</span></li>
+<li data-subj="code" class="leaf"><a href="https://www.tinkercad.com" target="_blank">🧊 Tinkercad</a><span class="tag">Free 3D design, CAD &amp; electronics simulator (Autodesk, needs free account)</span></li>
 
-<li class="leaf"><a href="https://scratch.mit.edu" target="_blank">🐱 Scratch</a><span class="tag">Free block-based coding platform for kids (MIT)</span></li>
+<li data-subj="code" class="leaf"><a href="https://scratch.mit.edu" target="_blank">🐱 Scratch</a><span class="tag">Free block-based coding platform for kids (MIT)</span></li>
 
-<li class="leaf"><a href="https://funderstanding.com/learning-lab/circuit-simulator-for-kids/" target="_blank">🔌 Circuit Simulator for Kids</a><span class="tag">Free browser-based circuit builder &amp; simulator (Funderstanding)</span></li>
+<li data-subj="sci,code" class="leaf"><a href="https://funderstanding.com/learning-lab/circuit-simulator-for-kids/" target="_blank">🔌 Circuit Simulator for Kids</a><span class="tag">Free browser-based circuit builder &amp; simulator (Funderstanding)</span></li>
 
-<li class="leaf"><a href="https://beyondloom.com/tools/ditherpaint.html" target="_blank">🎨 Ditherpaint</a><span class="tag">Free browser painting tool with retro dithered pixel textures (Beyond Loom)</span></li>
+<li data-subj="art" class="leaf"><a href="https://beyondloom.com/tools/ditherpaint.html" target="_blank">🎨 Ditherpaint</a><span class="tag">Free browser painting tool with retro dithered pixel textures (Beyond Loom)</span></li>
 
-<li class="leaf"><a href="https://beyondloom.com/tools/wigglypaint.html" target="_blank">🌀 Wigglypaint</a><span class="tag">Free browser drawing tool that animates every stroke into a wiggly loop (Beyond Loom)</span></li>
+<li data-subj="art" class="leaf"><a href="https://beyondloom.com/tools/wigglypaint.html" target="_blank">🌀 Wigglypaint</a><span class="tag">Free browser drawing tool that animates every stroke into a wiggly loop (Beyond Loom)</span></li>
 
-<li class="leaf"><a href="https://beyondloom.com/decker/index.html" target="_blank">🗃️ Decker</a><span class="tag">Free browser-based HyperCard-style multimedia authoring tool (Beyond Loom)</span></li>
+<li data-subj="code,art" class="leaf"><a href="https://beyondloom.com/decker/index.html" target="_blank">🗃️ Decker</a><span class="tag">Free browser-based HyperCard-style multimedia authoring tool (Beyond Loom)</span></li>
 
 </ul></details></li>
 
 <li><details class="group"><summary><span class="name">🖨️ Work Sheet Makers</span></summary>
 <ul>
 
-<li class="leaf"><a href="http://boccbo.cc/focus-sheet/" target="_blank">📝 Focus Sheet Maker</a> <span class="mine">★ mine</span><span class="tag">Free browser tool to make printable focus sheets</span></li>
+<li data-subj="gen" class="leaf"><a href="http://boccbo.cc/focus-sheet/" target="_blank">📝 Focus Sheet Maker</a> <span class="mine">★ mine</span><span class="tag">Free browser tool to make printable focus sheets</span></li>
 
-<li class="leaf"><a href="http://boccbo.cc/math-sheet/" target="_blank">➕ Math Sheet Maker</a> <span class="mine">★ mine</span><span class="tag">Free browser tool to make printable math worksheets</span></li>
+<li data-subj="math" class="leaf"><a href="http://boccbo.cc/math-sheet/" target="_blank">➕ Math Sheet Maker</a> <span class="mine">★ mine</span><span class="tag">Free browser tool to make printable math worksheets</span></li>
 
-<li class="leaf"><a href="http://boccbo.cc/spelling-list/" target="_blank">✏️ Spelling List Maker</a> <span class="mine">★ mine</span><span class="tag">Free browser tool to make printable sequential-style spelling lists</span></li>
+<li data-subj="lang" class="leaf"><a href="http://boccbo.cc/spelling-list/" target="_blank">✏️ Spelling List Maker</a> <span class="mine">★ mine</span><span class="tag">Free browser tool to make printable sequential-style spelling lists</span></li>
 
 </ul></details></li>
 
@@ -247,14 +248,53 @@
 </footer>
 
 <script>
+var SUBJ = [
+  ['math','🔢 Math'], ['lang','📖 Language Arts &amp; Reading'], ['sci','🔬 Science'],
+  ['soc','🏛️ History, Geography &amp; Social Studies'], ['art','🎨 Art &amp; Design'],
+  ['code','💻 Computing &amp; Making'], ['fl','🗣️ Foreign &amp; Old Languages'],
+  ['games','🎮 Games'], ['gen','🌐 All Subjects &amp; General']
+];
+var typeTree = document.getElementById('tree');
+var subjTree = null;
 var toggleBtn = document.getElementById('toggleAll');
-var allDetails = document.querySelectorAll('#tree details');
 var expanded = false;
+function buildSubject() {
+  subjTree = document.createElement('ul');
+  subjTree.className = 'tree'; subjTree.id = 'tree-subject';
+  SUBJ.forEach(function(sj) {
+    var items = typeTree.querySelectorAll('li[data-subj]');
+    var li = document.createElement('li');
+    var d = document.createElement('details'); d.className = 'group';
+    var sum = document.createElement('summary');
+    sum.innerHTML = '<span class="name">' + sj[1] + '</span>';
+    var ul = document.createElement('ul');
+    items.forEach(function(it) {
+      if (it.dataset.subj.split(',').indexOf(sj[0]) !== -1) ul.appendChild(it.cloneNode(true));
+    });
+    if (!ul.children.length) return;
+    d.appendChild(sum); d.appendChild(ul); li.appendChild(d); subjTree.appendChild(li);
+  });
+  typeTree.parentNode.appendChild(subjTree);
+}
+function setView(v) {
+  if (v === 'subject' && !subjTree) buildSubject();
+  typeTree.hidden = v === 'subject';
+  if (subjTree) subjTree.hidden = v !== 'subject';
+  document.querySelectorAll('.view-btn').forEach(function(b) { b.classList.toggle('on', b.dataset.view === v); });
+  expanded = false; toggleBtn.textContent = 'Expand all';
+  document.querySelectorAll('#tree details, #tree-subject details').forEach(function(d) { d.open = false; });
+  try { history.replaceState(null, '', v === 'subject' ? '#subject' : location.pathname); } catch (e) {}
+}
+document.querySelectorAll('.view-btn').forEach(function(b) {
+  b.addEventListener('click', function() { setView(b.dataset.view); });
+});
 toggleBtn.addEventListener('click', function() {
   expanded = !expanded;
-  allDetails.forEach(function(d) { d.open = expanded; });
+  var t = (subjTree && !subjTree.hidden) ? subjTree : typeTree;
+  t.querySelectorAll('details').forEach(function(d) { d.open = expanded; });
   toggleBtn.textContent = expanded ? 'Collapse all' : 'Expand all';
 });
+setView(location.hash === '#subject' ? 'subject' : 'type');
 </script>
 
 </body>
