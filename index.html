@@ -5,60 +5,60 @@
 <title>Homeschool Wiki</title>
 <style>
   :root {
-    --bg: #f5f3ec;
-    --card: #ffffff;
-    --ink: #262319;
-    --muted: #6f6a5c;
-    --accent: #a5501f;
-    --accent-soft: #f3e3d5;
-    --border: #e6e0d2;
+    --bg: #ffffff;
+    --ink: #000;
+    --muted: #666;
+    --brown: #8B4513;
+    --brown-dark: #654321;
+    --brown-bg: rgba(139, 69, 19, 0.1);
+    --line: #ccc;
+    --link: #0000EE;
+    --visited: #551A8B;
   }
   * { box-sizing: border-box; }
   body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    line-height: 1.45;
+    margin: 0; padding: 20px;
+    font-family: monospace; font-size: 14px;
+    background: var(--bg); color: var(--ink); line-height: 1.45;
   }
-  header { padding: 2.2rem 1.5rem 1rem; text-align: center; }
-  header h1 { margin: 0 0 .3rem; font-size: 2rem; }
-  header p { margin: 0 0 1rem; color: var(--muted); }
+  header { max-width: 800px; margin: 0 auto 20px; padding-bottom: 10px; border-bottom: 2px dashed var(--brown); }
+  header h1 { margin: 0 0 6px; font-size: 16px; color: var(--brown); text-transform: uppercase; }
+  header p { margin: 0 0 10px; color: var(--muted); }
   header .toggle-all {
-    background: none; border: 1px solid var(--border); color: var(--accent);
-    padding: .4rem .9rem; border-radius: 7px; font-size: .85rem; cursor: pointer;
+    background: none; border: 2px dashed var(--brown); color: var(--brown);
+    padding: 4px 10px; font: inherit; cursor: pointer;
   }
-  header .toggle-all:hover { background: var(--accent-soft); }
-  main { max-width: 800px; margin: 0 auto; padding: 1rem 1.5rem 2rem; }
+  header .toggle-all:hover { background: var(--brown-bg); }
+  main { max-width: 800px; margin: 0 auto; }
 
   /* simple tree list */
   ul.tree, ul.tree ul { list-style: none; margin: 0; padding: 0; }
-  ul.tree ul { margin-left: .55rem; padding-left: 1.3rem; border-left: 1px solid var(--border); }
-  ul.tree li { position: relative; padding: .22rem 0; }
+  ul.tree ul { margin-left: 8px; padding-left: 18px; border-left: 1px dotted var(--line); }
+  ul.tree li { position: relative; padding: 3px 0; }
   ul.tree ul > li::before {
-    content: ""; position: absolute; left: -1.3rem; top: 1.1em; width: 1rem;
-    border-top: 1px solid var(--border);
+    content: ""; position: absolute; left: -18px; top: 12px; width: 14px;
+    border-top: 1px dotted var(--line);
   }
   ul.tree details > summary {
-    list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap;
+    list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
   }
   ul.tree details > summary::-webkit-details-marker { display: none; }
   ul.tree details > summary::before {
-    content: "+"; flex: none; width: 1.1rem; text-align: center; font-family: monospace;
-    border: 1px solid var(--muted); border-radius: 3px; color: var(--accent); font-size: .85rem; line-height: 1.05rem;
+    content: "+"; flex: none; width: 15px; text-align: center;
+    border: 1px solid var(--brown); color: var(--brown); line-height: 13px; font-size: 13px;
   }
   ul.tree details[open] > summary::before { content: "\2212"; }
-  ul.tree details > summary:hover .name { color: var(--accent); }
-  ul.tree details > ul { margin-top: .15rem; }
-  ul.tree .group > summary .name { font-size: 1.1rem; font-weight: 600; }
-  ul.tree .name { font-weight: 600; }
-  ul.tree li.leaf { display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
-  ul.tree li.leaf > a { color: var(--accent); text-decoration: none; font-weight: 600; }
-  ul.tree ul ul li.leaf > a { font-weight: 400; }
-  ul.tree li.leaf > a:hover { text-decoration: underline; }
-  ul.tree .tag { color: var(--muted); font-size: .85rem; }
+  ul.tree details > summary:hover { background: var(--brown-bg); }
+  ul.tree .group > summary .name { font-size: 16px; font-weight: bold; color: var(--brown); }
+  ul.tree .name { font-weight: bold; }
+  ul.tree li.leaf { padding-left: 23px; }
+  ul.tree li.leaf > .tag { margin-left: 8px; }
+  ul.tree li.leaf > a { color: var(--link); text-decoration: underline; }
+  ul.tree li.leaf > a:visited { color: var(--visited); }
+  ul.tree ul ul li.leaf > a { font-weight: normal; }
+  ul.tree .tag { color: var(--muted); font-size: 12px; }
 
-  footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 1rem 1rem 3rem; }
+  footer { max-width: 800px; margin: 20px auto 0; border-top: 2px dashed var(--brown); padding-top: 10px; color: var(--muted); font-size: 12px; }
 </style>
 </head>
 <body>
