@@ -26,6 +26,8 @@
     background: var(--bg); color: var(--ink); line-height: 1.45;
   }
   header { max-width: 800px; margin: 0 auto 20px; padding-bottom: 10px; border-bottom: 2px dashed var(--brown); }
+  header .home-link { display: block; margin-bottom: 6px; color: var(--link); }
+  header .home-link:visited { color: var(--visited); }
   header h1 { margin: 0 0 6px; font-size: 18px; color: var(--brown); text-transform: uppercase; }
   header p { margin: 0 0 10px; color: var(--muted); }
   header .toggle-all {
@@ -69,6 +71,7 @@
 <body>
 
 <header>
+  <a class="home-link" href="https://boccbo.cc/">← boccbo.cc</a>
   <h1>Homeschool Wiki</h1>
   <p>Every site we use, as a simple list</p>
   <button class="toggle-all" id="toggleAll">Expand all</button>
