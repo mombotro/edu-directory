@@ -1,0 +1,1616 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Interactive Math Visualization</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f4f2ec;
+        --grid-line: rgba(38, 52, 84, 0.07);
+        --panel: #fffdf8;
+        --panel-2: #f8f5ee;
+        --ink: #1c2434;
+        --ink-soft: #5a6376;
+        --line: #ddd6c7;
+        --line-strong: #b9b09a;
+        --accent: #d9481f;
+        --accent-ink: #b93a15;
+        --accent-soft: #fdeee7;
+        --accent-solid: #d9481f;
+        --teal: #0e7c7b;
+        --teal-soft: #e2f2f1;
+        --chip: #ffffff;
+        --shadow: 0 10px 30px rgba(28, 36, 52, 0.08), 0 2px 6px rgba(28, 36, 52, 0.06);
+        --answer-bg: #fff6ec;
+        --lane-a: rgba(38, 52, 84, 0.05);
+        --lane-b: rgba(38, 52, 84, 0.1);
+        --lane-line: rgba(38, 52, 84, 0.12);
+        --lane-hi: rgba(217, 72, 31, 0.18);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #131720;
+          --grid-line: rgba(220, 228, 245, 0.055);
+          --panel: #1d222e;
+          --panel-2: #181d27;
+          --ink: #eef0f4;
+          --ink-soft: #a7aebd;
+          --line: #343b4c;
+          --line-strong: #4d566d;
+          --accent: #ff7a4d;
+          --accent-ink: #ffa07e;
+          --accent-soft: #3a241c;
+          --accent-solid: #e85d2a;
+          --teal: #4cc2c0;
+          --teal-soft: #173635;
+          --chip: #232936;
+          --shadow: 0 10px 30px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.3);
+          --answer-bg: #2a2118;
+          --lane-a: rgba(220, 228, 245, 0.045);
+          --lane-b: rgba(220, 228, 245, 0.085);
+          --lane-line: rgba(220, 228, 245, 0.1);
+          --lane-hi: rgba(255, 122, 77, 0.22);
+        }
+      }
+
+      html { -webkit-text-size-adjust: 100%; }
+      body {
+        margin: 0;
+        font-family: "Archivo", system-ui, sans-serif;
+        color: var(--ink);
+        background-color: var(--bg);
+        background-image:
+          linear-gradient(var(--grid-line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+        background-size: 28px 28px;
+        line-height: 1.45;
+      }
+      .wrap {
+        max-width: 1060px;
+        margin: 0 auto;
+        padding: 20px 16px 40px;
+      }
+      .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+      .intro { max-width: 68ch; margin: 4px 0 18px; }
+      .intro h1 {
+        font-size: 1.55rem;
+        line-height: 1.15;
+        margin: 0 0 6px;
+        letter-spacing: -0.01em;
+      }
+      .intro p { margin: 0; color: var(--ink-soft); font-size: 0.98rem; }
+      .intro strong { color: var(--ink); }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      /* ---------- Controls ---------- */
+      .controls { padding: 16px; margin-bottom: 16px; }
+      .controls-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: flex-end;
+      }
+      .field { flex: 1 1 200px; min-width: 0; }
+      .field label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--ink-soft);
+        margin-bottom: 6px;
+      }
+      .field input {
+        width: 100%;
+        box-sizing: border-box;
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 1.55rem;
+        font-weight: 600;
+        padding: 10px 12px;
+        color: var(--ink);
+        background: var(--panel-2);
+        border: 1.5px solid var(--line-strong);
+        border-radius: 10px;
+        outline: none;
+      }
+      .field input:focus { border-color: var(--accent); }
+      .op-toggle {
+        display: flex;
+        border: 1.5px solid var(--line-strong);
+        border-radius: 10px;
+        overflow: hidden;
+        flex: 0 0 auto;
+      }
+      .op-toggle button {
+        appearance: none;
+        border: 0;
+        background: var(--panel-2);
+        color: var(--ink-soft);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 1.35rem;
+        font-weight: 700;
+        width: 52px;
+        height: 50px;
+        cursor: pointer;
+      }
+      .op-toggle button.active { background: var(--accent-solid); color: #fff; }
+      .op-toggle button:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+
+      .btn {
+        appearance: none;
+        font: inherit;
+        font-weight: 700;
+        font-size: 0.92rem;
+        padding: 9px 16px;
+        border-radius: 10px;
+        border: 1.5px solid var(--line-strong);
+        background: var(--panel-2);
+        color: var(--ink);
+        cursor: pointer;
+      }
+      .btn:hover { border-color: var(--ink-soft); }
+      .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+      .btn:disabled { opacity: 0.45; cursor: default; }
+      .btn.primary {
+        background: var(--accent-solid);
+        border-color: var(--accent-solid);
+        color: #fff;
+      }
+      .btn.primary:hover { filter: brightness(1.07); }
+      .presets { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; align-items: center; }
+      .presets .lbl { font-size: 0.85rem; font-weight: 700; color: var(--ink-soft); }
+      .transport .btn.primary { font-size: 1.08rem; padding: 13px 28px; }
+      .preset {
+        appearance: none;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.82rem;
+        font-weight: 600;
+        padding: 6px 11px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: var(--chip);
+        color: var(--ink-soft);
+        cursor: pointer;
+      }
+      .preset:hover { color: var(--ink); border-color: var(--line-strong); }
+      .note { margin: 12px 0 0; font-size: 0.88rem; color: var(--teal); font-weight: 600; }
+      .note.err { color: var(--accent-ink); }
+
+      /* ---------- Stage ---------- */
+      .stage {
+        display: grid;
+        grid-template-columns: minmax(300px, 460px) 1fr;
+        gap: 16px;
+        align-items: start;
+      }
+      @media (max-width: 760px) {
+        .stage { grid-template-columns: 1fr; }
+      }
+      /* Very long numbers: give the board the full width so digits stay readable */
+      .stage.wide { grid-template-columns: 1fr; }
+
+      .board { padding: 18px 18px 20px; }
+      .board-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+      }
+      .board-head .t { font-weight: 800; font-size: 0.95rem; }
+      .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+      .place-tag {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--accent-ink);
+        background: var(--accent-soft);
+        padding: 3px 9px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+      .place-tag:empty { display: none; }
+
+      /* ONE digit grid for everything: the equation, every partial row and
+         the answer row are rows of the same cells, so each column shares
+         one exact x-centre all the way down. */
+      .board-col {
+        --fs: 52px;
+        position: relative;
+        width: fit-content;
+        max-width: 100%;
+        margin: 0 auto;
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-weight: 700;
+        font-size: var(--fs);
+      }
+      .board-col .grow { position: relative; }
+      /* Place lanes: one tinted track per column behind the digit grid,
+         running from the place labels at the head down to the answer row.
+         Pure background — the grid itself, and so every digit's centre,
+         is untouched. The lane of the place being worked lights up. */
+      .lanes {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        grid-template-columns: 1.05em repeat(var(--ncols, 3), 1.14em);
+        pointer-events: none;
+      }
+      .lane {
+        background: var(--lane-a);
+        border-left: 1px solid var(--lane-line);
+        transition: background 0.3s ease, box-shadow 0.3s ease;
+      }
+      .lane.alt { background: var(--lane-b); }
+      .lane.on {
+        background: var(--lane-hi);
+        box-shadow: inset 0 0 0 2px var(--accent), inset 0 0 26px var(--lane-hi);
+      }
+      .lane-labels { margin-bottom: 0.06em; }
+      .lane-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 0;
+        text-align: center;
+        line-height: 1.1;
+        font-family: "Archivo", sans-serif;
+        font-size: max(8px, 0.205em);
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        color: var(--ink-soft);
+      }
+      .answer-row .cell.lane-on { box-shadow: inset 0 0 0 2px var(--accent); }
+      .grow {
+        display: grid;
+        grid-template-columns: 1.05em repeat(var(--ncols, 3), 1.14em);
+        align-items: stretch;
+      }
+      .grow .sign {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent-ink);
+      }
+      .cell {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 1.3em;
+        text-align: center;
+        border-radius: 0.14em;
+      }
+      .cell.pad { visibility: hidden; }
+      .cell.hl {
+        background: var(--accent);
+        color: #fff;
+        box-shadow: 0 0.08em 0 rgba(0, 0, 0, 0.18);
+      }
+      .cell.hl-soft { background: var(--accent-soft); color: var(--accent-ink); }
+      .cell.gone { opacity: 0.18; }
+      /* A borrowed digit (7 becomes 17) written small above the column digit. */
+      #problem { padding-top: 0.34em; }
+      .cell .borrowed {
+        position: absolute;
+        top: -0.95em;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.44em;
+        font-weight: 700;
+        color: var(--teal);
+        background: var(--teal-soft);
+        border-radius: 0.3em;
+        padding: 0.06em 0.16em;
+        line-height: 1.1;
+      }
+      .rule { border-top: 0.09em solid var(--ink); height: 0; }
+      /* Layer rules: one horizontal bar UNDER each finished level's lines,
+         in exactly the equation bar's style and span (grid columns 2 / -1 —
+         from the first lane's left edge to the last lane's right edge,
+         contained inside the board grid, never past it). The row lives in
+         the digit grid itself, so the line crosses every lane continuously
+         and stays var(--ink) whatever lane is lit; the lanes behind it run
+         on above and below uninterrupted. Vertical margins give each
+         level group its own breathing space. */
+      .layer-rule-row {
+        margin: 0.34em 0 0.36em;
+        animation: ruleIn 0.4s ease;
+      }
+      .layer-rule-row .rule { position: relative; z-index: 2; }
+      @keyframes ruleIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .working-label, .answer-label {
+        font-family: "Archivo", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        color: var(--ink-soft);
+        margin: 0.5em 0 0.3em;
+      }
+      .empty-note {
+        font-family: "Archivo", sans-serif;
+        font-weight: 500;
+        font-size: 0.95rem;
+        color: var(--ink-soft);
+        line-height: 1.5;
+        margin: 4px 0 8px;
+        max-width: 34ch;
+      }
+      .prow-partial { position: relative; transition: opacity 0.4s ease; }
+      .prow-partial.absorbed { opacity: 0.3; }
+      .cell.zero-pop { animation: pop 0.35s ease; }
+      .cell.changed { animation: pop 0.45s ease; color: var(--teal); }
+      /* The answer row lives in the same grid; the box is drawn on its cells. */
+      .answer-row .cell {
+        border-top: 0.045em dashed var(--line-strong);
+        border-bottom: 0.045em dashed var(--line-strong);
+        background: var(--answer-bg);
+      }
+      .answer-row .cell.first {
+        border-left: 0.045em dashed var(--line-strong);
+        border-top-left-radius: 0.2em;
+        border-bottom-left-radius: 0.2em;
+      }
+      .answer-row .cell.last {
+        border-right: 0.045em dashed var(--line-strong);
+        border-top-right-radius: 0.2em;
+        border-bottom-right-radius: 0.2em;
+      }
+      .answer-row.done .cell { border-style: solid; border-color: var(--accent); }
+      .answer-row .cell.ghost { color: var(--ink-soft); opacity: 0.55; }
+      .answer-row .cell.pop { animation: pop 0.35s ease; }
+      @keyframes pop {
+        0% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+      }
+
+      /* The borrow, written underneath: the donor line is lit, tagged
+         with what leaves it, and a labelled chip carries the same amount
+         across to the column that needs it. */
+      .prow-partial.donor-now {
+        background: var(--teal-soft);
+        box-shadow: inset 0 0 0 2px var(--teal);
+        border-radius: 0.14em;
+      }
+      .borrow-tag {
+        position: absolute;
+        top: -0.6em;
+        right: 0.02em;
+        font-family: "Archivo", sans-serif;
+        font-size: 0.3em;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        color: #fff;
+        background: var(--teal);
+        border-radius: 999px;
+        padding: 0.16em 0.55em;
+        line-height: 1.1;
+        white-space: nowrap;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        z-index: 5;
+      }
+      .digtok.transfer {
+        background: var(--teal);
+        border-radius: 999px;
+        padding: 0.1em 0.45em;
+        white-space: nowrap;
+      }
+      /* The 1 that just arrived in a borrowed digit, told apart from the
+         digit that was always there. */
+      .cell .borrowed .arr { color: var(--accent-ink); }
+
+      /* Tokens that fall straight down their own column. */
+      .digtok {
+        position: fixed;
+        z-index: 60;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 700;
+        background: var(--accent-solid);
+        color: #fff;
+        border-radius: 0.16em;
+        box-shadow: 0 0.12em 0.3em rgba(0, 0, 0, 0.28);
+        pointer-events: none;
+      }
+
+      /* ---------- Narration ---------- */
+      .work { padding: 18px; }
+      .narr-label {
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        color: var(--accent-ink);
+        margin-bottom: 8px;
+      }
+      .narration {
+        padding: 14px 16px;
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        font-size: 1.12rem;
+        line-height: 1.55;
+        min-height: 3.1em;
+      }
+      .narration strong { color: var(--accent-ink); }
+
+      /* ---------- Transport ---------- */
+      .transport {
+        position: sticky;
+        bottom: 12px;
+        margin-top: 16px;
+        padding: 12px 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        z-index: 20;
+      }
+      .transport .spacer { flex: 1 1 auto; }
+      .progress {
+        flex: 1 1 130px;
+        min-width: 110px;
+        height: 8px;
+        border-radius: 99px;
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        overflow: hidden;
+      }
+      .progress > div {
+        height: 100%;
+        width: 0%;
+        background: var(--accent-solid);
+        transition: width 0.35s ease;
+      }
+      .step-count {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--ink-soft);
+        white-space: nowrap;
+      }
+
+      .explainer { margin: 18px 2px 0; color: var(--ink-soft); font-size: 0.92rem; max-width: 72ch; }
+      .explainer strong { color: var(--ink); }
+
+      @media (prefers-reduced-motion: reduce) {
+        .cell.zero-pop, .cell.changed, .answer-row .cell.pop { animation: none; }
+        .layer-rule-row { animation: none; }
+        .progress > div, .lane { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <div class="intro">
+        <h1>Addition &amp; Subtraction</h1>
+        <p>Type two numbers, pick + or −, then press Step.</p>
+      </div>
+
+      <section class="card controls" aria-label="Problem setup">
+        <div class="controls-row">
+          <div class="field">
+            <label for="numA">First number</label>
+            <input id="numA" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" value="456" />
+          </div>
+          <div class="op-toggle" role="group" aria-label="Operation">
+            <button type="button" id="opAdd" class="active" aria-label="Add">+</button>
+            <button type="button" id="opSub" aria-label="Subtract">−</button>
+          </div>
+          <div class="field">
+            <label for="numB">Second number</label>
+            <input id="numB" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" value="279" />
+          </div>
+        </div>
+        <div class="presets" aria-label="Example problems">
+          <button type="button" class="preset" data-a="456" data-b="279" data-op="add">456 + 279</button>
+          <button type="button" class="preset" data-a="8317" data-b="3370" data-op="sub">8,317 − 3,370</button>
+          <button type="button" class="preset" data-a="2000" data-b="1999" data-op="sub">2,000 − 1,999</button>
+          <button type="button" class="preset" id="randomBtn">Surprise me</button>
+        </div>
+      </section>
+
+      <div class="stage" id="stage">
+        <section class="card board" aria-label="The problem and the stack">
+          <div class="board-head" style="justify-content: flex-end">
+            <span class="tags"><span class="place-tag" id="phaseTag"></span></span>
+          </div>
+          <div class="board-col" id="boardCol">
+            <div class="problem" id="problem"></div>
+            <div id="partials"></div>
+            <div class="answer-row" id="answerRow"></div>
+          </div>
+        </section>
+
+        <section class="card work" aria-label="Explanation">
+          <div class="narration" id="narration" aria-live="polite"></div>
+        </section>
+      </div>
+
+      <section class="card transport" aria-label="Playback controls">
+        <button type="button" class="btn" id="restartBtn">Restart</button>
+        <button type="button" class="btn primary" id="stepBtn">Step →</button>
+        <button type="button" class="btn" id="playBtn">▶ Play</button>
+        <div class="progress" aria-hidden="true"><div id="progressFill"></div></div>
+        <span class="step-count" id="stepCount"></span>
+      </section>
+
+    </main>
+
+    <script>
+      (function () {
+        "use strict";
+
+        var $ = function (id) { return document.getElementById(id); };
+        var numA = $("numA"), numB = $("numB");
+        var opAdd = $("opAdd"), opSub = $("opSub");
+        var boardCol = $("boardCol"), problemEl = $("problem");
+        var partialsEl = $("partials"), answerRow = $("answerRow");
+        var narration = $("narration");
+        var phaseTag = $("phaseTag");
+        var stepBtn = $("stepBtn"), playBtn = $("playBtn"), restartBtn = $("restartBtn");
+        var progressFill = $("progressFill"), stepCount = $("stepCount");
+        var STEP_MS = 3400; // one calm teaching pace for Play — stepping by hand is the main way through
+        var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        var op = "add"; // 'add' | 'sub'
+
+        var state = null; // working model + steps; see buildModel / rebuild
+        var timer = null;
+        var playing = false;
+        var bigTok = null; // the collapse-phase running-total token
+
+        /* ---------- helpers ---------- */
+        function fmt(n) {
+          // n is a BigInt; group digits with commas
+          var s = n.toString();
+          var neg = false;
+          if (s.charAt(0) === "-") { neg = true; s = s.slice(1); }
+          var out = "";
+          while (s.length > 3) { out = "," + s.slice(-3) + out; s = s.slice(0, -3); }
+          return (neg ? "−" : "") + s + out;
+        }
+        var GROUPS = ["", "thousand", "million", "billion", "trillion", "quadrillion", "quintillion",
+          "sextillion", "septillion", "octillion", "nonillion", "decillion", "undecillion", "duodecillion",
+          "tredecillion", "quattuordecillion", "quindecillion", "sexdecillion", "septendecillion",
+          "octodecillion", "novemdecillion", "vigintillion", "unvigintillion", "duovigintillion",
+          "trevigintillion", "quattuorvigintillion", "quinvigintillion", "sexvigintillion",
+          "septenvigintillion", "octovigintillion", "novemvigintillion", "trigintillion"];
+        function placeName(p) {
+          if (p === 0) return "ones";
+          if (p === 1) return "tens";
+          if (p === 2) return "hundreds";
+          var g = Math.floor(p / 3), r = p % 3;
+          var base = GROUPS[g];
+          if (!base) return "10^" + p;
+          if (r === 0) return base + "s";
+          if (r === 1) return "ten " + base + "s";
+          return "hundred " + base + "s";
+        }
+        function capPlace(p) {
+          var n = placeName(p);
+          return n.charAt(0).toUpperCase() + n.slice(1);
+        }
+        // Short lane label: one word where possible, hyphenated past that.
+        function laneLabel(p) { return capPlace(p).replace(/ /g, "-"); }
+        function pow10(p) { return 10n ** BigInt(p); }
+        function cleanNumber(raw) {
+          var s = String(raw).replace(/[^0-9]/g, "");
+          s = s.replace(/^0+(?=\d)/, "");
+          return s;
+        }
+        function wait(ms) {
+          return new Promise(function (res) { setTimeout(res, reducedMotion ? 0 : ms); });
+        }
+        function animDone(el, dur) {
+          return new Promise(function (res) {
+            if (reducedMotion || !el.animate) { res(); return; }
+            var a = el.animate([{ transform: "translate(0,0)" }, { transform: "translate(0,0)" }], dur);
+            a.onfinish = function () { res(); };
+            setTimeout(res, dur + 250);
+          });
+        }
+        // Move a fixed-position token to a target rect with a falling ease.
+        function flyTo(tok, rect, dur) {
+          var from = tok.getBoundingClientRect();
+          var dx = rect.left - from.left, dy = rect.top - from.top;
+          tok.style.left = rect.left + "px";
+          tok.style.top = rect.top + "px";
+          tok.style.width = rect.width + "px";
+          tok.style.height = rect.height + "px";
+          if (reducedMotion) return Promise.resolve();
+          var a = tok.animate(
+            [
+              { transform: "translate(" + (-dx) + "px," + (-dy) + "px)" },
+              { transform: "translate(0,0)" }
+            ],
+            { duration: dur, easing: "cubic-bezier(.55,.06,.75,.5)" }
+          );
+          return new Promise(function (res) {
+            a.onfinish = function () { res(); };
+            setTimeout(res, dur + 250);
+          });
+        }
+        function makeTok(text, rect) {
+          var t = document.createElement("div");
+          t.className = "digtok";
+          t.textContent = text;
+          t.style.left = rect.left + "px";
+          t.style.top = rect.top + "px";
+          t.style.width = rect.width + "px";
+          t.style.height = rect.height + "px";
+          t.style.fontSize = getComputedStyle(boardCol).fontSize;
+          document.body.appendChild(t);
+          return t;
+        }
+        function popTok(tok) {
+          if (reducedMotion || !tok.animate) return;
+          tok.animate(
+            [{ transform: "scale(1)" }, { transform: "scale(1.13)" }, { transform: "scale(1)" }],
+            { duration: 220, easing: "ease-out" }
+          );
+        }
+        function unionRect(a, b) {
+          return {
+            left: Math.min(a.left, b.left), top: Math.min(a.top, b.top),
+            width: Math.max(a.right, b.right) - Math.min(a.left, b.left),
+            height: Math.max(a.bottom, b.bottom) - Math.min(a.top, b.top),
+            right: Math.max(a.right, b.right), bottom: Math.max(a.bottom, b.bottom)
+          };
+        }
+        function cellRect(cell) { return cell.getBoundingClientRect(); }
+
+        /* ---------- grid construction ----------
+           Columns: grid position 0 is the sign slot of each row; digit
+           columns are grid positions 1..ncols. Working index i (0-based
+           from the left of the padded operands) maps to grid position
+           i+1+extra, where `extra` is the leading blank column kept for
+           results that grow a digit. */
+        function gridPos(i) { return i + 1 + state.extra; }
+
+        function makeCell(text, extraClass) {
+          var c = document.createElement("div");
+          c.className = "cell" + (extraClass ? " " + extraClass : "");
+          c.textContent = text;
+          return c;
+        }
+        function makeSign(text) {
+          var s = document.createElement("div");
+          s.className = "sign";
+          s.textContent = text || "";
+          return s;
+        }
+        function operandRow(str, signText, rowIdx) {
+          var row = document.createElement("div");
+          row.className = "grow";
+          row.appendChild(makeSign(signText));
+          for (var e = 0; e < state.extra; e++) {
+            // The leading spare column: a two-digit result in the leftmost
+            // place (9 + 8 = 17) merges across into it.
+            var pc = makeCell("", "pad");
+            pc.setAttribute("data-col", e - state.extra);
+            pc.setAttribute("data-row", rowIdx);
+            row.appendChild(pc);
+          }
+          var padded = str.padStart(state.len, " ");
+          for (var i = 0; i < state.len; i++) {
+            var ch = padded.charAt(i);
+            var c = makeCell(ch === " " ? "0" : ch, ch === " " ? "pad" : "");
+            c.setAttribute("data-col", i);
+            c.setAttribute("data-row", rowIdx);
+            row.appendChild(c);
+          }
+          return row;
+        }
+        function renderProblem() {
+          problemEl.innerHTML = "";
+          problemEl.appendChild(operandRow(state.aRaw, "", 0));
+          problemEl.appendChild(operandRow(state.bRaw, op === "add" ? "+" : "−", 1));
+          var ruleRow = document.createElement("div");
+          ruleRow.className = "grow";
+          var rule = document.createElement("div");
+          rule.className = "rule";
+          rule.style.gridColumn = "2 / -1";
+          ruleRow.appendChild(rule);
+          problemEl.appendChild(ruleRow);
+        }
+        function renderAnswerShell() {
+          answerRow.innerHTML = "";
+          answerRow.className = "grow answer-row";
+          answerRow.appendChild(makeSign("="));
+          for (var g = 1; g <= state.ncols; g++) {
+            var c = makeCell(g === state.ncols ? "?" : "", "ghost");
+            if (g === 1) c.classList.add("first");
+            if (g === state.ncols) c.classList.add("last");
+            c.setAttribute("data-ag", g);
+            answerRow.appendChild(c);
+          }
+        }
+        function aCell(g) { return answerRow.querySelector('.cell[data-ag="' + g + '"]'); }
+
+        /* ---------- place lanes ----------
+           A background layer behind the one digit grid: one tinted track
+           per column, running the full height of the board, with the
+           place's name at its head. Pure background — the grid, and so
+           every digit's centre, is untouched. On each step the lane of
+           the place being worked lights up, in step with the narration. */
+        var lanesLayer = null, labelsRow = null, laneEls = {}, activeLaneG = null;
+        function clearLanes() {
+          if (lanesLayer && lanesLayer.parentNode) lanesLayer.parentNode.removeChild(lanesLayer);
+          if (labelsRow && labelsRow.parentNode) labelsRow.parentNode.removeChild(labelsRow);
+          lanesLayer = null; labelsRow = null; laneEls = {}; activeLaneG = null;
+        }
+        function renderLanes() {
+          clearLanes();
+          lanesLayer = document.createElement("div");
+          lanesLayer.className = "lanes";
+          lanesLayer.setAttribute("aria-hidden", "true");
+          lanesLayer.appendChild(document.createElement("div")); // sign slot
+          for (var g = 1; g <= state.ncols; g++) {
+            var d = document.createElement("div");
+            d.className = "lane" + (g % 2 ? " alt" : "");
+            lanesLayer.appendChild(d);
+            laneEls[g] = d;
+          }
+          boardCol.insertBefore(lanesLayer, boardCol.firstChild);
+          labelsRow = document.createElement("div");
+          labelsRow.className = "grow lane-labels";
+          labelsRow.setAttribute("aria-hidden", "true");
+          labelsRow.appendChild(makeSign(""));
+          for (var g2 = 1; g2 <= state.ncols; g2++) {
+            var lc = document.createElement("div");
+            lc.className = "lane-label";
+            lc.textContent = laneLabel(state.ncols - g2);
+            labelsRow.appendChild(lc);
+          }
+          boardCol.insertBefore(labelsRow, problemEl);
+        }
+        function setActiveLane(g) {
+          if (activeLaneG && laneEls[activeLaneG]) laneEls[activeLaneG].classList.remove("on");
+          var prev = answerRow.querySelector(".cell.lane-on");
+          if (prev) prev.classList.remove("lane-on");
+          activeLaneG = g || null;
+          if (!g) return;
+          if (laneEls[g]) laneEls[g].classList.add("on");
+          var ac = aCell(g);
+          if (ac) ac.classList.add("lane-on");
+        }
+
+        // Render a value right-aligned across a row's cells; returns its cells.
+        function paintValue(cells, valueStr) {
+          var start = cells.length - valueStr.length;
+          var used = [];
+          for (var j = 0; j < cells.length; j++) {
+            if (j >= start) {
+              cells[j].textContent = valueStr.charAt(j - start);
+              used.push(cells[j]);
+            } else {
+              cells[j].textContent = "";
+            }
+          }
+          return used;
+        }
+
+        function fitDigits() {
+          var boardW = boardCol.parentElement.clientWidth - 36;
+          var avail = Math.max(160, boardW - 8);
+          // No size cap: BigInt math is exact at any length; the digits simply
+          // shrink (and the board goes full-width) as numbers grow.
+          var px = Math.min(60, Math.max(10, avail / (state.ncols * 1.14 + 1.05)));
+          boardCol.style.setProperty("--fs", px + "px");
+          boardCol.style.setProperty("--ncols", state.ncols);
+        }
+
+        /* ---------- level helpers (levels 2 and beyond) ---------- */
+        // The digit a line shows at a place, or null when the line's own
+        // digits don't reach that column (a 15 has no hundreds digit).
+        function digitAtPlace(v, p) {
+          var s = v.toString();
+          var idx = s.length - 1 - p;
+          return idx < 0 ? null : Number(s.charAt(idx));
+        }
+        function maxPlaceOf(lines) {
+          var m = 0;
+          for (var i = 0; i < lines.length; i++) m = Math.max(m, lines[i].toString().length - 1);
+          return m;
+        }
+        // A level can slot together when every column holds at most one
+        // non-zero digit across all its lines.
+        function mergeableLines(lines) {
+          var mp = maxPlaceOf(lines);
+          for (var p = 0; p <= mp; p++) {
+            var n = 0;
+            for (var i = 0; i < lines.length; i++) {
+              var d = digitAtPlace(lines[i], p);
+              if (d !== null && d !== 0) n++;
+            }
+            if (n > 1) return false;
+          }
+          return true;
+        }
+        // The final cascade: the last level's lines are NOT merged,
+        // slotted or rewritten — they stay exactly as they were formed,
+        // and each column's digits fall through one another — trivial
+        // falls included, 0 into 3 and all — landing one by one in the
+        // answer row itself. One step per column, biggest place first.
+        // One short clause per step: "6 falls onto 1 → 7."
+        function fallText(falls, sumStr, place) {
+          var pre = capPlace(place) + ": ";
+          if (falls.length === 1) return pre + falls[0].digit + " falls → " + sumStr + ".";
+          var run = falls[0].digit;
+          var txt = pre + falls[0].digit + " falls";
+          for (var j = 1; j < falls.length; j++) {
+            run += falls[j].digit;
+            txt += " onto " + falls[j].digit + " → " + run;
+          }
+          return txt + ".";
+        }
+        function finalFallSteps(lines, srcIdx) {
+          var out = [];
+          var mp = maxPlaceOf(lines);
+          for (var p = mp; p >= 0; p--) {
+            var falls = [], sum = 0;
+            for (var i = 0; i < lines.length; i++) {
+              var d = digitAtPlace(lines[i], p);
+              // A line that IS zero is zero in every column, so the fall
+              // passes through its 0 too — no fall is skipped, however
+              // trivial (in 4,900 / 0 / 40 / 7 the tens 0 falls through
+              // the 0 line's 0 and then the 4).
+              if (d === null && lines[i] === 0n) d = 0;
+              if (d !== null) { falls.push({ row: i, digit: d }); sum += d; }
+            }
+            out.push({
+              kind: "finalFall", srcIdx: srcIdx, place: p,
+              falls: falls, sumStr: String(sum),
+              narration: fallText(falls, String(sum), p)
+            });
+          }
+          return out;
+        }
+
+        /* ---------- the model ----------
+           Walk the places left to right. Each place, the top digit falls
+           onto the bottom digit IN ITS OWN COLUMN. Subtraction: if the top
+           digit is too small, borrow first — take one unit of that place
+           out of the pool of partial lines already landed (rewritten in
+           place) and the falling digit grows by 10. */
+        function buildModel() {
+          var aStr = state.aRaw.padStart(state.len, "0");
+          var bStr = state.bRaw.padStart(state.len, "0");
+          var steps = [];
+          var pool = 0n;          // sum of the partial lines landed so far
+          var poolParts = [];     // [{ value: BigInt }] — borrow rewrites these
+          for (var i = 0; i < state.len; i++) {
+            var p = state.len - 1 - i;
+            var unit = pow10(p);
+            var aD = Number(aStr.charAt(i));
+            var bD = Number(bStr.charAt(i));
+            var top = aD, borrow = false;
+            if (op === "sub" && top < bD && pool > 0n) {
+              borrow = true;
+              top += 10;
+              // The falling digit gains ten of THIS place, so the pool pays
+              // ten times this place's unit (borrowing for the tens costs 100).
+              var lend = 10n * unit;
+              var poolBeforeB = pool;
+              pool -= lend;
+              // Mirror the in-place rewrite the board will show: the lent
+              // amount comes out of the landed lines, rightmost first.
+              // Record exactly which lines donate, and how much each one
+              // gives, so the borrow can be shown as its OWN step — both
+              // sides of the transfer — before this digit is allowed to fall.
+              var donors = [];
+              var cut = lend;
+              for (var bj = poolParts.length - 1; bj >= 0 && cut > 0n; bj--) {
+                var beforeB = poolParts[bj].value;
+                var takeB = beforeB < cut ? beforeB : cut;
+                if (takeB > 0n) {
+                  poolParts[bj].value -= takeB;
+                  cut -= takeB;
+                  donors.push({ idx: bj, before: beforeB, after: poolParts[bj].value, take: takeB });
+                }
+              }
+              var bNarr = capPlace(p) + ": borrow " + fmt(lend) + " from " +
+                donors.map(function (d) { return fmt(d.before) + " → " + fmt(d.after); }).join(", ") +
+                ". " + fmt(BigInt(aD) * unit) + " → " + fmt(BigInt(top) * unit) + ".";
+              steps.push({
+                kind: "borrow", col: i, place: p, aDigit: aD, bDigit: bD, topShown: top,
+                lend: lend, poolBefore: poolBeforeB, poolAfter: pool, donors: donors,
+                narration: bNarr
+              });
+            }
+            var res = op === "add" ? top + bD : top - bD;
+            var resStr = String(res);
+            var landCol = i + 1 - resStr.length; // result's leftmost working index
+            if (landCol < -1) landCol = -1;      // the leading extra column is the limit
+            var value = BigInt(resStr) * unit;
+            steps.push({
+              kind: "form", col: i, place: p, topShown: top, bDigit: bD,
+              resStr: resStr, landCol: landCol, value: value,
+              narration: capPlace(p) + ": " + top + " falls onto " + bD + " → " + resStr + "."
+            });
+            poolParts.push({ value: value });
+            pool += value;
+          }
+          // Levels 2+: the landed lines become a new problem underneath and
+          // are added THE SAME WAY — column by column, biggest place first,
+          // one falling digit per column producing the next level's lines
+          // (600/120/15 -> 700/30/5). When a level's columns each hold at
+          // most one non-zero digit, no new level is spawned — instead the
+          // SAME cascade runs one last time on those lines, each column's
+          // digits falling through each other into the answer row itself.
+          // Termination: a level whose column sums are all
+          // < 10 produces exactly such a slottable level, and any column sum
+          // >= 10 strictly shrinks the total digit count — fuzz-verified
+          // against BigInt arithmetic.
+          var curLines = poolParts.map(function (x) { return x.value; });
+          var srcIdx = 0;   // index into the runtime level rows
+          var levelNo = 2;  // level 1 is the equation's own digit falls
+          var landed = false;
+          var guard = 0;
+          while (guard++ < 100 && !landed) {
+            var total = 0n;
+            for (var ti = 0; ti < curLines.length; ti++) total += curLines[ti];
+            if (mergeableLines(curLines)) {
+              // Same cascade to the very end: no slotting, no rewriting,
+              // no new stack of lines. Each column of these last lines
+              // falls through itself — zeros included — and lands in
+              // the answer row, one answer digit per column.
+              var fSteps = finalFallSteps(curLines, srcIdx);
+              for (var fs = 0; fs < fSteps.length; fs++) steps.push(fSteps[fs]);
+              landed = true;
+              break;
+            }
+            var mp = maxPlaceOf(curLines);
+            var nextLines = [];
+            for (var cp = mp; cp >= 0; cp--) {
+              var falls = [], colSum = 0;
+              for (var li = 0; li < curLines.length; li++) {
+                var dg = digitAtPlace(curLines[li], cp);
+                if (dg !== null) { falls.push({ row: li, digit: dg }); colSum += dg; }
+              }
+              var cResStr = String(colSum);
+              var cVal = BigInt(cResStr) * pow10(cp);
+              steps.push({
+                kind: "colFall", level: levelNo, srcIdx: srcIdx, place: cp,
+                falls: falls, sumStr: cResStr, value: cVal,
+                firstOfLevel: cp === mp,
+                narration: fallText(falls, cResStr, cp)
+              });
+              nextLines.push(cVal);
+            }
+            curLines = nextLines;
+            srcIdx++;
+            levelNo++;
+          }
+          if (!landed) { // unreachable per the termination argument; stay safe
+            var fSteps2 = finalFallSteps(curLines, srcIdx);
+            for (var fs2 = 0; fs2 < fSteps2.length; fs2++) steps.push(fSteps2[fs2]);
+          }
+          return { steps: steps };
+        }
+
+        /* ---------- rebuild / reset ---------- */
+        function rebuild() {
+          stopPlay();
+          removeBigTok();
+          var aRaw = cleanNumber(numA.value);
+          var bRaw = cleanNumber(numB.value);
+          if (aRaw === "" || bRaw === "") {
+            state = null;
+            problemEl.innerHTML = "";
+            partialsEl.innerHTML = "";
+            answerRow.innerHTML = "";
+            clearLanes();
+            setControlsEnabled(false);
+            return;
+          }
+          var A = BigInt(aRaw), B = BigInt(bRaw);
+          if (op === "sub" && B > A) {
+            var t = A; A = B; B = t;
+            var tr = aRaw; aRaw = bRaw; bRaw = tr;
+          }
+          var len = Math.max(aRaw.length, bRaw.length);
+          $("stage").classList.toggle("wide", len > 12);
+          state = {
+            A: A, B: B, aRaw: aRaw, bRaw: bRaw, len: len,
+            extra: 1, ncols: len + 1,
+            steps: [], idx: 0, done: false, parts: [], levelRows: []
+          };
+          var model = buildModel();
+          state.steps = model.steps;
+          renderProblem();
+          renderAnswerShell();
+          renderLanes();
+          resetBoard();
+          fitDigits();
+          setControlsEnabled(true);
+          updateTransport();
+        }
+
+        function resetBoard() {
+          partialsEl.innerHTML = "";
+          renderAnswerShell();
+          setActiveLane(null);
+          removeBigTok();
+          state.parts = [];
+          // Level rows: [0] is level 1 (the same array doFall fills);
+          // each later level's rows are appended by its colFall steps.
+          state.levelRows = [state.parts];
+          phaseTag.textContent = "";
+          narration.textContent = "Press Step.";
+          // Borrowed-digit chips and used-up digits live on the problem
+          // cells; a fresh start has to clear those too, or a re-run
+          // would stack a second chip on the same column.
+          var usedCells = problemEl.querySelectorAll(".cell.gone");
+          for (var gi = 0; gi < usedCells.length; gi++) usedCells[gi].classList.remove("gone");
+          var oldChips = problemEl.querySelectorAll(".borrowed");
+          for (var ci = 0; ci < oldChips.length; ci++) oldChips[ci].parentNode.removeChild(oldChips[ci]);
+          clearHl();
+        }
+
+        /* ---------- column highlight ---------- */
+        function opCell(rowIdx, col) {
+          return problemEl.querySelector('.cell[data-row="' + rowIdx + '"][data-col="' + col + '"]');
+        }
+        function clearHl() {
+          var cells = problemEl.querySelectorAll(".cell.hl, .cell.hl-soft");
+          for (var i = 0; i < cells.length; i++) cells[i].classList.remove("hl", "hl-soft");
+        }
+        function lightColumn(col, soft) {
+          clearHl();
+          [0, 1].forEach(function (r) {
+            var c = opCell(r, col);
+            if (c && !c.classList.contains("pad")) c.classList.add(soft ? "hl-soft" : "hl");
+          });
+        }
+
+        /* ---------- partial lines ---------- */
+        function makePartialRow(part) {
+          var row = document.createElement("div");
+          row.className = "grow prow-partial";
+          row.appendChild(makeSign(""));
+          var cells = [];
+          for (var g = 1; g <= state.ncols; g++) {
+            var c = makeCell("");
+            c.setAttribute("data-pg", g);
+            row.appendChild(c);
+            cells.push(c);
+          }
+          part.rowEl = row;
+          part.cells = cells;
+          return row;
+        }
+        function partCell(part, g) {
+          return part.rowEl.querySelector('.cell[data-pg="' + g + '"]');
+        }
+        /* ---------- layer rules ----------
+           When a level's lines are complete and the next phase begins,
+           a horizontal rule is drawn UNDER that level — same bar as the
+           equation's own (same .rule style, same grid span 2 / -1, so it
+           runs exactly lane-edge to lane-edge inside the board) — and the
+           new level's lines, or the answer row, build below it. One rule
+           per source level, inserted once, synchronously, at the start of
+           the first step of the phase that follows it. Reset clears
+           #partials, so the rules clear with the lines. */
+        function ensureLayerRule(srcIdx) {
+          if (partialsEl.querySelector('[data-layer-rule="' + srcIdx + '"]')) return;
+          var row = document.createElement("div");
+          row.className = "grow layer-rule-row";
+          row.setAttribute("data-layer-rule", String(srcIdx));
+          row.setAttribute("aria-hidden", "true");
+          var rule = document.createElement("div");
+          rule.className = "rule";
+          rule.style.gridColumn = "2 / -1";
+          row.appendChild(rule);
+          partialsEl.appendChild(row);
+        }
+        // Take the borrowed unit (cut) out of the landed lines, in place,
+        // digit by digit, rightmost line first. Returns the cells that changed.
+        function rewritePool(cut) {
+          var changed = [];
+          for (var j = state.parts.length - 1; j >= 0 && cut > 0n; j--) {
+            var part = state.parts[j];
+            var take = part.value < cut ? part.value : cut;
+            var nv = part.value - take;
+            cut -= take;
+            if (nv !== part.value) {
+              part.value = nv;
+              var used = paintValue(part.cells, nv.toString());
+              for (var u = 0; u < used.length; u++) changed.push(used[u]);
+            }
+          }
+          return changed;
+        }
+
+        /* ---------- the borrow step ----------
+           Borrowing is written underneath, as a transfer between the
+           landed lines and the stuck column — never on the top number.
+           One step shows BOTH sides: the donor line is lit, tagged with
+           what leaves it (−100) and rewritten in place; then a labelled
+           chip (+100) carries the same amount to the stuck column, where
+           the borrowed 1 arrives in front of the falling digit. Only the
+           NEXT step lets the digit fall. */
+        function attachBorrowTag(part, take) {
+          var tag = document.createElement("span");
+          tag.className = "borrow-tag";
+          tag.textContent = "−" + fmt(take);
+          var n = part.rowEl.querySelectorAll(".borrow-tag").length;
+          if (n) tag.style.top = (-0.6 - n * 0.55) + "em";
+          part.rowEl.appendChild(tag);
+        }
+        function flyTransferChip(text, fromRect, toRect) {
+          var t = document.createElement("div");
+          t.className = "digtok transfer";
+          t.textContent = text;
+          t.style.fontSize = (parseFloat(getComputedStyle(boardCol).fontSize) * 0.44) + "px";
+          document.body.appendChild(t);
+          var fx = fromRect.left + fromRect.width / 2, fy = fromRect.top + fromRect.height / 2;
+          var tx = toRect.left + toRect.width / 2, ty = toRect.top + toRect.height / 2;
+          t.style.left = (fx - t.offsetWidth / 2) + "px";
+          t.style.top = (fy - t.offsetHeight / 2) + "px";
+          if (reducedMotion) return { el: t, done: Promise.resolve() };
+          var a = t.animate(
+            [
+              { transform: "translate(0,0)" },
+              { transform: "translate(" + (tx - fx) + "px," + (ty - fy) + "px)" }
+            ],
+            { duration: 800, easing: "cubic-bezier(.45,.05,.55,.6)" }
+          );
+          var done = new Promise(function (res) {
+            a.onfinish = function () { res(); };
+            setTimeout(res, 1050);
+          });
+          return { el: t, done: done };
+        }
+        function applyBorrow(step) {
+          phaseTag.textContent = "Borrow";
+          narration.textContent = step.narration;
+          lightColumn(step.col, true);
+          var topCell = opCell(0, step.col);
+          var seq = wait(400);
+          // OUT: the donor line(s) — the borrow is taken against the lines
+          // already landed. Light them, tag what leaves, rewrite in place.
+          seq = seq.then(function () {
+            step.donors.forEach(function (d) {
+              var part = state.parts[d.idx];
+              part.rowEl.classList.add("donor-now");
+              attachBorrowTag(part, d.take);
+            });
+            return wait(650);
+          }).then(function () {
+            var changed = rewritePool(step.poolBefore - step.poolAfter);
+            changed.forEach(function (c, n) {
+              setTimeout(function () { c.classList.add("changed"); }, reducedMotion ? 0 : n * 120);
+              setTimeout(function () { c.classList.remove("changed"); }, reducedMotion ? 0 : n * 120 + 900);
+            });
+            return wait(800);
+          }).then(function () {
+            // The SAME amount travels, labelled, from the donor line's tag
+            // across to the stuck column.
+            var d0 = step.donors[0];
+            var tags = state.parts[d0.idx].rowEl.querySelectorAll(".borrow-tag");
+            var tagEl = tags[tags.length - 1];
+            var fromR = tagEl ? tagEl.getBoundingClientRect() : cellRect(state.parts[d0.idx].cells[0]);
+            var chip = flyTransferChip("+" + fmt(step.lend), fromR, cellRect(topCell));
+            return chip.done.then(function () {
+              if (chip.el.parentNode) chip.el.parentNode.removeChild(chip.el);
+              // IN: the borrowed 1 arrives in front of the falling digit —
+              // the 1 becomes 11, written small above the column, as always.
+              var chipEl = document.createElement("span");
+              chipEl.className = "borrowed";
+              var arr = document.createElement("span");
+              arr.className = "arr";
+              arr.textContent = "1";
+              chipEl.appendChild(arr);
+              chipEl.appendChild(document.createTextNode(String(step.aDigit)));
+              topCell.appendChild(chipEl);
+              topCell.setAttribute("data-borrowed", "1");
+              popTok(topCell);
+              return wait(650);
+            });
+          });
+          return seq;
+        }
+
+        /* ---------- the collapse token ---------- */
+        function removeBigTok() {
+          if (bigTok && bigTok.parentNode) bigTok.parentNode.removeChild(bigTok);
+          bigTok = null;
+        }
+        /* ---------- steps ---------- */
+        function applyStep(step) {
+          // A donor line's highlight belongs to its borrow step only; the
+          // −tag on the line stays behind as the record of what it lent.
+          var lit = document.querySelectorAll(".prow-partial.donor-now");
+          for (var li = 0; li < lit.length; li++) lit[li].classList.remove("donor-now");
+          // The lane of the place being worked lights up with the step —
+          // for a borrow, that is the stuck place's lane.
+          setActiveLane(step.col !== undefined ? gridPos(step.col) : state.ncols - step.place);
+          if (step.kind === "borrow") return applyBorrow(step);
+          if (step.kind === "form") return applyForm(step);
+          if (step.kind === "colFall") return applyColFall(step);
+          if (step.kind === "finalFall") return applyFinalFall(step);
+          return Promise.resolve();
+        }
+
+        function applyForm(step) {
+          phaseTag.textContent = "";
+          narration.textContent = step.narration;
+          lightColumn(step.col, false);
+
+          // The fall itself. If this column needed a borrow, that was its
+          // own step just before this one — both sides of the transfer
+          // already shown — so here the digit (carrying any borrowed ten)
+          // simply falls.
+          var seq = Promise.resolve().then(function () {
+            return doFall(step, String(step.topShown));
+          });
+          return seq.then(function () {
+            // The line is already painted exactly as it landed — the result
+            // digits in their columns, then the zeros that appeared beside
+            // them. (Repainting right-aligned would drag a landed 0 into
+            // the ones column, out of the column it fell in.)
+            var part = state.parts[state.parts.length - 1];
+            if (part) {
+              part.value = step.value;
+              part.rowEl.scrollIntoView({ block: "nearest", behavior: reducedMotion ? "auto" : "smooth" });
+            }
+          });
+        }
+        function doFall(step, topText) {
+          var topCell = opCell(0, step.col);
+          var botCell = opCell(1, step.col);
+          // Build the (still empty) partial row so we can aim at its cells.
+          var part = { value: step.value, rowEl: null, cells: null };
+          partialsEl.appendChild(makePartialRow(part));
+          state.parts.push(part);
+
+          var tok = makeTok(topText, cellRect(topCell));
+          topCell.classList.add("gone");
+          return flyTo(tok, cellRect(botCell), 420).then(function () {
+            // Contact: the two digits merge into the result, in this column.
+            var resCells = [];
+            for (var q = 0; q < step.resStr.length; q++) {
+              resCells.push(opCell(1, step.landCol + q));
+            }
+            var r = cellRect(resCells[0]);
+            for (var q2 = 1; q2 < resCells.length; q2++) r = unionRect(r, cellRect(resCells[q2]));
+            tok.textContent = step.resStr;
+            return flyTo(tok, r, 60).then(function () { popTok(tok); return wait(240); });
+          }).then(function () {
+            // Keep falling, straight down, to the new line under the bar.
+            var landCells = [];
+            for (var q = 0; q < step.resStr.length; q++) {
+              landCells.push(partCell(part, gridPos(step.landCol + q)));
+            }
+            var r = cellRect(landCells[0]);
+            for (var q2 = 1; q2 < landCells.length; q2++) r = unionRect(r, cellRect(landCells[q2]));
+            return flyTo(tok, r, 520);
+          }).then(function () {
+            if (tok.parentNode) tok.parentNode.removeChild(tok);
+            // The result settles into the line's cells…
+            var landIdx = [];
+            for (var q = 0; q < step.resStr.length; q++) landIdx.push(gridPos(step.landCol + q));
+            landIdx.forEach(function (g, n) {
+              var c = partCell(part, g);
+              c.textContent = step.resStr.charAt(n);
+            });
+            // …then the place-value zeros APPEAR in the cells to its right.
+            var chain = Promise.resolve();
+            for (var z = 0; z < step.place; z++) {
+              (function (g) {
+                chain = chain.then(function () {
+                  var c = partCell(part, g);
+                  c.textContent = "0";
+                  c.classList.add("zero-pop");
+                  setTimeout(function () { c.classList.remove("zero-pop"); }, 400);
+                  return wait(170);
+                });
+              })(gridPos(step.col + 1 + z));
+            }
+            return chain;
+          });
+        }
+
+        // The rect a token spans in a row when it holds `len` digits whose
+        // last digit sits at grid position g.
+        function spanRect(part, g, len) {
+          var start = Math.max(1, g - (len - 1));
+          var r = cellRect(partCell(part, start));
+          for (var q = start + 1; q <= g; q++) r = unionRect(r, cellRect(partCell(part, q)));
+          return r;
+        }
+
+        // Level 2+: one column of the stacked lines. The top line's digit
+        // in this column falls straight down, merging with every digit
+        // below it in the same column, then keeps falling to a NEW line
+        // underneath the level — where the zeros appear beside it, exactly
+        // like a level-1 landing.
+        function applyColFall(step) {
+          clearHl();
+          phaseTag.textContent = "Level " + step.level;
+          narration.textContent = step.narration;
+          var srcRows = state.levelRows[step.srcIdx];
+          var dst = state.levelRows[step.srcIdx + 1];
+          if (!dst) { dst = []; state.levelRows[step.srcIdx + 1] = dst; }
+          // A new level begins: first draw the rule under the level just
+          // finished, so this level's lines build below their own bar.
+          // (No-op on this level's later columns — the rule is already in.)
+          ensureLayerRule(step.srcIdx);
+          // Build the (still empty) new line so the fall can aim at it.
+          var part = { value: step.value, rowEl: null, cells: null };
+          partialsEl.appendChild(makePartialRow(part));
+          dst.push(part);
+
+          var g = state.ncols - step.place; // grid position of this column
+          var f0 = step.falls[0];
+          var firstCell = partCell(srcRows[f0.row], g);
+          var tok = makeTok(String(f0.digit), cellRect(firstCell));
+          firstCell.classList.add("gone");
+          var runStr = String(f0.digit);
+          var chain = wait(200);
+          step.falls.slice(1).forEach(function (f) {
+            chain = chain.then(function () {
+              var sp = srcRows[f.row];
+              return flyTo(tok, spanRect(sp, g, runStr.length), 420).then(function () {
+                partCell(sp, g).classList.add("gone");
+                runStr = String(Number(runStr) + f.digit);
+                tok.textContent = runStr;
+                var r = spanRect(sp, g, runStr.length);
+                tok.style.left = r.left + "px";
+                tok.style.top = r.top + "px";
+                tok.style.width = r.width + "px";
+                tok.style.height = r.height + "px";
+                popTok(tok);
+                return wait(230);
+              });
+            });
+          });
+          return chain.then(function () {
+            return flyTo(tok, spanRect(part, g, step.sumStr.length), 520);
+          }).then(function () {
+            if (tok.parentNode) tok.parentNode.removeChild(tok);
+            var startG = g - (step.sumStr.length - 1);
+            if (startG < 1) { // unreachable per the column-sum bound; stay correct
+              paintValue(part.cells, step.value.toString());
+              part.rowEl.scrollIntoView({ block: "nearest", behavior: reducedMotion ? "auto" : "smooth" });
+              return;
+            }
+            // The result digits settle into the new line's cells…
+            for (var q = 0; q < step.sumStr.length; q++) {
+              partCell(part, startG + q).textContent = step.sumStr.charAt(q);
+            }
+            // …then the place-value zeros APPEAR in the cells to its right.
+            var zchain = Promise.resolve();
+            for (var z = 1; z <= step.place; z++) {
+              (function (gg) {
+                zchain = zchain.then(function () {
+                  var c = partCell(part, gg);
+                  c.textContent = "0";
+                  c.classList.add("zero-pop");
+                  setTimeout(function () { c.classList.remove("zero-pop"); }, 400);
+                  return wait(170);
+                });
+              })(g + z);
+            }
+            return zchain.then(function () {
+              part.rowEl.scrollIntoView({ block: "nearest", behavior: reducedMotion ? "auto" : "smooth" });
+            });
+          });
+        }
+
+        // The final cascade: one column of the LAST level's lines. The
+        // topmost digit in the column falls straight down through every
+        // digit below it in those lines — zeros included, merging at
+        // each contact — then keeps falling into the ANSWER row, where
+        // it lands as that column's answer digit. The source lines are
+        // never modified; their digits only dim as they are used. No
+        // new line is created: the fall ends in the answer row itself.
+        function applyFinalFall(step) {
+          clearHl();
+          phaseTag.textContent = "Final cascade";
+          narration.textContent = step.narration;
+          // The last level is complete: draw its rule now, so the final
+          // cascade falls below it into the answer row. (No-op on the
+          // later columns — the rule is already in.)
+          ensureLayerRule(step.srcIdx);
+          var rows = state.levelRows[step.srcIdx];
+          var g = state.ncols - step.place; // grid position of this column
+          var f0 = step.falls[0];
+          var firstCell = partCell(rows[f0.row], g);
+          var tok = makeTok(String(f0.digit), cellRect(firstCell));
+          firstCell.classList.add("gone");
+          var runStr = String(f0.digit);
+          var chain = wait(200);
+          step.falls.slice(1).forEach(function (f) {
+            chain = chain.then(function () {
+              var sp = rows[f.row];
+              return flyTo(tok, spanRect(sp, g, runStr.length), 420).then(function () {
+                partCell(sp, g).classList.add("gone");
+                runStr = String(Number(runStr) + f.digit);
+                tok.textContent = runStr;
+                var r = spanRect(sp, g, runStr.length);
+                tok.style.left = r.left + "px";
+                tok.style.top = r.top + "px";
+                tok.style.width = r.width + "px";
+                tok.style.height = r.height + "px";
+                popTok(tok);
+                return wait(230);
+              });
+            });
+          });
+          return chain.then(function () {
+            // Keep falling, past the last line, into the answer row.
+            return flyTo(tok, cellRect(aCell(g)), 520);
+          }).then(function () {
+            if (tok.parentNode) tok.parentNode.removeChild(tok);
+            var ac = aCell(g);
+            ac.textContent = step.sumStr;
+            ac.classList.remove("ghost");
+            ac.classList.add("pop");
+            setTimeout(function () { ac.classList.remove("pop"); }, 420);
+            if (step.place === 0) {
+              // The last column has landed: the source lines are all
+              // used up now — dim them, values untouched — and the
+              // answer row is complete.
+              rows.forEach(function (r) { r.rowEl.classList.add("absorbed"); });
+              answerRow.classList.add("done");
+            }
+            answerRow.scrollIntoView({ block: "nearest", behavior: reducedMotion ? "auto" : "smooth" });
+            return wait(200);
+          });
+        }
+
+        function isLastStep() { return state && state.idx >= state.steps.length - 1; }
+
+        function finish() {
+          state.done = true;
+          clearHl();
+          setActiveLane(null);
+          phaseTag.textContent = "";
+          stopPlay();
+        }
+
+        function doStep() {
+          if (!state || state.done) { stopPlay(); updateTransport(); return; }
+          var step = state.steps[state.idx];
+          var last = isLastStep();
+          state.idx++;
+          var p = applyStep(step) || Promise.resolve();
+          if (last) p.then(function () { finish(); updateTransport(); });
+          updateTransport();
+        }
+
+        function updateTransport() {
+          if (!state) {
+            stepCount.textContent = "";
+            progressFill.style.width = "0%";
+            return;
+          }
+          var total = state.steps.length;
+          stepCount.textContent = Math.min(state.idx, total) + " / " + total;
+          progressFill.style.width = (total ? (state.idx / total) * 100 : 0) + "%";
+          stepBtn.disabled = state.done;
+          playBtn.disabled = state.done;
+          playBtn.textContent = playing ? "❚❚ Pause" : "▶ Play";
+        }
+
+        function setControlsEnabled(on) {
+          stepBtn.disabled = !on;
+          playBtn.disabled = !on;
+          restartBtn.disabled = !on;
+        }
+
+        /* ---------- play / pause ---------- */
+        function stopPlay() {
+          playing = false;
+          if (timer) { clearInterval(timer); timer = null; }
+          playBtn.textContent = "▶ Play";
+        }
+        function startPlay() {
+          if (!state || state.done) return;
+          playing = true;
+          playBtn.textContent = "❚❚ Pause";
+          timer = setInterval(function () {
+            doStep();
+            if (!state || state.done) { stopPlay(); updateTransport(); }
+          }, STEP_MS);
+        }
+
+        /* ---------- events ---------- */
+        stepBtn.addEventListener("click", function () { stopPlay(); doStep(); });
+        playBtn.addEventListener("click", function () {
+          if (playing) { stopPlay(); updateTransport(); } else { startPlay(); updateTransport(); }
+        });
+        restartBtn.addEventListener("click", function () {
+          if (!state) return;
+          stopPlay();
+          state.idx = 0;
+          state.done = false;
+          resetBoard();
+          updateTransport();
+        });
+        function setOp(newOp) {
+          op = newOp;
+          opAdd.classList.toggle("active", op === "add");
+          opSub.classList.toggle("active", op === "sub");
+          rebuild();
+        }
+        opAdd.addEventListener("click", function () { setOp("add"); });
+        opSub.addEventListener("click", function () { setOp("sub"); });
+
+        var rebuildTimer = null;
+        function queueRebuild() {
+          clearTimeout(rebuildTimer);
+          rebuildTimer = setTimeout(rebuild, 350);
+        }
+        numA.addEventListener("input", queueRebuild);
+        numB.addEventListener("input", queueRebuild);
+
+        function randomDigits(count) {
+          var s = String(1 + Math.floor(Math.random() * 9));
+          for (var i = 1; i < count; i++) s += String(Math.floor(Math.random() * 10));
+          return s;
+        }
+        $("randomBtn").addEventListener("click", function () {
+          // Classroom-sized numbers only: 3–4 digits, big enough to show the
+          // places working, small enough to talk through.
+          var nA = 3 + Math.floor(Math.random() * 2);
+          var nB = 3 + Math.floor(Math.random() * 2);
+          numA.value = randomDigits(nA);
+          numB.value = randomDigits(nB);
+          rebuild();
+        });
+
+        var presets = document.querySelectorAll(".preset");
+        for (var pi = 0; pi < presets.length; pi++) {
+          presets[pi].addEventListener("click", function () {
+            if (!this.getAttribute("data-a")) return; // e.g. the Surprise me button
+            numA.value = this.getAttribute("data-a");
+            numB.value = this.getAttribute("data-b");
+            setOp(this.getAttribute("data-op"));
+          });
+        }
+
+        document.addEventListener("keydown", function (e) {
+          var tag = (e.target && e.target.tagName) || "";
+          if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
+          if (e.key === " " || e.key === "ArrowRight") {
+            e.preventDefault();
+            stopPlay();
+            doStep();
+          }
+        });
+
+        var resizeTimer = null;
+        window.addEventListener("resize", function () {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(function () { if (state) fitDigits(); }, 150);
+        });
+
+        rebuild();
+      })();
+    </script>
+
+  </body>
+</html>
