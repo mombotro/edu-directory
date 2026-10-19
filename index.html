@@ -45,11 +45,12 @@
     border-top: 1px dotted var(--line);
   }
   ul.tree details > summary {
-    list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+    list-style: none; cursor: pointer; display: block; position: relative; padding-left: 23px;
   }
+  ul.tree details > summary .tag { margin-left: 8px; }
   ul.tree details > summary::-webkit-details-marker { display: none; }
   ul.tree details > summary::before {
-    content: "+"; flex: none; width: 15px; text-align: center;
+    content: "+"; position: absolute; left: 0; top: .2em; width: 15px; text-align: center;
     border: 1px solid var(--brown); color: var(--brown); line-height: 13px; font-size: 14px;
   }
   ul.tree details[open] > summary::before { content: "\2212"; }
