@@ -7,9 +7,7 @@
     <link rel="icon" href="data:," />
     <title>Interactive Math Visualization</title>
     <style>
-@font-face{font-family:"Terminus";font-style:normal;font-weight:400;src:local("Terminus"),url("../fonts/Terminus-Regular.ttf") format("truetype");font-display:swap}
-@font-face{font-family:"Terminus";font-style:normal;font-weight:700;src:local("Terminus"),url("../fonts/Terminus-Bold.ttf") format("truetype");font-display:swap}
-@font-face{font-family:"Terminus";font-style:italic;font-weight:400;src:local("Terminus"),url("../fonts/Terminus-Italic.ttf") format("truetype");font-display:swap}
+@font-face{font-family:"Lexend";font-style:normal;font-weight:100 900;src:local("Lexend"),url("../fonts/Lexend.woff2") format("woff2");font-display:swap}
 
       :root {
         color-scheme: light;
@@ -64,7 +62,7 @@
       html { -webkit-text-size-adjust: 100%; }
       body {
         margin: 0;
-        font-family: "Terminus", "Terminus (TTF)", monospace;
+        font-family: 'Lexend', system-ui, sans-serif;
         color: var(--ink);
         background-color: var(--bg);
         background-image:
@@ -78,7 +76,7 @@
         margin: 0 auto;
         padding: 20px 16px 40px;
       }
-      .mono { font-family: "Terminus", "Terminus (TTF)", monospace; }
+      .mono { font-family: 'Lexend', system-ui, sans-serif; }
 
       .intro { max-width: 68ch; margin: 4px 0 18px; }
       .intro h1 {
@@ -116,7 +114,7 @@
       .field input {
         width: 100%;
         box-sizing: border-box;
-        font-family: "Terminus", "Terminus (TTF)", monospace;
+        font-family: 'Lexend', system-ui, sans-serif;
         font-size: 1.55rem;
         font-weight: 600;
         padding: 10px 12px;
@@ -139,7 +137,7 @@
         border: 0;
         background: var(--panel-2);
         color: var(--ink-soft);
-        font-family: "Terminus", "Terminus (TTF)", monospace;
+        font-family: 'Lexend', system-ui, sans-serif;
         font-size: 1.35rem;
         font-weight: 700;
         width: 52px;
@@ -175,7 +173,7 @@
       .transport .btn.primary { font-size: 1.08rem; padding: 13px 28px; }
       .preset {
         appearance: none;
-        font-family: "Terminus", "Terminus (TTF)", monospace;
+        font-family: 'Lexend', system-ui, sans-serif;
         font-size: 0.82rem;
         font-weight: 600;
         padding: 6px 11px;
@@ -233,7 +231,7 @@
         width: fit-content;
         max-width: 100%;
         margin: 0 auto;
-        font-family: "Terminus", "Terminus (TTF)", monospace;
+        font-family: 'Lexend', system-ui, sans-serif;
         font-weight: 700;
         font-size: var(--fs);
       }
@@ -267,7 +265,7 @@
         min-width: 0;
         text-align: center;
         line-height: 1.1;
-        font-family: "Terminus", "Terminus (TTF)", monospace;
+        font-family: 'Lexend', system-ui, sans-serif;
         font-size: max(8px, 0.205em);
         font-weight: 700;
         letter-spacing: 0.01em;
@@ -336,7 +334,7 @@
         to { opacity: 1; }
       }
       .working-label, .answer-label {
-        font-family: "Terminus", "Terminus (TTF)", monospace;
+        font-family: 'Lexend', system-ui, sans-serif;
         font-size: 0.72rem;
         font-weight: 800;
         letter-spacing: 0.06em;
@@ -344,7 +342,7 @@
         margin: 0.5em 0 0.3em;
       }
       .empty-note {
-        font-family: "Terminus", "Terminus (TTF)", monospace;
+        font-family: 'Lexend', system-ui, sans-serif;
         font-weight: 500;
         font-size: 0.95rem;
         color: var(--ink-soft);
@@ -392,7 +390,7 @@
         position: absolute;
         top: -0.6em;
         right: 0.02em;
-        font-family: "Terminus", "Terminus (TTF)", monospace;
+        font-family: 'Lexend', system-ui, sans-serif;
         font-size: 0.3em;
         font-weight: 800;
         letter-spacing: 0.02em;
@@ -422,7 +420,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: "Terminus", "Terminus (TTF)", monospace;
+        font-family: 'Lexend', system-ui, sans-serif;
         font-weight: 700;
         background: var(--accent-solid);
         color: #fff;
@@ -480,7 +478,7 @@
         transition: width 0.35s ease;
       }
       .step-count {
-        font-family: "Terminus", "Terminus (TTF)", monospace;
+        font-family: 'Lexend', system-ui, sans-serif;
         font-size: 0.85rem;
         font-weight: 600;
         color: var(--ink-soft);
