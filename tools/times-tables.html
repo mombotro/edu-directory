@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Times Tables Tool</title>
+<style>
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:"Geneva","Tahoma","Verdana",sans-serif; color:#000;
+    background-color:#8b8b8b;
+    background-image:radial-gradient(#7c7c7c 1px, transparent 1.4px), radial-gradient(#9c9c9c 1px, transparent 1.4px);
+    background-size:4px 4px; background-position:0 0, 2px 2px; }
+  .mac-menubar{ position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:18px;
+    background:#fff; border-bottom:2px solid #000; padding:3px 12px;
+    font-family:"Chicago","Charcoal","Geneva",sans-serif; font-size:14px; }
+  .mac-menubar .mb-app{ font-weight:700; }
+  .mac-menubar a{ color:#000; text-decoration:none; } .mac-menubar a:hover{ background:#000; color:#fff; }
+  .wrap{ max-width:1000px; margin:0 auto; padding:18px 14px 40px; }
+  h1{ display:none; }
+  .sub{ color:#000; font-size:13px; margin:0 0 14px; background:#dddddd; border:1px solid #000;
+    box-shadow:inset 1px 1px 0 #fff, inset -1px -1px 0 #999; padding:6px 9px; line-height:1.45; }
+  .card{ background:#dddddd; border:1px solid #000; border-radius:0;
+    box-shadow:2px 2px 0 rgba(0,0,0,.4), inset 1px 1px 0 #fff, inset -1px -1px 0 #999;
+    padding:14px; margin-bottom:16px; }
+  .mac-bar{ display:flex; align-items:center; gap:8px; margin:-14px -14px 12px; padding:3px 7px;
+    border-bottom:1px solid #000;
+    background:repeating-linear-gradient(to bottom,#f4f4f4 0 2px,#b9b9b9 2px 4px);
+    font-family:"Chicago","Charcoal","Geneva",sans-serif; font-size:13px; }
+  .mac-bar .mac-title{ flex:1; text-align:center; font-weight:700; }
+  .mac-bar .mac-title span{ background:#dddddd; padding:0 10px; }
+  .mac-close,.mac-zoom{ width:9px; height:9px; background:#000; border-radius:50%; flex:none; }
+  button{ font-family:"Chicago","Charcoal","Geneva",sans-serif; font-size:13px; font-weight:700; color:#000;
+    background:#eeeeee; border:1px solid #000; border-radius:7px; padding:4px 14px; cursor:pointer;
+    box-shadow:inset 1px 1px 0 #fff, inset -1px -1px 0 #aaaaaa, 1px 1px 0 rgba(0,0,0,.3); }
+  button:active, button.on{ background:#555; color:#fff; }
+  #pdfBtn{ box-shadow:0 0 0 2px #dddddd, 0 0 0 3px #000, inset 1px 1px 0 #fff, inset -1px -1px 0 #aaaaaa; }
+  button:disabled{ opacity:.45; cursor:default; }
+  select, input[type="number"]{ font:inherit; font-weight:400; font-size:13px; padding:3px 6px; border:1px solid #000; border-radius:0; background:#fff; box-shadow:inset 1px 1px 0 #999; }
+  .field{ display:flex; flex-direction:column; gap:5px; font-size:12px; font-weight:700; }
+  .field input[type="checkbox"]{ accent-color:#000; width:14px; height:14px; }
+  .check{ flex-direction:row; align-items:center; gap:7px; padding-bottom:8px; }
+  .hint{ font-size:12.5px; color:#222; margin:10px 0 0; line-height:1.45; }
+  /* tabs */
+  .tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .tabs button{ font-size:14px; padding:7px 18px; }
+  .view{ display:none; } .view.active{ display:block; }
+  /* learn */
+  .chips{ display:flex; flex-wrap:wrap; gap:6px; margin:6px 0 12px; }
+  .chips button{ border-radius:0; padding:5px 0; width:42px; text-align:center; }
+  .learn-grid{ display:grid; grid-template-columns:220px 1fr; gap:16px; }
+  @media(max-width:700px){ .learn-grid{ grid-template-columns:1fr; } }
+  .factlist{ list-style:none; margin:0; padding:0; background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999; max-height:380px; overflow:auto; }
+  .factlist li{ padding:6px 10px; font-family:"Courier New",monospace; font-size:15px; cursor:pointer; border-bottom:1px dotted #bbb; }
+  .factlist li:hover{ background:#eee; } .factlist li.on{ background:#000; color:#fff; }
+  .bigfact{ font-family:"Courier New",monospace; font-size:38px; font-weight:700; text-align:center; margin:6px 0 2px; }
+  .skip{ text-align:center; font-size:14px; line-height:1.6; margin:8px 0; word-break:break-word; }
+  .skip b{ background:#000; color:#fff; padding:1px 5px; }
+  .arraywrap{ display:flex; justify-content:center; margin:10px 0; overflow:auto; }
+  .array{ display:grid; gap:4px; }
+  .array i{ width:14px; height:14px; border-radius:50%; background:#000; display:block; }
+  .arraylbl{ text-align:center; font-size:12.5px; color:#333; }
+  /* full chart */
+  .chartscroll{ overflow:auto; background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999; padding:8px; }
+  table.chart{ border-collapse:collapse; margin:0 auto; font-family:"Courier New",monospace; }
+  table.chart td, table.chart th{ width:38px; height:32px; text-align:center; font-size:13px; border:1px solid #bbb; padding:0; }
+  table.chart th{ background:#000; color:#fff; font-weight:700; }
+  table.chart td{ cursor:pointer; } table.chart td:hover{ background:#ddd; }
+  table.chart td.hl{ background:#ccc; } table.chart td.sel{ background:#000; color:#fff; font-weight:700; }
+  table.chart td.diag{ font-weight:700; text-decoration:underline; }
+  /* practice */
+  .pcontrols{ display:flex; flex-wrap:wrap; gap:14px 18px; align-items:end; }
+  .stats{ display:flex; gap:18px; flex-wrap:wrap; font-size:13px; font-weight:700; margin:10px 0; }
+  .prog{ height:14px; border:1px solid #000; background:#fff; box-shadow:inset 1px 1px 0 #999; margin:8px 0 14px; }
+  .prog i{ display:block; height:100%; background:#000; width:0%; transition:width .25s; }
+  .qbox{ background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999; padding:22px 14px; text-align:center; }
+  .qbig{ font-family:"Courier New",monospace; font-size:52px; font-weight:700; margin:4px 0 14px; }
+  .qbig input{ width:150px; font-family:"Courier New",monospace; font-size:44px; font-weight:700; text-align:center; border:none; border-bottom:4px solid #000; box-shadow:none; outline:none; }
+  .choices{ display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+  .choices button{ font-family:"Courier New",monospace; font-size:24px; padding:10px 22px; border-radius:0; }
+  .feedback{ min-height:30px; font-size:17px; font-weight:700; margin-top:12px; }
+  .feedback.good{ color:#006400; } .feedback.bad{ color:#8b0000; }
+  .summary{ background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999; padding:14px; margin-top:14px; display:none; }
+  .summary.show{ display:block; }
+  .missed{ font-family:"Courier New",monospace; font-size:14px; line-height:1.7; }
+  /* print sheet preview */
+  #sheetWrap{ overflow:auto; background:#fff; border:1px solid #000; box-shadow:5px 5px 0 rgba(0,0,0,.35); }
+  .mac-bar.sheet-bar{ margin:0; }
+  .sheet{ background:#fff; width:100%; aspect-ratio:8.5/11; container-type:inline-size; padding:4cqw 5cqw 5cqw; margin:0 auto; color:#000; }
+  .sheet-inst{ color:#555; font-size:2cqw; margin-bottom:3cqw; }
+  table.pchart{ border-collapse:collapse; width:100%; font-family:"Courier New",monospace; }
+  table.pchart td, table.pchart th{ border:1px solid #000; text-align:center; font-size:1.85cqw; height:3.4cqw; padding:0; }
+  table.pchart th{ font-weight:700; background:#eee; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .pprobs{ display:grid; gap:3cqw; align-content:start; }
+  .pprob{ font-size:2.6cqw; white-space:nowrap; font-family:"Courier New",monospace; }
+  .pprob .blank{ display:inline-block; width:5.5cqw; border-bottom:.35cqw solid #000; height:1em; }
+  .pprob .ans{ font-weight:700; }
+  .ptablelist{ font-family:"Courier New",monospace; font-size:2.5cqw; line-height:1.9; columns:2; }
+  @media print{
+    @page{ size:Letter portrait; margin:0; }
+    html,body{ margin:0; padding:0; background:#fff; }
+    .no-print{ display:none !important; }
+    .wrap{ max-width:none; padding:0; }
+    #printView{ display:block !important; }
+    #sheetWrap{ overflow:visible; border:none; box-shadow:none; margin:0; }
+    .sheet{ width:8.5in !important; height:11in !important; margin:0; }
+  }
+</style>
+</head>
+<body>
+<div class="mac-menubar no-print">
+  <span class="mb-app">Times Tables Tool</span>
+  <a href="../index.html">← Directory</a>
+</div>
+<div class="wrap">
+  <h1>Times Tables Tool</h1>
+  <p class="sub no-print">Learn the tables, drill them, and print them — all in one place. <strong>Learn</strong> shows each fact as groups of dots and as skip-counting. <strong>Practice</strong> drills the tables you pick, and any fact you miss comes back again until you get it. <strong>Print</strong> makes a clean chart or practice sheet.</p>
+
+  <div class="tabs no-print">
+    <button id="tab-learn" class="on" type="button">📖 Learn</button>
+    <button id="tab-practice" type="button">✏️ Practice</button>
+    <button id="tab-print" type="button">🖨 Print</button>
+  </div>
+
+  <!-- ============ LEARN ============ -->
+  <div class="view active" id="learnView">
+    <div class="card no-print">
+      <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Pick a table</span></span><span class="mac-zoom"></span></div>
+      <div class="chips" id="tableChips"></div>
+      <div class="learn-grid">
+        <ul class="factlist" id="factList"></ul>
+        <div>
+          <div class="bigfact" id="bigFact">2 × 1 = 2</div>
+          <div class="arraywrap"><div class="array" id="arrayBox"></div></div>
+          <div class="arraylbl" id="arrayLbl"></div>
+          <div class="skip" id="skipLine"></div>
+          <p class="hint" id="commuteNote"></p>
+        </div>
+      </div>
+    </div>
+    <div class="card no-print">
+      <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Full chart — click any square</span></span><span class="mac-zoom"></span></div>
+      <div class="chartscroll"><table class="chart" id="fullChart"></table></div>
+      <p class="hint">The underlined squares down the middle are the square numbers (3 × 3, 4 × 4…). Clicking a square above shows that fact on the left — and its turn-around fact (8 × 7 instead of 7 × 8) is the mirror square across that line, with the same answer.</p>
+    </div>
+  </div>
+
+  <!-- ============ PRACTICE ============ -->
+  <div class="view" id="practiceView">
+    <div class="card no-print">
+      <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Practice controls</span></span><span class="mac-zoom"></span></div>
+      <div class="chips" id="drillChips"></div>
+      <div class="pcontrols">
+        <label class="field">Quick pick
+          <select id="quickPick">
+            <option value="custom">Custom (chips above)</option>
+            <option value="all" selected>All tables 1–12</option>
+            <option value="early">Early tables 2, 5, 10</option>
+            <option value="mid">Building up 3, 4, 6</option>
+            <option value="tricky">Tricky ones 6, 7, 8, 9, 12</option>
+          </select>
+        </label>
+        <label class="field">Mode
+          <select id="drillMode">
+            <option value="practice" selected>Practice — untimed</option>
+            <option value="sprint">Sprint — 60 seconds</option>
+          </select>
+        </label>
+        <label class="field">Questions
+          <select id="qCount">
+            <option value="10">10</option>
+            <option value="20" selected>20</option>
+            <option value="30">30</option>
+          </select>
+        </label>
+        <label class="field">Answer by
+          <select id="answerBy">
+            <option value="type" selected>Typing</option>
+            <option value="choice">Choosing (4 options)</option>
+          </select>
+        </label>
+        <label class="field check"><input type="checkbox" id="includeTurn"> Include turn-around facts (7×8 and 8×7)</label>
+        <button id="startBtn" type="button">▶ Start drill</button>
+      </div>
+      <div class="stats">
+        <span>Score: <span id="stScore">0</span></span>
+        <span>Streak: <span id="stStreak">0</span> 🔥</span>
+        <span>Question: <span id="stQ">–</span></span>
+        <span id="stTimeWrap" style="display:none">Time left: <span id="stTime">60</span>s</span>
+      </div>
+      <div class="prog"><i id="progBar"></i></div>
+      <div class="qbox">
+        <div class="qbig" id="qBig">Press Start drill</div>
+        <div class="choices" id="choiceBox" style="display:none"></div>
+        <div style="margin-top:12px"><button id="checkBtn" type="button">Check</button> <button id="nextBtn" type="button" disabled>Next →</button></div>
+        <div class="feedback" id="feedback" aria-live="polite"></div>
+      </div>
+      <div class="summary" id="summaryBox">
+        <div style="font-size:17px;font-weight:700" id="summaryTitle"></div>
+        <p style="margin:8px 0 4px;font-weight:700">Facts to keep practising:</p>
+        <div class="missed" id="missedList"></div>
+        <div style="margin-top:12px"><button id="retryMissedBtn" type="button">↻ Drill just those facts</button> <button id="againBtn" type="button">New drill</button></div>
+      </div>
+      <p class="hint">Each drill asks every fact once — 7 × 8 and 8 × 7 count as the same fact, unless you tick <em>Include turn-around facts</em>. The only repeats are facts you miss: in Practice a missed fact is shown with its answer, then comes back a few questions later until you get it right on your own. In Sprint you have 60 seconds: answer as many as you can, wrong answers just move you on, and your missed facts are listed at the end.</p>
+    </div>
+  </div>
+
+  <!-- ============ PRINT ============ -->
+  <div class="view" id="printView">
+    <div class="card no-print">
+      <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Print controls</span></span><span class="mac-zoom"></span></div>
+      <div class="pcontrols">
+        <label class="field">Sheet type
+          <select id="sheetType">
+            <option value="chart" selected>Full chart — filled in</option>
+            <option value="blankchart">Blank chart — fill it in</option>
+            <option value="practice">Practice sheet — mixed problems</option>
+            <option value="onetable">One table — in order</option>
+          </select>
+        </label>
+        <label class="field">Table (for One table / Practice)
+          <select id="printTable"></select>
+        </label>
+        <label class="field">Problems (Practice only)
+          <select id="printCount">
+            <option value="20">20</option>
+            <option value="24" selected>24</option>
+            <option value="30">30</option>
+          </select>
+        </label>
+        <label class="field check"><input type="checkbox" id="printAnswers"> Show answers</label>
+        <label class="field check"><input type="checkbox" id="printAllTables" checked> Practice: use all tables</label>
+        <button id="printNewBtn" type="button">🎲 New practice sheet</button>
+        <button id="pdfBtn" type="button">⬇ Export as PDF</button>
+      </div>
+      <p class="hint"><strong>Export as PDF:</strong> choose <em>Save as PDF</em>, paper <em>Letter</em>, orientation <em>Portrait</em>, margins <em>None</em>, scale <em>100%</em>. The sheet itself is clean — just an instruction line and the work, no title and no name line, same as your other makers.</p>
+    </div>
+    <div id="sheetWrap">
+      <div class="mac-bar sheet-bar no-print"><span class="mac-close"></span><span class="mac-title"><span>untitled</span></span><span class="mac-zoom"></span></div>
+      <div class="sheet" id="sheet">
+        <div class="sheet-inst" id="sheetInst"></div>
+        <div id="sheetBody"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const shuffle = a => { a=[...a]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+
+/* ---------- tabs ---------- */
+const TABS = [["learn","learnView"],["practice","practiceView"],["print","printView"]];
+for(const [name,view] of TABS){
+  $("tab-"+name).addEventListener("click", ()=>{
+    for(const [n,v] of TABS){ $("tab-"+n).classList.toggle("on", n===name); $(v).classList.toggle("active", v===view); }
+  });
+}
+
+/* ---------- LEARN ---------- */
+let learnTable = 2, learnMult = 1;
+const chipsBox = $("tableChips");
+for(let n=1;n<=12;n++){
+  const b=document.createElement("button"); b.type="button"; b.textContent=n; b.dataset.t=n;
+  b.addEventListener("click", ()=>{ learnTable=n; learnMult=1; drawLearn(); });
+  chipsBox.appendChild(b);
+}
+function drawLearn(){
+  [...chipsBox.children].forEach(b=>b.classList.toggle("on", +b.dataset.t===learnTable));
+  const list=$("factList"); list.innerHTML="";
+  for(let m=1;m<=12;m++){
+    const li=document.createElement("li"); li.textContent=`${learnTable} × ${m} = ${learnTable*m}`;
+    li.classList.toggle("on", m===learnMult);
+    li.addEventListener("click", ()=>{ learnMult=m; drawLearn(); });
+    list.appendChild(li);
+  }
+  const a=learnTable, b=learnMult, ans=a*b;
+  $("bigFact").textContent = `${a} × ${b} = ${ans}`;
+  const arr=$("arrayBox"); arr.style.gridTemplateColumns=`repeat(${b}, 14px)`; arr.innerHTML="";
+  for(let i=0;i<ans;i++){ arr.appendChild(document.createElement("i")); }
+  $("arrayLbl").textContent = `${a} rows of ${b} — count them all: ${ans}`;
+  let skips=[]; for(let m=1;m<=12;m++) skips.push(m===b?`<b>${a*m}</b>`:String(a*m));
+  $("skipLine").innerHTML = `Skip-count by ${a}s: ` + skips.join(", ");
+  $("commuteNote").textContent = a===b
+    ? `This is a square number: ${a} × ${a} makes a real square of dots.`
+    : `Turn it around and it's the same answer: ${b} × ${a} = ${ans} too. Learn one, and you know the other.`;
+  drawChartSelection();
+}
+/* full chart */
+const chart=$("fullChart");
+(function buildChart(){
+  let html="<tr><th>×</th>"; for(let c=1;c<=12;c++) html+=`<th>${c}</th>`; html+="</tr>";
+  for(let r=1;r<=12;r++){ html+=`<tr><th>${r}</th>`;
+    for(let c=1;c<=12;c++) html+=`<td data-r="${r}" data-c="${c}" class="${r===c?"diag":""}">${r*c}</td>`;
+    html+="</tr>"; }
+  chart.innerHTML=html;
+  chart.addEventListener("click", e=>{
+    const td=e.target.closest("td"); if(!td) return;
+    learnTable=+td.dataset.r; learnMult=+td.dataset.c; drawLearn();
+    document.querySelector("#learnView .card").scrollIntoView({behavior:"smooth", block:"start"});
+  });
+})();
+function drawChartSelection(){
+  chart.querySelectorAll("td").forEach(td=>{
+    const r=+td.dataset.r, c=+td.dataset.c;
+    td.classList.toggle("sel", r===learnTable && c===learnMult);
+    td.classList.toggle("hl", (r===learnTable || c===learnMult) && !(r===learnTable && c===learnMult));
+  });
+}
+
+/* ---------- PRACTICE ---------- */
+let drillTables = new Set([1,2,3,4,5,6,7,8,9,10,11,12]);
+const drillChips=$("drillChips");
+for(let n=1;n<=12;n++){
+  const b=document.createElement("button"); b.type="button"; b.textContent=n; b.dataset.t=n; b.className="on";
+  b.addEventListener("click", ()=>{ const t=+b.dataset.t;
+    drillTables.has(t)?drillTables.delete(t):drillTables.add(t);
+    b.classList.toggle("on", drillTables.has(t)); $("quickPick").value="custom"; });
+  drillChips.appendChild(b);
+}
+function setDrillTables(list){
+  drillTables=new Set(list);
+  [...drillChips.children].forEach(b=>b.classList.toggle("on", drillTables.has(+b.dataset.t)));
+}
+$("quickPick").addEventListener("change", e=>{
+  const v=e.target.value;
+  if(v==="all") setDrillTables([1,2,3,4,5,6,7,8,9,10,11,12]);
+  if(v==="early") setDrillTables([2,5,10]);
+  if(v==="mid") setDrillTables([3,4,6]);
+  if(v==="tricky") setDrillTables([6,7,8,9,12]);
+});
+
+let queue=[], current=null, score=0, streak=0, asked=0, totalPlanned=0, missed=new Map(), answered=false, timerId=null, timeLeft=60, sprint=false, retryOnly=null;
+
+function buildQueue(count){
+  let facts=[];
+  const includeTurn = $("includeTurn").checked;
+  if(retryOnly){ facts=[...retryOnly]; }
+  else{
+    for(const t of [...drillTables]) for(let m=1;m<=12;m++){
+      facts.push([t,m]); if(includeTurn && t!==m) facts.push([m,t]);
+    }
+  }
+  /* One entry per fact. With turn-arounds OFF, a fact and its turn-around are
+     the SAME fact (7×8 is 8×7), so dedupe on the sorted pair — building the
+     pool table-by-table otherwise puts both orders in (7×8 from the 7s and
+     8×7 from the 8s) and the drill repeats itself. With turn-arounds ON,
+     dedupe on the exact order only, so no exact repeat either. A retry-missed
+     drill also dedupes on the sorted pair. */
+  const key = (includeTurn && !retryOnly)
+    ? (a,b)=>`${a}x${b}`
+    : (a,b)=>`${Math.min(a,b)}x${Math.max(a,b)}`;
+  facts=[...new Map(facts.map(f=>[key(f[0],f[1]),f])).values()];
+  facts=shuffle(facts);
+  return facts.slice(0, Math.min(count, facts.length)).map(([a,b])=>({a,b,ans:a*b,seenMiss:false}));
+}
+function startDrill(onlyMissed){
+  if(!onlyMissed) retryOnly=null;
+  clearInterval(timerId);
+  if(!retryOnly && drillTables.size===0){ $("feedback").textContent="Pick at least one table first."; $("feedback").className="feedback bad"; return; }
+  sprint = $("drillMode").value==="sprint";
+  queue = buildQueue(sprint? 999 : +$("qCount").value);
+  totalPlanned = queue.length; score=0; streak=0; asked=0; missed=new Map();
+  $("summaryBox").classList.remove("show");
+  $("stTimeWrap").style.display = sprint? "" : "none";
+  if(sprint){ timeLeft=60; $("stTime").textContent=timeLeft;
+    timerId=setInterval(()=>{ timeLeft--; $("stTime").textContent=timeLeft; if(timeLeft<=0) finishDrill(); },1000); }
+  nextQuestion();
+}
+function nextQuestion(){
+  if(queue.length===0){ finishDrill(); return; }
+  current=queue.shift(); answered=false;
+  $("feedback").textContent=""; $("feedback").className="feedback";
+  $("nextBtn").disabled=true; $("checkBtn").disabled=false;
+  const by=$("answerBy").value;
+  if(by==="type"){
+    $("choiceBox").style.display="none";
+    $("qBig").innerHTML=`${current.a} × ${current.b} = <input id="ansInput" type="number" inputmode="numeric" autocomplete="off">`;
+    const inp=$("ansInput"); inp.focus();
+    inp.addEventListener("keydown", e=>{ if(e.key==="Enter"){ answered? nextQuestion() : checkAnswer(); } });
+  } else {
+    $("qBig").textContent=`${current.a} × ${current.b} = ?`;
+    $("choiceBox").style.display="flex"; $("checkBtn").disabled=true;
+    const opts=new Set([current.ans]);
+    while(opts.size<4){ const d=current.ans + [ -current.a, current.a, -1, 1, -10, 10, -current.b, current.b ][Math.floor(Math.random()*8)]; if(d>0) opts.add(d); }
+    $("choiceBox").innerHTML="";
+    shuffle([...opts]).forEach(v=>{
+      const b=document.createElement("button"); b.type="button"; b.textContent=v;
+      b.addEventListener("click", ()=>checkAnswer(v));
+      $("choiceBox").appendChild(b);
+    });
+  }
+  updateStats();
+}
+function checkAnswer(chosen){
+  if(answered || !current) return;
+  const val = chosen!==undefined ? chosen : +($("ansInput") ? $("ansInput").value : NaN);
+  if(chosen===undefined && $("ansInput") && $("ansInput").value==="") return;
+  answered=true; asked++;
+  const fb=$("feedback");
+  if(val===current.ans){
+    score++; streak++;
+    fb.textContent = sprint? "✓" : `✓ Correct! ${current.a} × ${current.b} = ${current.ans}`;
+    fb.className="feedback good";
+  } else {
+    streak=0;
+    const key=`${current.a}x${current.b}`;
+    if(!missed.has(key)) missed.set(key,{a:current.a,b:current.b,ans:current.ans});
+    fb.textContent=`Not quite — ${current.a} × ${current.b} = ${current.ans}`;
+    fb.className="feedback bad";
+    if(!sprint){
+      /* A missed fact returns after 3 more questions — but only if a copy isn't
+         already waiting later in this drill, so repeats can never stack up. */
+      if(!queue.some(q=>q.a===current.a && q.b===current.b)){
+        queue.splice(Math.min(3, queue.length), 0, {...current});
+        totalPlanned++;
+      }
+    }
+  }
+  $("checkBtn").disabled=true; $("nextBtn").disabled=false;
+  if(!sprint) $("nextBtn").focus();
+  updateStats();
+  if(sprint) setTimeout(nextQuestion, 350);
+}
+function updateStats(){
+  $("stScore").textContent=score; $("stStreak").textContent=streak;
+  $("stQ").textContent = sprint? String(asked+ (current?1:0)) : (totalPlanned? `${Math.min(asked+1,totalPlanned)} of ${totalPlanned}` : "–");
+  $("progBar").style.width = sprint? `${(60-timeLeft)/60*100}%` : (totalPlanned? `${asked/totalPlanned*100}%` : "0%");
+}
+function finishDrill(){
+  clearInterval(timerId); current=null;
+  $("qBig").textContent="All done! 🎉";
+  $("choiceBox").style.display="none"; $("checkBtn").disabled=true; $("nextBtn").disabled=true;
+  $("feedback").textContent=""; updateStats(); $("progBar").style.width="100%";
+  const m=[...missed.values()];
+  $("summaryTitle").textContent = sprint
+    ? `Time! You answered ${score} correctly in 60 seconds.`
+    : `You scored ${score} out of ${asked} — ${m.length===0? "every fact right on the way through!" : "the facts below came back until the end of the drill."}`;
+  $("missedList").innerHTML = m.length? m.map(f=>`${f.a} × ${f.b} = ${f.ans}`).join(" &nbsp;•&nbsp; ") : "None — nothing missed. 🎉";
+  $("retryMissedBtn").disabled = m.length===0;
+  $("summaryBox").classList.add("show");
+}
+$("startBtn").addEventListener("click", ()=>startDrill(false));
+$("againBtn").addEventListener("click", ()=>startDrill(false));
+$("retryMissedBtn").addEventListener("click", ()=>{ retryOnly=[...missed.values()].map(f=>[f.a,f.b]); startDrill(true); });
+$("checkBtn").addEventListener("click", ()=>checkAnswer());
+$("nextBtn").addEventListener("click", nextQuestion);
+$("drillMode").addEventListener("change", ()=>{ $("qCount").disabled = $("drillMode").value==="sprint"; });
+
+/* ---------- PRINT ---------- */
+const printTableSel=$("printTable");
+for(let n=1;n<=12;n++){ const o=document.createElement("option"); o.value=n; o.textContent=`${n} times table`; if(n===7)o.selected=true; printTableSel.appendChild(o); }
+let printProblems=[];
+function genPrintProblems(){
+  const count=+$("printCount").value;
+  const tables = $("printAllTables").checked ? [1,2,3,4,5,6,7,8,9,10,11,12] : [+printTableSel.value];
+  const seen=new Set(); printProblems=[];
+  let guard=0;
+  while(printProblems.length<count && guard++<count*80){
+    const a=tables[Math.floor(Math.random()*tables.length)], b=1+Math.floor(Math.random()*12);
+    const sig=`${a}x${b}`; if(seen.has(sig)) continue; seen.add(sig);
+    printProblems.push({a,b,ans:a*b});
+  }
+}
+function drawSheet(){
+  const type=$("sheetType").value, show=$("printAnswers").checked, body=$("sheetBody"), inst=$("sheetInst");
+  if(type==="chart" || type==="blankchart"){
+    inst.textContent = type==="chart" ? "Times tables chart — use it to check your work." : "Fill in the times tables chart.";
+    let html=`<table class="pchart"><tr><th>×</th>`;
+    for(let c=1;c<=12;c++) html+=`<th>${c}</th>`; html+="</tr>";
+    for(let r=1;r<=12;r++){ html+=`<tr><th>${r}</th>`;
+      for(let c=1;c<=12;c++) html+=`<td>${type==="chart"||show? r*c : ""}</td>`;
+      html+="</tr>"; }
+    body.innerHTML=html+"</table>";
+  } else if(type==="onetable"){
+    const t=+printTableSel.value;
+    inst.textContent=`Write the answers. The ${t} times table.`;
+    let html=`<div class="ptablelist">`;
+    for(let m=1;m<=12;m++) html+=`<div>${t} × ${m} = ${show? `<span class="ans" style="font-weight:700">${t*m}</span>` : "____"}</div>`;
+    body.innerHTML=html+"</div>";
+  } else {
+    if(printProblems.length===0) genPrintProblems();
+    inst.textContent="Solve each problem.";
+    const cols = printProblems.length>24?3:2;
+    let html=`<div class="pprobs" style="grid-template-columns:repeat(${cols},1fr)">`;
+    for(const p of printProblems) html+=`<div class="pprob">${p.a} × ${p.b} = ${show? `<span class="ans">${p.ans}</span>` : `<span class="blank"></span>`}</div>`;
+    body.innerHTML=html+"</div>";
+  }
+}
+for(const id of ["sheetType","printTable","printAnswers","printAllTables"]) $(id).addEventListener("input", ()=>{ if(id!=="printAnswers"&&$("sheetType").value==="practice"&&(id==="printTable"||id==="printAllTables")) genPrintProblems(); drawSheet(); });
+$("printCount").addEventListener("input", ()=>{ genPrintProblems(); drawSheet(); });
+$("printNewBtn").addEventListener("click", ()=>{ genPrintProblems(); drawSheet(); });
+$("pdfBtn").addEventListener("click", ()=>{ document.title="Times Tables Sheet"; window.print(); });
+
+/* init */
+drawLearn();
+genPrintProblems();
+drawSheet();
+</script>
+</body>
+</html>

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Number Line Tool</title>
+<style>
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:"Geneva","Tahoma","Verdana",sans-serif; color:#000;
+    background-color:#8b8b8b;
+    background-image:radial-gradient(#7c7c7c 1px, transparent 1.4px), radial-gradient(#9c9c9c 1px, transparent 1.4px);
+    background-size:4px 4px; background-position:0 0, 2px 2px; }
+  .mac-menubar{ position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:18px;
+    background:#fff; border-bottom:2px solid #000; padding:3px 12px;
+    font-family:"Chicago","Charcoal","Geneva",sans-serif; font-size:14px; }
+  .mac-menubar .mb-app{ font-weight:700; }
+  .mac-menubar a{ color:#000; text-decoration:none; } .mac-menubar a:hover{ background:#000; color:#fff; }
+  .wrap{ max-width:1000px; margin:0 auto; padding:18px 14px 40px; }
+  h1{ display:none; }
+  .sub{ font-size:13px; margin:0 0 14px; background:#dddddd; border:1px solid #000;
+    box-shadow:inset 1px 1px 0 #fff, inset -1px -1px 0 #999; padding:6px 9px; line-height:1.45; }
+  .card{ background:#dddddd; border:1px solid #000; border-radius:0;
+    box-shadow:2px 2px 0 rgba(0,0,0,.4), inset 1px 1px 0 #fff, inset -1px -1px 0 #999;
+    padding:14px; margin-bottom:16px; }
+  .mac-bar{ display:flex; align-items:center; gap:8px; margin:-14px -14px 12px; padding:3px 7px;
+    border-bottom:1px solid #000;
+    background:repeating-linear-gradient(to bottom,#f4f4f4 0 2px,#b9b9b9 2px 4px);
+    font-family:"Chicago","Charcoal","Geneva",sans-serif; font-size:13px; }
+  .mac-bar .mac-title{ flex:1; text-align:center; font-weight:700; }
+  .mac-bar .mac-title span{ background:#dddddd; padding:0 10px; }
+  .mac-close,.mac-zoom{ width:9px; height:9px; background:#000; border-radius:50%; flex:none; }
+  button{ font-family:"Chicago","Charcoal","Geneva",sans-serif; font-size:13px; font-weight:700; color:#000;
+    background:#eeeeee; border:1px solid #000; border-radius:7px; padding:4px 14px; cursor:pointer;
+    box-shadow:inset 1px 1px 0 #fff, inset -1px -1px 0 #aaaaaa, 1px 1px 0 rgba(0,0,0,.3); }
+  button:active, button.on{ background:#555; color:#fff; }
+  #pdfBtn{ box-shadow:0 0 0 2px #dddddd, 0 0 0 3px #000, inset 1px 1px 0 #fff, inset -1px -1px 0 #aaaaaa; }
+  button:disabled{ opacity:.45; cursor:default; }
+  select, input[type="number"]{ font:inherit; font-weight:400; font-size:13px; padding:3px 6px; border:1px solid #000; border-radius:0; background:#fff; box-shadow:inset 1px 1px 0 #999; }
+  input[type="number"]{ width:84px; }
+  .field{ display:flex; flex-direction:column; gap:5px; font-size:12px; font-weight:700; }
+  .field input[type="checkbox"]{ accent-color:#000; width:14px; height:14px; }
+  .check{ flex-direction:row; align-items:center; gap:7px; padding-bottom:8px; }
+  .hint{ font-size:12.5px; color:#222; margin:10px 0 0; line-height:1.45; }
+  .tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .tabs button{ font-size:14px; padding:7px 18px; }
+  .view{ display:none; } .view.active{ display:block; }
+  .controls{ display:flex; flex-wrap:wrap; gap:14px 18px; align-items:end; }
+  /* ---------- number line ---------- */
+  .nlstage{ background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999; padding:18px 22px 10px; margin-top:12px; }
+  .nl{ position:relative; }
+  .nl-arcs{ position:relative; height:64px; }
+  .nl-arcs svg{ position:absolute; left:0; top:0; overflow:visible; }
+  .arclbl{ position:absolute; transform:translateX(-50%); font-family:"Courier New",monospace; font-weight:700; font-size:14px; top:0; background:#fff; padding:0 3px; }
+  .nl-track{ position:relative; height:44px; cursor:pointer; touch-action:none; }
+  .nl-bar{ position:absolute; left:0; right:0; top:20px; height:3px; background:#000; }
+  .nl-bar::before,.nl-bar::after{ content:""; position:absolute; top:-4px; border:5.5px solid transparent; }
+  .nl-bar::before{ left:-9px; border-right:8px solid #000; }
+  .nl-bar::after{ right:-9px; border-left:8px solid #000; }
+  .tick{ position:absolute; top:12px; width:2px; height:18px; background:#000; transform:translateX(-50%); }
+  .tick.minor{ top:16px; height:10px; width:1px; background:#777; }
+  .nl-labels{ position:relative; height:24px; }
+  .nlab{ position:absolute; transform:translateX(-50%); font-family:"Courier New",monospace; font-size:13px; top:2px; }
+  .marker{ position:absolute; top:-6px; transform:translateX(-50%); z-index:5; text-align:center; cursor:grab; }
+  .marker .pin{ width:22px; height:22px; border-radius:50% 50% 50% 0; transform:rotate(-45deg); background:#000; border:2px solid #fff; box-shadow:0 0 0 1.5px #000; margin:0 auto; }
+  .marker.grey .pin{ background:#888; }
+  .marker .mval{ display:block; margin-top:9px; font-family:"Courier New",monospace; font-weight:700; font-size:14px; background:#000; color:#fff; padding:0 5px; white-space:nowrap; }
+  .marker.grey .mval{ background:#888; }
+  .dotmark{ position:absolute; top:15px; width:13px; height:13px; border-radius:50%; background:#000; transform:translateX(-50%); z-index:4; }
+  .bigval{ font-family:"Courier New",monospace; font-size:42px; font-weight:700; text-align:center; margin:8px 0 0; }
+  .inforow{ display:flex; gap:10px 26px; flex-wrap:wrap; justify-content:center; font-size:14px; margin-top:6px; text-align:center; }
+  .countline{ text-align:center; font-size:13.5px; margin-top:10px; line-height:1.6; word-break:break-word; }
+  .countline b{ background:#000; color:#fff; padding:1px 5px; }
+  /* jump + practice */
+  .eqbig{ font-family:"Courier New",monospace; font-size:38px; font-weight:700; text-align:center; margin:6px 0 2px; }
+  .narr{ min-height:26px; text-align:center; font-size:16px; font-weight:700; margin-top:10px; }
+  .stats{ display:flex; gap:18px; flex-wrap:wrap; font-size:13px; font-weight:700; margin:10px 0; }
+  .feedback{ min-height:28px; font-size:16px; font-weight:700; margin-top:10px; text-align:center; }
+  .feedback.good{ color:#006400; } .feedback.bad{ color:#8b0000; }
+  .qprompt{ font-size:19px; font-weight:700; text-align:center; margin:4px 0; }
+  .ansrow{ display:flex; gap:10px; justify-content:center; align-items:center; margin-top:10px; flex-wrap:wrap; }
+  .ansrow input{ font-family:"Courier New",monospace; font-size:22px; font-weight:700; text-align:center; width:120px; }
+  /* print sheet */
+  #sheetWrap{ overflow:auto; background:#fff; border:1px solid #000; box-shadow:5px 5px 0 rgba(0,0,0,.35); }
+  .mac-bar.sheet-bar{ margin:0; }
+  .sheet{ background:#fff; width:100%; aspect-ratio:11/8.5; container-type:inline-size; padding:3.5cqw 4cqw; margin:0 auto; color:#000; }
+  .sheet-inst{ color:#555; font-size:1.7cqw; margin-bottom:2.5cqw; }
+  .pline{ margin-bottom:4.5cqw; }
+  .pline .nl-track{ cursor:default; height:3.6cqw; }
+  .pline .nl-bar{ top:1.7cqw; height:.28cqw; }
+  .pline .tick{ top:1cqw; width:.18cqw; height:1.6cqw; }
+  .pline .nlab{ font-size:1.55cqw; }
+  .pline .nl-labels{ height:2.2cqw; }
+  .pline .dotmark{ top:1.25cqw; width:1.15cqw; height:1.15cqw; }
+  .plineq{ font-size:1.7cqw; margin-top:.6cqw; font-family:"Courier New",monospace; }
+  @media print{
+    @page{ size:Letter landscape; margin:0; }
+    html,body{ margin:0; padding:0; background:#fff; }
+    .no-print{ display:none !important; }
+    .wrap{ max-width:none; padding:0; }
+    #printView{ display:block !important; }
+    #sheetWrap{ overflow:visible; border:none; box-shadow:none; margin:0; }
+    .sheet{ width:11in !important; height:8.5in !important; margin:0; }
+  }
+</style>
+</head>
+<body>
+<div class="mac-menubar no-print">
+  <span class="mb-app">Number Line Tool</span>
+  <a href="../index.html">← Directory</a>
+</div>
+<div class="wrap">
+  <h1>Number Line Tool</h1>
+  <p class="sub no-print">One line, four ways to use it. <strong>Explore</strong> — drag the pin and watch the numbers. <strong>Jump &amp; Solve</strong> — see adding, subtracting, and times tables as hops along the line. <strong>Practice</strong> — find numbers, read numbers, and measure distances. <strong>Print</strong> — clean number lines for paper work.</p>
+
+  <div class="tabs no-print">
+    <button id="tab-explore" class="on" type="button">🧭 Explore</button>
+    <button id="tab-jump" type="button">🦘 Jump &amp; Solve</button>
+    <button id="tab-practice" type="button">✏️ Practice</button>
+    <button id="tab-print" type="button">🖨 Print</button>
+  </div>
+
+  <!-- ============ EXPLORE ============ -->
+  <div class="view active" id="exploreView">
+    <div class="card no-print">
+      <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Explore the line</span></span><span class="mac-zoom"></span></div>
+      <div class="controls">
+        <label class="field">Line
+          <select id="exPreset">
+            <option value="0-10" selected>0 to 10</option>
+            <option value="0-20">0 to 20</option>
+            <option value="0-50">0 to 50</option>
+            <option value="0-100">0 to 100</option>
+            <option value="-10-10">−10 to 10</option>
+            <option value="-20-20">−20 to 20</option>
+            <option value="frac">0 to 1 — fractions</option>
+            <option value="custom">Custom…</option>
+          </select>
+        </label>
+        <label class="field" id="exMinWrap" style="display:none">From <input type="number" id="exMin" value="0"></label>
+        <label class="field" id="exMaxWrap" style="display:none">To <input type="number" id="exMax" value="30"></label>
+        <button id="exApply" type="button" style="display:none">Set line</button>
+        <button id="exLeft" type="button">◀ Step back</button>
+        <button id="exRight" type="button">Step forward ▶</button>
+      </div>
+      <div class="nlstage"><div id="exLine"></div>
+        <div class="bigval" id="exBig">0</div>
+        <div class="inforow" id="exInfo"></div>
+        <div class="countline" id="exCount"></div>
+      </div>
+      <p class="hint">Drag the pin, tap anywhere on the line, or use the ◀ ▶ buttons (arrow keys work too when the pin is picked up). Numbers to the right are bigger; numbers to the left are smaller. On the −10 to 10 line, watch the pin cross zero — numbers below zero are smaller than every number above zero.</p>
+    </div>
+  </div>
+
+  <!-- ============ JUMP & SOLVE ============ -->
+  <div class="view" id="jumpView">
+    <div class="card no-print">
+      <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Jump &amp; Solve</span></span><span class="mac-zoom"></span></div>
+      <div class="controls">
+        <label class="field">Start / first number <input type="number" id="jA" value="47"></label>
+        <label class="field">Operation
+          <select id="jOp">
+            <option value="add" selected>+ Add</option>
+            <option value="sub">− Subtract</option>
+            <option value="mul">× Times (jumps of the second number)</option>
+          </select>
+        </label>
+        <label class="field">Second number <input type="number" id="jB" value="25"></label>
+        <label class="field">Jumps
+          <select id="jStrategy">
+            <option value="smart" selected>Smart chunks (tens, then ones)</option>
+            <option value="one">One big jump</option>
+            <option value="hops10">Hops of 10, then the rest</option>
+            <option value="hops5">Hops of 5, then the rest</option>
+            <option value="hops1">Hops of 1 (counting on)</option>
+          </select>
+        </label>
+        <button id="jBuild" type="button">Set up</button>
+        <button id="jStep" type="button">Jump ▶</button>
+        <button id="jPlay" type="button">Play all</button>
+        <button id="jReset" type="button">↺ Back to start</button>
+      </div>
+      <div class="eqbig" id="jEq">47 + 25 = ?</div>
+      <div class="nlstage"><div id="jLine"></div></div>
+      <div class="narr" id="jNarr">Press Jump to hop along the line.</div>
+      <p class="hint">Adding hops to the <em>right</em>, subtracting hops to the <em>left</em>. For ×, the first number is <em>how many jumps</em> and the second is <em>how big each jump is</em> — that's the times tables walking along the line. Smart chunks breaks 25 into +20 then +5, the way you'd do it in your head.</p>
+    </div>
+  </div>
+
+  <!-- ============ PRACTICE ============ -->
+  <div class="view" id="practiceView">
+    <div class="card no-print">
+      <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Practice</span></span><span class="mac-zoom"></span></div>
+      <div class="controls">
+        <label class="field">Game
+          <select id="pMode">
+            <option value="find" selected>Find the Number — put the pin on it</option>
+            <option value="read">What Number Is This? — read the pin</option>
+            <option value="dist">How Far Apart? — distance between two pins</option>
+          </select>
+        </label>
+        <label class="field">Line
+          <select id="pPreset">
+            <option value="0-10">0 to 10</option>
+            <option value="0-20" selected>0 to 20</option>
+            <option value="0-100">0 to 100 (steps of 5)</option>
+            <option value="-10-10">−10 to 10</option>
+          </select>
+        </label>
+        <label class="field check"><input type="checkbox" id="pHide"> Hide the numbers (challenge)</label>
+        <button id="pNew" type="button">🎲 New question</button>
+      </div>
+      <div class="stats"><span>Score: <span id="pScore">0</span></span><span>Streak: <span id="pStreak">0</span> 🔥</span><span>Answered: <span id="pAsked">0</span></span></div>
+      <div class="qprompt" id="pPrompt"></div>
+      <div class="nlstage"><div id="pLine"></div></div>
+      <div class="ansrow" id="pAnsRow">
+        <input id="pAns" type="number" inputmode="numeric" autocomplete="off" placeholder="answer">
+        <button id="pCheck" type="button">Check</button>
+        <button id="pNext" type="button" disabled>Next →</button>
+      </div>
+      <div class="feedback" id="pFeedback" aria-live="polite"></div>
+      <p class="hint">In <em>Find the Number</em>, drag the pin (or tap the line) and press Check. In the other two games, type your answer. Hiding the numbers leaves only the ticks — count them carefully!</p>
+    </div>
+  </div>
+
+  <!-- ============ PRINT ============ -->
+  <div class="view" id="printView">
+    <div class="card no-print">
+      <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Print controls</span></span><span class="mac-zoom"></span></div>
+      <div class="controls">
+        <label class="field">From <input type="number" id="prMin" value="0"></label>
+        <label class="field">To <input type="number" id="prMax" value="20"></label>
+        <label class="field">Count by
+          <select id="prStep">
+            <option value="1" selected>1s</option>
+            <option value="2">2s</option>
+            <option value="5">5s</option>
+            <option value="10">10s</option>
+          </select>
+        </label>
+        <label class="field">Lines on the sheet
+          <select id="prLines">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="4">4</option>
+          </select>
+        </label>
+        <label class="field check"><input type="checkbox" id="prLabels" checked> Show numbers</label>
+        <label class="field check"><input type="checkbox" id="prDot"> Put a mystery dot on each line</label>
+        <button id="prNew" type="button">🎲 New dots</button>
+        <button id="pdfBtn" type="button">⬇ Export as PDF</button>
+      </div>
+      <p class="hint"><strong>Export as PDF:</strong> choose <em>Save as PDF</em>, paper <em>Letter</em>, orientation <em>Landscape</em> (number lines are long!), margins <em>None</em>, scale <em>100%</em>. The sheet is clean — just an instruction line and the lines, no title and no name line, same as your other makers.</p>
+    </div>
+    <div id="sheetWrap">
+      <div class="mac-bar sheet-bar no-print"><span class="mac-close"></span><span class="mac-title"><span>untitled</span></span><span class="mac-zoom"></span></div>
+      <div class="sheet" id="sheet">
+        <div class="sheet-inst" id="sheetInst"></div>
+        <div id="sheetBody"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const pct=(v,cfg)=>(v-cfg.min)/(cfg.max-cfg.min)*100;
+function fmtVal(v, frac){
+  if(!frac) return String(Math.round(v*1000)/1000);
+  const m={0:"0","0.25":"1/4","0.5":"1/2","0.75":"3/4",1:"1"};
+  return m[String(Math.round(v*100)/100)] ?? String(v);
+}
+function niceStep(span){
+  for(const s of [0.25,0.5,1,2,5,10,20,25,50,100,200]) if(span/s<=20) return s;
+  return 500;
+}
+/* Build the static innards of a line (bar + ticks + labels) */
+function lineInnards(cfg){
+  let ticks="", labels="";
+  const n=Math.round((cfg.max-cfg.min)/cfg.tick);
+  for(let i=0;i<=n;i++){
+    const v=Math.round((cfg.min+i*cfg.tick)*1000)/1000, p=pct(v,cfg);
+    const isLab = Math.abs((v-cfg.min)/cfg.label - Math.round((v-cfg.min)/cfg.label))<1e-9;
+    ticks+=`<span class="tick${isLab?"":" minor"}" style="left:${p}%"></span>`;
+    if(isLab && cfg.showLabels!==false) labels+=`<span class="nlab" style="left:${p}%">${fmtVal(v,cfg.frac)}</span>`;
+  }
+  return `<div class="nl-track"><div class="nl-bar"></div>${ticks}<span class="nl-slots"></span></div><div class="nl-labels">${labels}</div>`;
+}
+function markerHTML(v,cfg,opts={}){
+  return `<span class="marker${opts.grey?" grey":""}" data-marker="1" style="left:${pct(v,cfg)}%"><span class="pin"></span>${opts.hideVal?"":`<span class="mval">${fmtVal(v,cfg.frac)}</span>`}</span>`;
+}
+function renderStaticLine(el,cfg,inner){
+  el.innerHTML=`<div class="nl">${lineInnards(cfg)}</div>`;
+  el.querySelector(".nl-slots").innerHTML=inner||"";
+  return el.querySelector(".nl-track");
+}
+function valueFromEvent(e,track,cfg){
+  const r=track.getBoundingClientRect();
+  const raw=cfg.min + clamp((e.clientX-r.left)/r.width,0,1)*(cfg.max-cfg.min);
+  const snapped=Math.round(raw/cfg.snap)*cfg.snap;
+  return clamp(Math.round(snapped*1000)/1000, cfg.min, cfg.max);
+}
+function dragify(track,getCfg,onMove,onDone){
+  let down=false;
+  track.addEventListener("pointerdown", e=>{ down=true; track.setPointerCapture(e.pointerId); onMove(valueFromEvent(e,track,getCfg())); });
+  track.addEventListener("pointermove", e=>{ if(down) onMove(valueFromEvent(e,track,getCfg())); });
+  track.addEventListener("pointerup",   e=>{ if(down){ down=false; onDone && onDone(); } });
+}
+
+/* ---------- tabs ---------- */
+const TABS=[["explore","exploreView"],["jump","jumpView"],["practice","practiceView"],["print","printView"]];
+for(const [name,view] of TABS) $("tab-"+name).addEventListener("click", ()=>{
+  for(const [n,v] of TABS){ $("tab-"+n).classList.toggle("on", n===name); $(v).classList.toggle("active", v===view); }
+  if(name==="jump") drawJumpArcs();
+});
+
+/* ---------- EXPLORE ---------- */
+const PRESETS={
+  "0-10":{min:0,max:10,tick:1,label:1,snap:1},
+  "0-20":{min:0,max:20,tick:1,label:2,snap:1},
+  "0-50":{min:0,max:50,tick:5,label:5,snap:1},
+  "0-100":{min:0,max:100,tick:5,label:10,snap:5},
+  "-10-10":{min:-10,max:10,tick:1,label:1,snap:1},
+  "-20-20":{min:-20,max:20,tick:2,label:2,snap:1},
+  "frac":{min:0,max:1,tick:0.25,label:0.25,snap:0.25,frac:true},
+};
+let exCfg={...PRESETS["0-10"]}, exVal=0;
+function drawExplore(){
+  const track=renderStaticLine($("exLine"), exCfg, markerHTML(exVal,exCfg));
+  dragify(track, ()=>exCfg, v=>{ exVal=v; moveExMarker(); }, drawExplore);
+  drawExInfo();
+}
+function moveExMarker(){
+  const m=$("exLine").querySelector("[data-marker]");
+  if(m){ m.style.left=pct(exVal,exCfg)+"%"; m.querySelector(".mval").textContent=fmtVal(exVal,exCfg.frac); }
+  drawExInfo();
+}
+function drawExInfo(){
+  $("exBig").textContent=fmtVal(exVal,exCfg.frac);
+  const before=exVal-exCfg.snap, after=exVal+exCfg.snap;
+  let bits=[];
+  bits.push(`Before it: <b>${before<exCfg.min?"—":fmtVal(before,exCfg.frac)}</b>`);
+  bits.push(`After it: <b>${after>exCfg.max?"—":fmtVal(after,exCfg.frac)}</b>`);
+  if(exCfg.min<0) bits.push(`Distance from zero: <b>${fmtVal(Math.abs(exVal),exCfg.frac)}</b>`);
+  if(!exCfg.frac) bits.push(exVal%2===0?`It's <b>even</b>`:`It's <b>odd</b>`);
+  $("exInfo").innerHTML=bits.join("&nbsp; · &nbsp;");
+  /* counting line: label steps from min up to the pin, with the pin itself bold at the end */
+  let seq=[];
+  const guardN=Math.round((exCfg.max-exCfg.min)/exCfg.label);
+  for(let i=0;i<=guardN;i++){ const x=Math.round((exCfg.min+i*exCfg.label)*1000)/1000; if(x<exVal) seq.push(fmtVal(x,exCfg.frac)); else break; }
+  seq.push(`<b>${fmtVal(exVal,exCfg.frac)}</b>`);
+  $("exCount").innerHTML="Counting: "+seq.join(", ")+(exVal<exCfg.max ? ", …" : "");
+}
+$("exPreset").addEventListener("change", e=>{
+  const v=e.target.value, custom=v==="custom";
+  $("exMinWrap").style.display=$("exMaxWrap").style.display=$("exApply").style.display= custom?"":"none";
+  if(!custom){ exCfg={...PRESETS[v]}; exVal=exCfg.min; drawExplore(); }
+});
+$("exApply").addEventListener("click", ()=>{
+  let a=+$("exMin").value, b=+$("exMax").value;
+  if(!(b>a) || b-a>1000){ $("exCount").textContent="That line doesn't work — 'To' must be bigger than 'From', and no more than 1000 apart."; return; }
+  const step=niceStep(b-a);
+  exCfg={min:a,max:b,tick:step,label:step,snap:step}; exVal=a; drawExplore();
+});
+$("exLeft").addEventListener("click", ()=>{ exVal=clamp(Math.round((exVal-exCfg.snap)*1000)/1000, exCfg.min, exCfg.max); drawExplore(); });
+$("exRight").addEventListener("click", ()=>{ exVal=clamp(Math.round((exVal+exCfg.snap)*1000)/1000, exCfg.min, exCfg.max); drawExplore(); });
+document.addEventListener("keydown", e=>{
+  if(!$("exploreView").classList.contains("active")) return;
+  if(e.key==="ArrowLeft") $("exLeft").click();
+  if(e.key==="ArrowRight") $("exRight").click();
+});
+
+/* ---------- JUMP & SOLVE ---------- */
+let J=null, playTimer=null;
+function buildJumps(){
+  clearInterval(playTimer);
+  const A=+$("jA").value||0, B=+$("jB").value||0, op=$("jOp").value, strat=$("jStrategy").value;
+  let start, jumps=[], sym, eqLeft;
+  if(op==="mul"){
+    const count=clamp(Math.round(A),0,12), size=clamp(Math.round(B),0,12);
+    start=0; jumps=Array(count).fill(size); sym="×"; eqLeft=`${count} × ${size}`;
+  } else {
+    start=A; sym= op==="add"?"+":"−";
+    eqLeft=`${A} ${sym} ${Math.abs(B)}`;
+    const total = op==="add"? Math.abs(B) : -Math.abs(B);
+    const dir=Math.sign(total)||1, mag=Math.abs(total);
+    if(strat==="one" || op==="mul") jumps=[total];
+    else if(strat==="smart"){
+      const tens=Math.floor(mag/10)*10, ones=mag%10;
+      if(tens) jumps.push(dir*tens); if(ones) jumps.push(dir*ones); if(!jumps.length) jumps=[0];
+    } else {
+      const hop = strat==="hops10"?10: strat==="hops5"?5:1;
+      let left=mag; while(left>=hop){ jumps.push(dir*hop); left-=hop; } if(left>0) jumps.push(dir*left); if(!jumps.length) jumps=[0];
+    }
+  }
+  const landings=[start]; for(const j of jumps) landings.push(landings[landings.length-1]+j);
+  const lo0=Math.min(...landings,0), hi0=Math.max(...landings,0);
+  const step=niceStep(hi0-lo0||10);
+  const lo=Math.floor(lo0/step)*step - (lo0%step===0?step:0) - step*0 ;
+  const hi=Math.ceil(hi0/step)*step + (hi0%step===0?step:0);
+  const cfg={min:Math.min(lo, lo0-step), max:Math.max(hi, hi0+step), tick:step, label:step, snap:step};
+  /* simpler padded range: one step of padding each side */
+  cfg.min=Math.floor(lo0/step)*step-step; cfg.max=Math.ceil(hi0/step)*step+step;
+  if(cfg.min===cfg.max){ cfg.max+=step; }
+  J={start,jumps,landings,cfg,idx:0,sym,eqLeft,result:landings[landings.length-1],op};
+  drawJump();
+  $("jNarr").textContent = op==="mul"
+    ? `Start at 0. We'll take ${jumps.length} jumps of ${Math.abs(jumps[0]||0)}.`
+    : `Start at ${start}. Press Jump to hop.`;
+  $("jEq").textContent=`${eqLeft} = ?`;
+}
+function drawJump(){
+  if(!J) return;
+  const el=$("jLine");
+  el.innerHTML=`<div class="nl"><div class="nl-arcs" id="jArcs"></div>${lineInnards(J.cfg)}</div>`;
+  const slots=el.querySelector(".nl-slots");
+  let inner=markerHTML(J.start,J.cfg,{grey:true,hideVal:false});
+  inner+=markerHTML(J.landings[J.idx],J.cfg);
+  slots.innerHTML=inner;
+  /* completed-jump labels */
+  const arcs=$("jArcs");
+  for(let i=0;i<J.idx;i++){
+    const mid=(J.landings[i]+J.landings[i+1])/2;
+    const lbl=document.createElement("span"); lbl.className="arclbl";
+    lbl.style.left=pct(mid,J.cfg)+"%";
+    lbl.textContent=(J.jumps[i]>0?"+":"−")+Math.abs(J.jumps[i]);
+    arcs.appendChild(lbl);
+  }
+  drawJumpArcs();
+}
+function drawJumpArcs(){
+  if(!J) return;
+  const host=$("jArcs"); if(!host) return;
+  const w=host.clientWidth; if(!w) return;
+  const x=v=>(v-J.cfg.min)/(J.cfg.max-J.cfg.min)*w;
+  let paths="";
+  for(let i=0;i<J.idx;i++){
+    const x1=x(J.landings[i]), x2=x(J.landings[i+1]);
+    const h=clamp(Math.abs(x2-x1)/3+14, 22, 54);
+    paths+=`<path d="M ${x1} 62 Q ${(x1+x2)/2} ${62-2*h} ${x2} 62" fill="none" stroke="#000" stroke-width="2.5"/>`;
+    paths+=`<path d="M ${x2} 62 l ${x2>x1?-8:8} -3 l 0 8 z" fill="#000"/>`;
+  }
+  host.querySelector("svg")?.remove();
+  const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+  svg.setAttribute("width",w); svg.setAttribute("height",64); svg.innerHTML=paths;
+  host.prepend(svg);
+}
+function jumpStep(){
+  if(!J || J.idx>=J.jumps.length) return;
+  J.idx++;
+  const landed=J.landings[J.idx], j=J.jumps[J.idx-1];
+  drawJump();
+  if(J.idx>=J.jumps.length){
+    $("jNarr").textContent=`Landed on ${landed}. So ${J.eqLeft} = ${J.result}.`;
+    $("jEq").textContent=`${J.eqLeft} = ${J.result}`;
+    clearInterval(playTimer);
+  } else {
+    $("jNarr").textContent=`Jump ${j>0?"+":"−"}${Math.abs(j)} — land on ${landed}.`;
+  }
+}
+$("jBuild").addEventListener("click", buildJumps);
+$("jStep").addEventListener("click", jumpStep);
+$("jReset").addEventListener("click", ()=>{ if(J){ clearInterval(playTimer); J.idx=0; drawJump(); $("jEq").textContent=`${J.eqLeft} = ?`; $("jNarr").textContent="Back to the start. Press Jump to hop."; } });
+$("jPlay").addEventListener("click", ()=>{ if(!J) return; clearInterval(playTimer); if(J.idx>=J.jumps.length) J.idx=0; playTimer=setInterval(()=>{ if(J.idx>=J.jumps.length){ clearInterval(playTimer); return; } jumpStep(); }, 950); });
+for(const id of ["jA","jB","jOp","jStrategy"]) $(id).addEventListener("change", buildJumps);
+window.addEventListener("resize", drawJumpArcs);
+
+/* ---------- PRACTICE ---------- */
+const PCFG={"0-10":PRESETS["0-10"],"0-20":PRESETS["0-20"],"0-100":PRESETS["0-100"],"-10-10":PRESETS["-10-10"]};
+let pCfg={...PCFG["0-20"]}, pRenderCfg={...PCFG["0-20"]}, pTarget=0, pTarget2=0, pVal=pCfg.min, pScore=0, pStreak=0, pAsked=0, pDone=false;
+function randVal(cfg){
+  const n=Math.round((cfg.max-cfg.min)/cfg.snap);
+  return Math.round((cfg.min + Math.floor(Math.random()*(n+1))*cfg.snap)*1000)/1000;
+}
+function newQuestion(){
+  pCfg={...PCFG[$("pPreset").value]};
+  const mode=$("pMode").value; pDone=false;
+  $("pFeedback").textContent=""; $("pFeedback").className="feedback";
+  $("pNext").disabled=true; $("pAns").value="";
+  const hide=$("pHide").checked;
+  const cfg={...pCfg, showLabels:!hide};
+  pRenderCfg=cfg;
+  if(mode==="find"){
+    pTarget=randVal(pCfg); pVal=pCfg.min;
+    $("pPrompt").textContent=`Put the pin on ${fmtVal(pTarget,pCfg.frac)}`;
+    $("pAnsRow").style.display="none";
+    const track=renderStaticLine($("pLine"), cfg, markerHTML(pVal,cfg,{hideVal:true}));
+    dragify(track, ()=>pCfg, v=>{ pVal=v; const m=$("pLine").querySelector("[data-marker]"); if(m) m.style.left=pct(v,pCfg)+"%"; });
+    /* check button lives in ansrow for find mode too — move it visible */
+    $("pAnsRow").style.display="flex"; $("pAns").style.display="none";
+  } else if(mode==="read"){
+    pTarget=randVal(pCfg);
+    $("pPrompt").textContent="What number is the pin on?";
+    $("pAnsRow").style.display="flex"; $("pAns").style.display="";
+    renderStaticLine($("pLine"), cfg, markerHTML(pTarget,cfg,{hideVal:true}));
+    $("pAns").focus();
+  } else {
+    pTarget=randVal(pCfg); do{ pTarget2=randVal(pCfg); }while(pTarget2===pTarget);
+    const lo=Math.min(pTarget,pTarget2), hi=Math.max(pTarget,pTarget2); pTarget=lo; pTarget2=hi;
+    $("pPrompt").textContent="How far apart are the two pins?";
+    $("pAnsRow").style.display="flex"; $("pAns").style.display="";
+    renderStaticLine($("pLine"), cfg, markerHTML(pTarget,cfg)+markerHTML(pTarget2,cfg,{grey:true}));
+    $("pAns").focus();
+  }
+  updatePStats();
+}
+function checkPractice(){
+  if(pDone) return;
+  const mode=$("pMode").value;
+  let correct, answerText;
+  if(mode==="find"){ correct = pVal===pTarget; answerText=fmtVal(pTarget,pCfg.frac); }
+  else if(mode==="read"){ correct = +$("pAns").value===pTarget; answerText=fmtVal(pTarget,pCfg.frac); }
+  else { const d=pTarget2-pTarget; correct = +$("pAns").value===d; answerText=String(d); }
+  if(mode!=="find" && $("pAns").value==="") return;
+  pDone=true; pAsked++;
+  const fb=$("pFeedback");
+  if(correct){ pScore++; pStreak++; fb.textContent="✓ Correct!"; fb.className="feedback good"; }
+  else { pStreak=0;
+    fb.textContent= mode==="find" ? `Not quite — ${answerText} is where the pin needed to be. Count the ticks and try the next one.` : `Not quite — the answer is ${answerText}.`;
+    fb.className="feedback bad";
+    if(mode==="find"){ /* reveal: rebuild the line with the pin sitting on the target, value shown */
+      pVal=pTarget; renderStaticLine($("pLine"), pRenderCfg, markerHTML(pTarget,pRenderCfg)); }
+  }
+  $("pNext").disabled=false; updatePStats();
+}
+function updatePStats(){ $("pScore").textContent=pScore; $("pStreak").textContent=pStreak; $("pAsked").textContent=pAsked; }
+$("pCheck").addEventListener("click", checkPractice);
+$("pNext").addEventListener("click", newQuestion);
+$("pNew").addEventListener("click", newQuestion);
+for(const id of ["pMode","pPreset","pHide"]) $(id).addEventListener("change", newQuestion);
+$("pAns").addEventListener("keydown", e=>{ if(e.key==="Enter"){ pDone? newQuestion() : checkPractice(); } });
+
+/* ---------- PRINT ---------- */
+let prDots=[];
+function genDots(){
+  const min=+$("prMin").value, max=+$("prMax").value, step=+$("prStep").value;
+  prDots=[]; const n=Math.max(0,Math.round((max-min)/step));
+  for(let i=0;i<+$("prLines").value;i++) prDots.push(min + Math.floor(Math.random()*(n+1))*step);
+}
+function drawSheet(){
+  let min=+$("prMin").value, max=+$("prMax").value, step=+$("prStep").value;
+  if(!(max>min)){ max=min+20; }
+  const labels=$("prLabels").checked, dot=$("prDot").checked;
+  if(dot && prDots.length!==+$("prLines").value) genDots();
+  $("sheetInst").textContent = dot ? "Write the number the dot is on." : "Use the number lines to count, add, and subtract.";
+  const cfg={min,max,tick:step,label:step,snap:step,showLabels:labels};
+  let html="";
+  for(let i=0;i<+$("prLines").value;i++){
+    html+=`<div class="pline"><div class="nl">${lineInnards(cfg)}`;
+    html+="</div>";
+    if(dot) html+=`<div class="plineq">The dot is on ______</div>`;
+    html+="</div>";
+    /* dot injected after via slots replacement below */
+  }
+  $("sheetBody").innerHTML=html;
+  if(dot){
+    $("sheetBody").querySelectorAll(".pline").forEach((pl,i)=>{
+      const slots=pl.querySelector(".nl-slots");
+      if(slots) slots.innerHTML=`<span class="dotmark" style="left:${pct(prDots[i],cfg)}%"></span>`;
+    });
+  }
+}
+for(const id of ["prMin","prMax","prStep","prLines","prLabels","prDot"]) $(id).addEventListener("input", ()=>{ if(id==="prLines"||id==="prMin"||id==="prMax"||id==="prStep") genDots(); drawSheet(); });
+$("prNew").addEventListener("click", ()=>{ genDots(); drawSheet(); });
+$("pdfBtn").addEventListener("click", ()=>{ document.title="Number Lines"; window.print(); });
+
+/* init */
+drawExplore();
+buildJumps();
+newQuestion();
+genDots();
+drawSheet();
+</script>
+</body>
+</html>
