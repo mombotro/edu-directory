@@ -13,38 +13,46 @@
   .controls .grow{ flex:1 1 180px; } .controls .grow input{ width:100%; }
   .chips{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
   .chips button{ font-size:12px; padding:2px 10px; }
+  /* children tabs */
+  .kids{ display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:14px; }
+  .kids button{ font-size:13px; padding:4px 14px; }
+  .kids .dot{ font-size:10px; margin-left:5px; }
+  .kids .sp{ flex:1; }
   /* schedule list */
   .list{ background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999; }
-  .row{ display:grid; grid-template-columns:28px 130px 1fr 74px 96px auto; gap:8px; align-items:center; padding:6px 10px; border-bottom:1px dotted #999; }
+  .row{ display:grid; grid-template-columns:28px 128px 1fr 150px 92px auto; gap:8px; align-items:center; padding:6px 10px; border-bottom:1px dotted #999; }
   .row:last-child{ border-bottom:none; }
   .row.active{ background:#000; color:#fff; }
-  .row.active input{ background:#fff; color:#000; }
+  .row.active input, .row.active select{ background:#fff; color:#000; }
   .row.done .subj input{ text-decoration:line-through; color:#555; }
   .row .when{ font-size:12px; white-space:nowrap; }
   .row .subj input{ width:100%; font-weight:700; }
-  .row .mins{ white-space:nowrap; }
-  .row .mins input{ width:56px; }
-  .row .mins span{ font-size:12px; }
+  .row .opts{ display:flex; gap:5px; align-items:center; white-space:nowrap; font-size:12px; }
+  .row .opts input{ width:52px; }
+  .row .opts select{ font:inherit; font-size:12px; padding:2px 2px; border:1px solid #000; border-radius:0; background:#fff; }
   .clock{ font-family:"Courier New",monospace; font-size:22px; font-weight:700; text-align:right; }
   .row .acts{ display:flex; gap:4px; justify-content:flex-end; flex-wrap:wrap; }
   .row .acts button{ font-size:12px; padding:2px 8px; min-width:30px; }
   .num{ font-weight:700; text-align:center; }
   .empty{ padding:22px; text-align:center; font-size:13px; }
   .totals{ display:flex; flex-wrap:wrap; gap:6px 24px; justify-content:space-between; margin-top:10px; font-size:13px; font-weight:700; }
-  .now{ margin-bottom:12px; background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999; padding:10px 14px; text-align:center; }
-  .now .big{ font-family:"Courier New",monospace; font-size:54px; font-weight:700; line-height:1.1; }
-  .now .what{ font-size:15px; font-weight:700; }
-  @media(max-width:760px){ .row{ grid-template-columns:24px 1fr auto; } .row .when{ grid-column:2 / 4; } .row .mins{ grid-column:2; } .row .clock{ grid-column:3; } .row .acts{ grid-column:1 / 4; justify-content:flex-start; } }
-  /* print sheet */
+  .now{ margin-bottom:12px; background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999; padding:10px 14px; }
+  .now .idle{ text-align:center; font-size:15px; font-weight:700; }
+  .now .line{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding:2px 0; }
+  .now .line .what{ font-size:15px; font-weight:700; }
+  .now .line .big{ font-family:"Courier New",monospace; font-size:40px; font-weight:700; line-height:1.15; }
+  @media(max-width:860px){ .row{ grid-template-columns:24px 1fr auto; } .row .when{ grid-column:2 / 4; } .row .opts{ grid-column:2; } .row .clock{ grid-column:3; } .row .acts{ grid-column:1 / 4; justify-content:flex-start; } }
+  /* print sheets */
   #sheetWrap{ overflow:auto; background:#fff; border:1px solid #000; box-shadow:5px 5px 0 rgba(0,0,0,.35); }
   .mac-bar.sheet-bar{ margin:0; }
-  .sheet{ background:#fff; width:100%; aspect-ratio:8.5/11; container-type:inline-size; padding:5cqw 6cqw; margin:0 auto; color:#000; }
+  .sheet{ background:#fff; width:100%; aspect-ratio:8.5/11; container-type:inline-size; padding:5cqw 6cqw; margin:0 auto; color:#000; border-bottom:2px dashed #888; }
+  .sheet:last-child{ border-bottom:none; }
   .sheet .who{ display:flex; justify-content:space-between; gap:3cqw; font-size:2.4cqw; margin-bottom:3cqw; }
   .sheet .who span{ display:inline-block; min-width:22cqw; border-bottom:.3cqw solid #000; padding:0 1cqw; font-weight:700; }
-  .sheet table{ width:100%; border-collapse:collapse; font-size:2.3cqw; }
+  .sheet table{ width:100%; border-collapse:collapse; font-size:2.2cqw; }
   .sheet th, .sheet td{ border:1px solid #000; padding:1.1cqw 1.4cqw; text-align:left; }
   .sheet th{ background:#eee; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  .sheet td.c, .sheet th.c{ text-align:center; width:9cqw; }
+  .sheet td.c, .sheet th.c{ text-align:center; width:11cqw; }
   .sheet td.box{ width:9cqw; text-align:center; font-size:3cqw; }
   .sheet .tot{ margin-top:2.4cqw; font-size:2.2cqw; text-align:right; font-weight:700; }
   @media print{
@@ -53,7 +61,8 @@
     .no-print{ display:none !important; }
     .wrap{ max-width:none; padding:0; }
     #sheetWrap{ overflow:visible; border:none; box-shadow:none; margin:0; }
-    .sheet{ width:8.5in !important; height:11in !important; margin:0; }
+    .sheet{ width:8.5in !important; height:11in !important; margin:0; border:none; page-break-after:always; break-after:page; }
+    .sheet:last-child{ page-break-after:auto; break-after:auto; }
   }
 </style>
 </head>
@@ -63,18 +72,22 @@
 </div>
 <div class="wrap">
   <h1>Day Timer</h1>
-  <p class="sub no-print">Plan the day: add a name and date, then add each subject with how many minutes it gets. Press <strong>Start</strong> on a subject to run its timer. When you're done, export the list as a printable sheet, text, or CSV.</p>
+  <p class="sub no-print">Plan the day for each child: add a name and date, then add each subject as a <strong>countdown timer</strong> (a set number of minutes) or a <strong>stopwatch</strong> (counts up, for work with no fixed length). Each child has their own list and their own timers. Export the day as a printable sheet, text, or CSV.</p>
 
   <div class="card no-print">
     <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Today</span></span><span class="mac-zoom"></span></div>
+    <div class="kids" id="kids"></div>
     <div class="controls">
-      <label class="field grow">Name <input type="text" id="name" placeholder="Student name" autocomplete="off"></label>
+      <label class="field grow">Name <input type="text" id="name" placeholder="Child's name" autocomplete="off"></label>
       <label class="field">Date <input type="date" id="date"></label>
       <label class="field">Day starts at <input type="time" id="dayStart" value="09:00"></label>
     </div>
     <div class="controls" style="margin-top:14px">
       <label class="field grow">Subject <input type="text" id="subj" list="subjList" placeholder="Math, Reading, Recess…" autocomplete="off"></label>
-      <label class="field">Minutes <input type="number" id="mins" min="1" max="600" value="30"></label>
+      <label class="field">Type
+        <select id="mode"><option value="timer">Countdown timer</option><option value="watch">Stopwatch</option></select>
+      </label>
+      <label class="field"><span id="minsLbl">Minutes</span> <input type="number" id="mins" min="1" max="600" value="30"></label>
       <button id="addBtn" type="button">＋ Add to day</button>
     </div>
     <datalist id="subjList"></datalist>
@@ -82,33 +95,37 @@
   </div>
 
   <div class="card no-print">
-    <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Schedule</span></span><span class="mac-zoom"></span></div>
-    <div class="now" id="now"><div class="what" id="nowWhat">Nothing running</div><div class="big" id="nowClock">--:--</div></div>
+    <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span id="schedTitle">Schedule</span></span><span class="mac-zoom"></span></div>
+    <div class="now" id="now"></div>
     <div class="list" id="list"></div>
     <div class="totals"><span id="total"></span><span id="finish"></span></div>
     <div class="controls" style="margin-top:12px">
-      <label class="field check"><input type="checkbox" id="auto" checked> Start the next subject automatically</label>
+      <label class="field check"><input type="checkbox" id="auto" checked> Start the next countdown automatically</label>
       <label class="field check"><input type="checkbox" id="sound" checked> Beep when time is up</label>
-      <button id="resetAll" type="button">↺ Reset all timers</button>
-      <button id="clearAll" type="button">Clear day</button>
+      <button id="resetAll" type="button">↺ Reset this child's timers</button>
+      <button id="copyList" type="button">Copy list to other children</button>
+      <button id="clearAll" type="button">Clear this child's day</button>
     </div>
   </div>
 
   <div class="card no-print">
     <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Export</span></span><span class="mac-zoom"></span></div>
     <div class="controls">
+      <label class="field">Export
+        <select id="scope"><option value="all">All children</option><option value="one">Just this child</option></select>
+      </label>
       <button id="pdfBtn" type="button">⬇ Export as PDF</button>
       <button id="txtBtn" type="button">Download .txt</button>
       <button id="csvBtn" type="button">Download .csv</button>
       <button id="copyBtn" type="button">Copy as text</button>
       <span id="exportMsg" style="font-size:12px;font-weight:700"></span>
     </div>
-    <p class="hint"><strong>Export as PDF:</strong> choose <em>Save as PDF</em>, paper <em>Letter</em>, orientation <em>Portrait</em>, margins <em>None</em>, scale <em>100%</em>. The sheet has the name and date at the top and a checkbox for each subject.</p>
+    <p class="hint"><strong>Export as PDF:</strong> choose <em>Save as PDF</em>, paper <em>Letter</em>, orientation <em>Portrait</em>, margins <em>None</em>, scale <em>100%</em>. Each child gets their own page with name, date, a planned and actual time for each subject, and a checkbox.</p>
   </div>
 
   <div id="sheetWrap">
     <div class="mac-bar sheet-bar no-print"><span class="mac-close"></span><span class="mac-title"><span>sheet preview</span></span><span class="mac-zoom"></span></div>
-    <div class="sheet" id="sheet"></div>
+    <div id="sheets"></div>
   </div>
 </div>
 
@@ -116,31 +133,47 @@
 "use strict";
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const KEY = "dayTimer.v1";
+const KEY = "dayTimer.v2", OLD = "dayTimer.v1";
 const QUICK = [["Math",30],["Reading",30],["Writing",20],["Spelling",15],["Science",30],["History",30],["Art",30],["Music",20],["PE / Recess",20],["Break",10],["Lunch",30]];
 
-let st = { name:"", date:"", dayStart:"09:00", auto:true, sound:true, items:[] };
-let run = null;               /* {id, endAt} while a timer is running */
-let nextId = 1, audio = null;
+let st = { date:"", dayStart:"09:00", auto:true, sound:true, scope:"all", cur:1, kids:[{ id:1, name:"", items:[] }] };
+const runs = {};                 /* item id -> {endAt} (countdown) or {startAt, base} (stopwatch) */
+let nextId = 1, nextKid = 2, audio = null, lastSave = 0;
 
 function today(){ const d = new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 function load(){
-  try { const o = JSON.parse(localStorage.getItem(KEY) || "null"); if (o && Array.isArray(o.items)) st = Object.assign(st, o); } catch(e){}
+  try {
+    const o = JSON.parse(localStorage.getItem(KEY) || "null");
+    if (o && Array.isArray(o.kids) && o.kids.length) st = Object.assign(st, o);
+    else {                       /* bring over a one-child list saved by the first version */
+      const v1 = JSON.parse(localStorage.getItem(OLD) || "null");
+      if (v1 && Array.isArray(v1.items)) {
+        st.date = v1.date || ""; st.dayStart = v1.dayStart || "09:00"; st.auto = v1.auto !== false; st.sound = v1.sound !== false;
+        st.kids = [{ id:1, name:v1.name || "", items:v1.items.map(i => Object.assign({ mode:"timer", el:0 }, i)) }];
+      }
+    }
+  } catch(e){}
   if (!st.date) st.date = today();
-  st.items.forEach(i => { nextId = Math.max(nextId, i.id + 1); });
+  if (!st.kids.some(k => k.id === st.cur)) st.cur = st.kids[0].id;
+  st.kids.forEach(k => { nextKid = Math.max(nextKid, k.id + 1); k.items.forEach(i => { nextId = Math.max(nextId, i.id + 1); if (!i.mode) i.mode = "timer"; if (i.el == null) i.el = 0; }); });
 }
-function save(){ try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e){} }
+function save(){ lastSave = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e){} }
 
-function fmt(sec){
-  sec = Math.max(0, Math.ceil(sec));
+const kid = () => st.kids.find(k => k.id === st.cur);
+const kidName = k => k.name.trim() || "Child " + (st.kids.indexOf(k) + 1);
+function find(id){ for (const k of st.kids) { const it = k.items.find(i => i.id === id); if (it) return { k, it }; } return null; }
+
+/* ---------- formatting ---------- */
+function fmtDown(sec){ return fmtHMS(Math.max(0, Math.ceil(sec))); }
+function fmtUp(sec){ return fmtHMS(Math.max(0, Math.floor(sec))); }
+function fmtHMS(sec){
   const h = Math.floor(sec/3600), m = Math.floor(sec%3600/60), s = sec%60;
   return (h ? h+":"+String(m).padStart(2,"0") : String(m).padStart(2,"0")) + ":" + String(s).padStart(2,"0");
 }
 function clock(totalMin){
   const [h, m] = (st.dayStart || "09:00").split(":").map(Number);
-  let t = (h*60 + m + totalMin) % 1440;
-  const hh = Math.floor(t/60), mm = t%60, ap = hh >= 12 ? "PM" : "AM";
-  return ((hh % 12) || 12) + ":" + String(mm).padStart(2,"0") + " " + ap;
+  const t = (h*60 + m + totalMin) % 1440, hh = Math.floor(t/60), mm = t%60;
+  return ((hh % 12) || 12) + ":" + String(mm).padStart(2,"0") + " " + (hh >= 12 ? "PM" : "AM");
 }
 function dur(min){ const h = Math.floor(min/60), m = min%60; return h ? h+" h"+(m ? " "+m+" min" : "") : m+" min"; }
 function prettyDate(){
@@ -148,147 +181,220 @@ function prettyDate(){
   if (p.length !== 3 || !p[0]) return "";
   return new Date(p[0], p[1]-1, p[2]).toLocaleDateString(undefined, { weekday:"long", year:"numeric", month:"long", day:"numeric" });
 }
-/* planned start/end of each subject, in minutes after the day start */
-function spans(){ let t = 0; return st.items.map(i => { const a = t; t += i.mins; return [a, t]; }); }
+function spans(k){ let t = 0; return k.items.map(i => { const a = t; t += i.mins; return [a, t]; }); }
+function spentSec(it){ return it.mode === "watch" ? it.el : Math.max(0, it.mins*60 - it.left); }
+function spentTxt(it){ const s = Math.round(spentSec(it)); return s > 0 ? fmtHMS(s) : "—"; }
+function plannedTxt(it){ return it.mins > 0 ? it.mins + " min" : (it.mode === "watch" ? "open" : "—"); }
+function whenTxt(it, sp){ return it.mins > 0 ? clock(sp[0]) + " – " + clock(sp[1]) : "open-ended"; }
+function clockVal(it){ return it.mode === "watch" ? fmtUp(it.el) : fmtDown(it.left); }
 
-/* ---------- timer ---------- */
+/* ---------- running timers ---------- */
 function beep(){
   if (!st.sound) return;
   try {
     audio = audio || new (window.AudioContext || window.webkitAudioContext)();
-    for (let k = 0; k < 3; k++) {
-      const o = audio.createOscillator(), g = audio.createGain(), t0 = audio.currentTime + k*0.35;
+    for (let n = 0; n < 3; n++) {
+      const o = audio.createOscillator(), g = audio.createGain(), t0 = audio.currentTime + n*0.35;
       o.type = "square"; o.frequency.value = 880; g.gain.setValueAtTime(0.12, t0); g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.28);
       o.connect(g); g.connect(audio.destination); o.start(t0); o.stop(t0 + 0.3);
     }
   } catch(e){}
 }
+function pauseItem(id){
+  const f = find(id); if (!f || !runs[id]) return;
+  tickOne(id, f.it, Date.now());
+  delete runs[id];
+}
 function startItem(id){
-  const it = st.items.find(i => i.id === id); if (!it) return;
-  if (run && run.id !== id) pauseRun();
-  if (it.left <= 0) { it.left = it.mins*60; it.done = false; }
+  const f = find(id); if (!f) return;
+  f.k.items.forEach(i => { if (i.id !== id && runs[i.id]) pauseItem(i.id); });   /* one at a time per child */
+  const it = f.it;
+  if (it.mode === "watch") { if (it.done) { it.el = 0; it.done = false; } runs[id] = { startAt: Date.now(), base: it.el }; }
+  else { if (it.left <= 0) { it.left = it.mins*60; it.done = false; } runs[id] = { endAt: Date.now() + it.left*1000 }; }
   if (!audio) { try { audio = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} }
-  run = { id, endAt: Date.now() + it.left*1000 };
   draw();
 }
-function pauseRun(){
-  if (!run) return;
-  const it = st.items.find(i => i.id === run.id);
-  if (it) it.left = Math.max(0, (run.endAt - Date.now())/1000);
-  run = null; save();
+function finishItem(id){              /* stopwatch: stop and mark done */
+  pauseItem(id); const f = find(id); if (f) f.it.done = true; draw();
+}
+/* update one item from its run; returns true if a countdown just reached zero */
+function tickOne(id, it, now){
+  const r = runs[id]; if (!r) return false;
+  if (it.mode === "watch") { it.el = r.base + (now - r.startAt)/1000; return false; }
+  it.left = Math.max(0, (r.endAt - now)/1000);
+  return it.left <= 0;
 }
 function tick(){
-  if (!run) return;
-  const it = st.items.find(i => i.id === run.id);
-  if (!it) { run = null; return; }
-  const left = (run.endAt - Date.now())/1000;
-  if (left <= 0) {
-    it.left = 0; it.done = true; run = null; save(); beep();
-    if (st.auto) { const nx = st.items.slice(st.items.indexOf(it)+1).find(i => !i.done); if (nx) { startItem(nx.id); return; } }
-    draw(); return;
-  }
-  it.left = left; paintClocks();
+  const ids = Object.keys(runs).map(Number); if (!ids.length) return;
+  const now = Date.now(); let redraw = false;
+  ids.forEach(id => {
+    const f = find(id); if (!f) { delete runs[id]; return; }
+    if (tickOne(id, f.it, now)) {
+      f.it.left = 0; f.it.done = true; delete runs[id]; beep(); redraw = true;
+      if (st.auto) { const nx = f.k.items.slice(f.k.items.indexOf(f.it) + 1).find(i => !i.done && i.mode === "timer"); if (nx) startItem(nx.id); }
+    }
+  });
+  if (redraw) { draw(); return; }
+  paintClocks();
+  if (Date.now() - lastSave > 5000) save();
 }
 function paintClocks(){
-  const it = run && st.items.find(i => i.id === run.id);
-  $("nowWhat").textContent = it ? (it.subject || "Untitled") : "Nothing running";
-  $("nowClock").textContent = it ? fmt(it.left) : "--:--";
-  document.title = it ? fmt(it.left) + " · " + (it.subject || "Day Timer") : "Day Timer";
-  st.items.forEach(i => { const el = document.querySelector('[data-clock="'+i.id+'"]'); if (el) el.textContent = fmt(i.left); });
+  const live = Object.keys(runs).map(Number).map(find).filter(Boolean);
+  $("now").innerHTML = live.length
+    ? live.map(f => '<div class="line"><span class="what">'+esc(st.kids.length > 1 ? kidName(f.k) + " — " : "")+esc(f.it.subject || "Untitled")+
+        (f.it.mode === "watch" ? ' (stopwatch)' : '')+'</span><span class="big">'+clockVal(f.it)+'</span></div>').join("")
+    : '<div class="idle">Nothing running</div>';
+  document.title = live.length ? clockVal(live[0].it) + " · " + (live[0].it.subject || "Day Timer") : "Day Timer";
+  kid().items.forEach(i => { const el = document.querySelector('[data-clock="'+i.id+'"]'); if (el) el.textContent = clockVal(i); });
 }
+
+/* ---------- children ---------- */
+function drawKids(){
+  $("kids").innerHTML = st.kids.map(k => {
+    const live = k.items.some(i => runs[i.id]);
+    return '<button type="button" data-k="'+k.id+'" class="'+(k.id === st.cur ? "on" : "")+'">'+esc(kidName(k))+(live ? '<span class="dot">●</span>' : '')+'</button>';
+  }).join("") + '<button type="button" id="addKid">＋ Add child</button><span class="sp"></span><button type="button" id="delKid">Remove this child</button>';
+  $("schedTitle").textContent = "Schedule — " + kidName(kid());
+  $("name").placeholder = "Child " + (st.kids.indexOf(kid()) + 1);
+}
+$("kids").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.k) { st.cur = +b.dataset.k; $("name").value = kid().name; draw(); $("name").focus(); return; }
+  if (b.id === "addKid") { const k = { id: nextKid++, name:"", items:[] }; st.kids.push(k); st.cur = k.id; $("name").value = ""; draw(); $("name").focus(); return; }
+  if (b.id === "delKid") {
+    const k = kid();
+    if (st.kids.length === 1) { if (k.items.length && !confirm("This is the only child. Clear their name and list?")) return; k.items.forEach(i => delete runs[i.id]); k.items = []; k.name = ""; }
+    else { if (k.items.length && !confirm("Remove " + kidName(k) + " and their list?")) return; k.items.forEach(i => delete runs[i.id]); st.kids.splice(st.kids.indexOf(k), 1); st.cur = st.kids[0].id; }
+    $("name").value = kid().name; draw();
+  }
+});
 
 /* ---------- list ---------- */
 function draw(){
-  const box = $("list"), sp = spans();
-  if (!st.items.length) {
-    box.innerHTML = '<div class="empty">No subjects yet. Add one above, or tap a quick-add button.</div>';
+  drawKids();
+  const k = kid(), box = $("list"), sp = spans(k);
+  if (!k.items.length) {
+    box.innerHTML = '<div class="empty">No subjects for '+esc(kidName(k))+' yet. Add one above, or tap a quick-add button.</div>';
   } else {
-    box.innerHTML = st.items.map((it, n) => {
-      const on = run && run.id === it.id;
+    box.innerHTML = k.items.map((it, n) => {
+      const on = !!runs[it.id], watch = it.mode === "watch";
       return '<div class="row'+(on?' active':'')+(it.done?' done':'')+'" data-id="'+it.id+'">' +
         '<div class="num">'+(it.done ? "✓" : n+1)+'</div>' +
-        '<div class="when">'+clock(sp[n][0])+' – '+clock(sp[n][1])+'</div>' +
+        '<div class="when">'+whenTxt(it, sp[n])+'</div>' +
         '<div class="subj"><input type="text" value="'+esc(it.subject)+'" data-f="subject" aria-label="Subject"></div>' +
-        '<div class="mins"><input type="number" min="1" max="600" value="'+it.mins+'" data-f="mins" aria-label="Minutes"> <span>min</span></div>' +
-        '<div class="clock" data-clock="'+it.id+'">'+fmt(it.left)+'</div>' +
+        '<div class="opts"><select data-f="mode" aria-label="Type"><option value="timer"'+(watch?'':' selected')+'>Timer</option><option value="watch"'+(watch?' selected':'')+'>Stopwatch</option></select>' +
+        '<input type="number" min="'+(watch?0:1)+'" max="600" value="'+it.mins+'" data-f="mins" aria-label="Minutes"> min</div>' +
+        '<div class="clock" data-clock="'+it.id+'">'+clockVal(it)+'</div>' +
         '<div class="acts"><button type="button" data-a="go">'+(on?"❚❚ Pause":"▶ Start")+'</button>' +
+        (watch ? '<button type="button" data-a="fin" title="Stop and mark done">■ Done</button>' : '') +
         '<button type="button" data-a="reset" title="Reset this timer">↺</button>' +
         '<button type="button" data-a="up" title="Move up">▲</button><button type="button" data-a="down" title="Move down">▼</button>' +
         '<button type="button" data-a="del" title="Remove">✕</button></div></div>';
     }).join("");
   }
-  const total = st.items.reduce((a, i) => a + i.mins, 0);
-  const doneMin = st.items.filter(i => i.done).reduce((a, i) => a + i.mins, 0);
-  $("total").textContent = st.items.length ? st.items.length + " subjects · " + dur(total) + " planned · " + dur(doneMin) + " done" : "";
-  $("finish").textContent = st.items.length ? "Ends about " + clock(total) : "";
-  paintClocks(); sheet(); save();
+  const total = k.items.reduce((a, i) => a + i.mins, 0);
+  const doneMin = k.items.filter(i => i.done).reduce((a, i) => a + i.mins, 0);
+  $("total").textContent = k.items.length ? k.items.length + " subjects · " + dur(total) + " planned · " + dur(doneMin) + " done" : "";
+  $("finish").textContent = k.items.length && total ? "Ends about " + clock(total) : "";
+  paintClocks(); sheets(); save();
 }
 
-function addItem(subject, mins){
-  subject = (subject || "").trim(); mins = Math.max(1, Math.min(600, parseInt(mins, 10) || 0));
-  if (!subject || !mins) return false;
-  st.items.push({ id: nextId++, subject, mins, left: mins*60, done: false });
+function addItem(subject, mins, mode){
+  subject = (subject || "").trim(); mode = mode === "watch" ? "watch" : "timer";
+  mins = Math.max(mode === "watch" ? 0 : 1, Math.min(600, parseInt(mins, 10) || 0));
+  if (!subject || (mode === "timer" && !mins)) return false;
+  kid().items.push({ id: nextId++, subject, mode, mins, left: mins*60, el: 0, done: false });
   draw(); return true;
 }
-$("addBtn").addEventListener("click", () => { if (addItem($("subj").value, $("mins").value)) { $("subj").value = ""; $("subj").focus(); } });
+function syncModeForm(){
+  const w = $("mode").value === "watch";
+  $("minsLbl").textContent = w ? "Planned min (optional)" : "Minutes";
+  $("mins").min = w ? 0 : 1; if (w && $("mins").value === "30") $("mins").value = 0; if (!w && !+$("mins").value) $("mins").value = 30;
+}
+$("mode").addEventListener("change", syncModeForm);
+$("addBtn").addEventListener("click", () => { if (addItem($("subj").value, $("mins").value, $("mode").value)) { $("subj").value = ""; $("subj").focus(); } });
 ["subj","mins"].forEach(id => $(id).addEventListener("keydown", e => { if (e.key === "Enter") $("addBtn").click(); }));
 
 $("list").addEventListener("click", e => {
   const b = e.target.closest("button[data-a]"); if (!b) return;
-  const id = +b.closest(".row").dataset.id, idx = st.items.findIndex(i => i.id === id), it = st.items[idx], a = b.dataset.a;
-  if (a === "go") { if (run && run.id === id) { pauseRun(); draw(); } else startItem(id); return; }
-  if (a === "reset") { if (run && run.id === id) run = null; it.left = it.mins*60; it.done = false; }
-  else if (a === "del") { if (run && run.id === id) run = null; st.items.splice(idx, 1); }
-  else if (a === "up" && idx > 0) { st.items.splice(idx-1, 0, st.items.splice(idx, 1)[0]); }
-  else if (a === "down" && idx < st.items.length-1) { st.items.splice(idx+1, 0, st.items.splice(idx, 1)[0]); }
+  const id = +b.closest(".row").dataset.id, k = kid(), idx = k.items.findIndex(i => i.id === id), it = k.items[idx], a = b.dataset.a;
+  if (a === "go") { if (runs[id]) { pauseItem(id); draw(); } else startItem(id); return; }
+  if (a === "fin") { finishItem(id); return; }
+  if (a === "reset") { delete runs[id]; it.left = it.mins*60; it.el = 0; it.done = false; }
+  else if (a === "del") { delete runs[id]; k.items.splice(idx, 1); }
+  else if (a === "up" && idx > 0) { k.items.splice(idx-1, 0, k.items.splice(idx, 1)[0]); }
+  else if (a === "down" && idx < k.items.length-1) { k.items.splice(idx+1, 0, k.items.splice(idx, 1)[0]); }
   draw();
 });
 $("list").addEventListener("change", e => {
   const f = e.target.dataset.f; if (!f) return;
-  const it = st.items.find(i => i.id === +e.target.closest(".row").dataset.id);
+  const id = +e.target.closest(".row").dataset.id, it = find(id).it;
   if (f === "subject") it.subject = e.target.value.trim() || "Untitled";
-  else { const m = Math.max(1, Math.min(600, parseInt(e.target.value, 10) || it.mins)); it.mins = m; if (!(run && run.id === it.id)) { it.left = m*60; it.done = false; } }
+  else if (f === "mode") { delete runs[id]; it.mode = e.target.value; it.left = it.mins*60; it.el = 0; it.done = false; if (it.mode === "timer" && !it.mins) it.mins = 30, it.left = 1800; }
+  else {
+    const lo = it.mode === "watch" ? 0 : 1, m = Math.max(lo, Math.min(600, parseInt(e.target.value, 10) || (it.mode === "watch" ? 0 : it.mins)));
+    it.mins = m; if (!runs[id] && it.mode === "timer") { it.left = m*60; it.done = false; }
+  }
   draw();
 });
 
 /* ---------- header fields ---------- */
-$("name").value = "";
-function bindField(id, key, after){ $(id).addEventListener("input", () => { st[key] = $(id).value; save(); after && after(); }); }
-bindField("name", "name", sheet); bindField("date", "date", sheet); bindField("dayStart", "dayStart", draw);
+$("name").addEventListener("input", () => { kid().name = $("name").value; drawKids(); sheets(); save(); });
+$("date").addEventListener("input", () => { st.date = $("date").value; sheets(); save(); });
+$("dayStart").addEventListener("input", () => { st.dayStart = $("dayStart").value || "09:00"; draw(); });
 $("auto").addEventListener("change", () => { st.auto = $("auto").checked; save(); });
 $("sound").addEventListener("change", () => { st.sound = $("sound").checked; save(); });
-$("resetAll").addEventListener("click", () => { run = null; st.items.forEach(i => { i.left = i.mins*60; i.done = false; }); draw(); });
-$("clearAll").addEventListener("click", () => { if (!st.items.length || confirm("Remove every subject from today's list?")) { run = null; st.items = []; draw(); } });
+$("scope").addEventListener("change", () => { st.scope = $("scope").value; sheets(); save(); });
+$("resetAll").addEventListener("click", () => { kid().items.forEach(i => { delete runs[i.id]; i.left = i.mins*60; i.el = 0; i.done = false; }); draw(); });
+$("clearAll").addEventListener("click", () => { const k = kid(); if (!k.items.length || confirm("Remove every subject from " + kidName(k) + "'s list?")) { k.items.forEach(i => delete runs[i.id]); k.items = []; draw(); } });
+$("copyList").addEventListener("click", () => {
+  const others = st.kids.filter(k => k !== kid());
+  if (!others.length) { say("Add another child first."); return; }
+  if (!kid().items.length) { say("This child's list is empty."); return; }
+  if (others.some(k => k.items.length) && !confirm("Replace the lists of the other children with this one?")) return;
+  others.forEach(k => { k.items.forEach(i => delete runs[i.id]); k.items = kid().items.map(i => ({ id: nextId++, subject:i.subject, mode:i.mode, mins:i.mins, left:i.mins*60, el:0, done:false })); });
+  draw(); say("Copied to " + others.length + (others.length > 1 ? " children." : " child."));
+});
 
 /* quick-add */
 $("chips").innerHTML = QUICK.map(q => '<button type="button" data-s="'+esc(q[0])+'" data-m="'+q[1]+'">'+esc(q[0])+' '+q[1]+'</button>').join("");
-$("chips").addEventListener("click", e => { const b = e.target.closest("button[data-s]"); if (b) addItem(b.dataset.s, b.dataset.m); });
+$("chips").addEventListener("click", e => { const b = e.target.closest("button[data-s]"); if (b) addItem(b.dataset.s, b.dataset.m, "timer"); });
 $("subjList").innerHTML = QUICK.map(q => '<option value="'+esc(q[0])+'">').join("");
 
 /* ---------- export ---------- */
-function sheet(){
-  const sp = spans(), total = st.items.reduce((a, i) => a + i.mins, 0);
-  $("sheet").innerHTML =
-    '<div class="who"><div>Name: <span>'+esc(st.name)+'</span></div><div>Date: <span>'+esc(prettyDate())+'</span></div></div>' +
-    '<table><thead><tr><th>Time</th><th>Subject</th><th class="c">Minutes</th><th class="c">Done</th></tr></thead><tbody>' +
-    (st.items.length ? st.items.map((it, n) => '<tr><td>'+clock(sp[n][0])+' – '+clock(sp[n][1])+'</td><td>'+esc(it.subject)+'</td><td class="c">'+it.mins+'</td><td class="box">☐</td></tr>').join("")
-                     : '<tr><td colspan="4">No subjects added yet.</td></tr>') +
-    '</tbody></table>' + (st.items.length ? '<div class="tot">Total: '+dur(total)+'</div>' : '');
+function scopeKids(){ return st.scope === "one" ? [kid()] : st.kids; }
+function sheets(){
+  $("sheets").innerHTML = scopeKids().map(k => {
+    const sp = spans(k), total = k.items.reduce((a, i) => a + i.mins, 0);
+    return '<div class="sheet"><div class="who"><div>Name: <span>'+esc(k.name)+'</span></div><div>Date: <span>'+esc(prettyDate())+'</span></div></div>' +
+      '<table><thead><tr><th>Time</th><th>Subject</th><th class="c">Planned</th><th class="c">Actual</th><th class="c">Done</th></tr></thead><tbody>' +
+      (k.items.length ? k.items.map((it, n) => '<tr><td>'+whenTxt(it, sp[n])+'</td><td>'+esc(it.subject)+(it.mode === "watch" ? ' (stopwatch)' : '')+'</td><td class="c">'+plannedTxt(it)+
+        '</td><td class="c">'+(spentSec(it) > 0 ? spentTxt(it) : "")+'</td><td class="box">'+(it.done ? "☑" : "☐")+'</td></tr>').join("")
+        : '<tr><td colspan="5">No subjects added yet.</td></tr>') +
+      '</tbody></table>' + (k.items.length && total ? '<div class="tot">Total planned: '+dur(total)+'</div>' : '') + '</div>';
+  }).join("");
 }
 function asText(){
-  const sp = spans(), total = st.items.reduce((a, i) => a + i.mins, 0);
-  const lines = ["Name: " + st.name, "Date: " + prettyDate(), ""];
-  st.items.forEach((it, n) => lines.push(clock(sp[n][0]) + " - " + clock(sp[n][1]) + "  " + it.subject + " (" + it.mins + " min)"));
-  lines.push("", "Total: " + dur(total));
-  return lines.join("\n") + "\n";
+  return scopeKids().map(k => {
+    const sp = spans(k), total = k.items.reduce((a, i) => a + i.mins, 0);
+    const lines = ["Name: " + k.name, "Date: " + prettyDate(), ""];
+    k.items.forEach((it, n) => lines.push(whenTxt(it, sp[n]).replace(" – ", " - ") + "  " + it.subject + (it.mode === "watch" ? " (stopwatch)" : "") +
+      " (planned " + plannedTxt(it) + (spentSec(it) > 0 ? ", actual " + spentTxt(it) : "") + ")" + (it.done ? " [done]" : "")));
+    lines.push("", "Total planned: " + dur(total));
+    return lines.join("\n");
+  }).join("\n\n----------\n\n") + "\n";
 }
 function asCsv(){
-  const q = v => '"' + String(v).replace(/"/g, '""') + '"', sp = spans();
-  const rows = [["Name","Date","Start","End","Subject","Minutes","Done"].map(q).join(",")];
-  st.items.forEach((it, n) => rows.push([st.name, st.date, clock(sp[n][0]), clock(sp[n][1]), it.subject, it.mins, it.done ? "yes" : "no"].map(q).join(",")));
+  const q = v => '"' + String(v).replace(/"/g, '""') + '"', rows = [["Child","Date","Start","End","Subject","Type","Planned min","Actual (min:sec)","Done"].map(q).join(",")];
+  scopeKids().forEach(k => { const sp = spans(k); k.items.forEach((it, n) =>
+    rows.push([k.name, st.date, it.mins > 0 ? clock(sp[n][0]) : "", it.mins > 0 ? clock(sp[n][1]) : "", it.subject, it.mode === "watch" ? "Stopwatch" : "Timer", it.mins,
+      spentSec(it) > 0 ? spentTxt(it) : "", it.done ? "yes" : "no"].map(q).join(","))); });
   return rows.join("\r\n") + "\r\n";
 }
-function fileBase(){ return "schedule-" + ((st.name || "day").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "day") + "-" + (st.date || today()); }
+function fileBase(){
+  const who = scopeKids().length > 1 ? "all" : (kid().name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "day");
+  return "schedule-" + who + "-" + (st.date || today());
+}
 function download(text, ext, type){
   const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type }));
   a.download = fileBase() + "." + ext; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
@@ -303,8 +409,8 @@ $("copyBtn").addEventListener("click", () => {
 
 /* ---------- start ---------- */
 load();
-$("name").value = st.name; $("date").value = st.date; $("dayStart").value = st.dayStart;
-$("auto").checked = st.auto; $("sound").checked = st.sound;
+$("name").value = kid().name; $("date").value = st.date; $("dayStart").value = st.dayStart;
+$("auto").checked = st.auto; $("sound").checked = st.sound; $("scope").value = st.scope || "all";
 draw();
 setInterval(tick, 250);
 </script>
