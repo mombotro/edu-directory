@@ -72,7 +72,7 @@
 </div>
 <div class="wrap">
   <h1>Day Timer</h1>
-  <p class="sub no-print">Plan the day for each child: add a name and date, then add each subject as a <strong>countdown timer</strong> (a set number of minutes) or a <strong>stopwatch</strong> (counts up, for work with no fixed length). Each child has their own list and their own timers. Export the day as a printable sheet, text, or CSV.</p>
+  <p class="sub no-print">Plan the day for each child: add a name and date, then add each subject as a <strong>countdown timer</strong> (a set number of minutes) or a <strong>stopwatch</strong> (counts up, for work with no fixed length). Each child has their own list, but only one timer runs at a time: starting another one pauses the first. Export the day as a printable sheet, text, or CSV.</p>
 
   <div class="card no-print">
     <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Today</span></span><span class="mac-zoom"></span></div>
@@ -207,7 +207,7 @@ function pauseItem(id){
 }
 function startItem(id){
   const f = find(id); if (!f) return;
-  f.k.items.forEach(i => { if (i.id !== id && runs[i.id]) pauseItem(i.id); });   /* one at a time per child */
+  Object.keys(runs).map(Number).forEach(r => { if (r !== id) pauseItem(r); });   /* only one clock runs at a time, for all children */
   const it = f.it;
   if (it.mode === "watch") { if (it.done) { it.el = 0; it.done = false; } runs[id] = { startAt: Date.now(), base: it.el }; }
   else { if (it.left <= 0) { it.left = it.mins*60; it.done = false; } runs[id] = { endAt: Date.now() + it.left*1000 }; }
