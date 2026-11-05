@@ -2,6 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Little House in the Big Woods — Walkable Pioneer Cabin &amp; Homestead</title>
+<link rel="stylesheet" href="../system7.css">
 <style>
 @font-face{font-family:"Lexend";font-style:normal;font-weight:100 900;src:local("Lexend"),url("../fonts/Lexend.woff2") format("woff2");font-display:swap}
 
@@ -20,11 +21,34 @@
  #touch{position:fixed;right:14px;bottom:14px;z-index:6;display:none;gap:8px}
  #touch button{width:56px;height:56px;border-radius:50%;border:1px solid #c0b89a;background:rgba(74,64,48,.85);color:#fff;font-size:20px}
  @media (pointer:coarse){#touch{display:flex}}
+
+ /* System 7 look (chrome from ../system7.css) */
+ body{font-family:"Geneva","Tahoma","Verdana",sans-serif;background:#8b8b8b;color:#000;overflow:hidden}
+ .mac-menubar{position:fixed;left:0;right:0;top:0}
+ #hud,#card,#loc,#prompt{background:#dddddd;color:#000;border:1px solid #000;border-radius:0;box-shadow:2px 2px 0 rgba(0,0,0,.4),inset 1px 1px 0 #fff,inset -1px -1px 0 #999}
+ #hud{top:36px;max-height:calc(100vh - 48px);overflow:auto}
+ #hud h1{display:block;font-family:"Chicago","Charcoal","Geneva",sans-serif;font-size:15px;margin:-12px -14px 10px;padding:3px 10px;text-align:center;
+  border-bottom:1px solid #000;background:repeating-linear-gradient(to bottom,#f4f4f4 0 2px,#b9b9b9 2px 4px)}
+ #hud p{font-size:13px}
+ #card{border-left:1px solid #000}
+ #card h2{color:#000;font-family:"Chicago","Charcoal","Geneva",sans-serif;font-size:14px}
+ #card p{font-size:13.5px}
+ #loc{top:36px;font-size:12.5px}
+ #prompt{border-radius:0;color:#000;font-size:13px}
+ .btn,#touch button,#burger{font-family:"Chicago","Charcoal","Geneva",sans-serif;font-weight:700;color:#000;background:#eeeeee;border:1px solid #000;border-radius:7px;
+  box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #aaaaaa,1px 1px 0 rgba(0,0,0,.3)}
+ .btn{font-size:13px;padding:4px 14px}
+ .btn:hover,.btn.sec,.btn.sec:hover{background:#eeeeee}
+ .btn:active,#touch button:active,#burger:active{background:#555;color:#fff}
+ #burger{top:36px;border-radius:7px}
 </style>
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 </head><body>
+<div class="mac-menubar" data-up='[["Homeschool Wiki","../index.html"],["boccbo.cc","https://boccbo.cc/"]]'>
+  <span class="mb-app">Little House in the Big Woods</span>
+</div>
 <div id="app"></div><div id="cross"></div>
-<div id="hud"><p><a href="../index.html" style="color:#ffd98a">← Directory</a> · <a href="https://boccbo.cc/" style="color:#ffd98a">← boccbo.cc</a></p><h1>🏡 Little House in the Big Woods</h1>
+<div id="hud"><h1>Little House in the Big Woods</h1>
 <p>The Ingalls family's little gray log house in the Big Woods of Wisconsin, c. 1871 — from Laura Ingalls Wilder's book. The cabin, attic and cellar, garden, barn, smokehouse, wheat-field clearing and the woods themselves. <b>Every building is hollow — go inside, climb to the attic, duck down to the cellar.</b></p>
 <p><b>Walk:</b> click Start, mouse to look, <b>W A S D</b> to move, <b>Shift</b> hurry, <b>Space</b> jump.</p>
 <p>Follow the numbered stops ①–⑮ — their cards appear as you arrive. The smaller <b>gold markers, numbered 16–35</b>, are points of interest: get close, then <b>aim the crosshair dot at the number and click</b> (or press <b>E</b>) to read its fact. <b>O</b> = bird's-eye view.</p>
@@ -178,4 +202,5 @@ function tick(){requestAnimationFrame(tick);const dt=Math.min(clock.getDelta(),0
  renderer.render(scene,camera);}
 tick();
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
-</script></body></html>
+</script><script src="../menubar.js"></script>
+</body></html>

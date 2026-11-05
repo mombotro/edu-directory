@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cherokee Syllabary Tool</title>
+<link rel="stylesheet" href="../system7.css">
+<style>
+  select, input[type="text"]{ font:inherit; font-weight:400; font-size:13px; padding:3px 6px; border:1px solid #000; border-radius:0; background:#fff; box-shadow:inset 1px 1px 0 #999; }
+  /* Cherokee glyphs: system fonts only, no downloads */
+  .chr{ font-family:"Plantagenet Cherokee","Gadugi","Noto Sans Cherokee","Everson Mono",sans-serif; }
+  /* learn */
+  .detail{ display:grid; grid-template-columns:170px 1fr; gap:18px; align-items:center; }
+  @media(max-width:640px){ .detail{ grid-template-columns:1fr; } }
+  .bigchar{ background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999;
+    font-size:104px; line-height:1.25; text-align:center; padding:10px 0 16px; }
+  .bigsound{ font-size:34px; font-weight:700; }
+  .drow{ font-size:14px; margin-top:4px; }
+  .rowstrip{ display:flex; flex-wrap:wrap; gap:5px; margin-top:12px; }
+  .rowstrip button{ border-radius:0; padding:4px 9px; font-size:19px; font-weight:400; }
+  .rowstrip button small{ font-size:11px; font-weight:700; display:block; }
+  .chartscroll{ overflow:auto; background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999; padding:8px; }
+  table.chart{ border-collapse:collapse; margin:0 auto; }
+  table.chart td, table.chart th{ border:1px solid #bbb; padding:3px 2px; text-align:center; }
+  table.chart th{ background:#000; color:#fff; font-weight:700; font-size:13px; min-width:34px; }
+  table.chart th.rowhead{ background:#ddd; color:#000; font-size:12px; padding:3px 7px; white-space:nowrap; }
+  table.chart td{ min-width:86px; }
+  .cell{ display:inline-block; cursor:pointer; padding:3px 7px; margin:1px; }
+  .cell:hover{ background:#ddd; }
+  .cell.sel{ background:#000; color:#fff; }
+  .cell .g{ font-size:30px; line-height:1.15; display:block; }
+  .cell .s{ font-size:12.5px; font-weight:700; display:block; }
+  /* words */
+  .words{ display:grid; grid-template-columns:repeat(auto-fill,minmax(215px,1fr)); gap:10px; }
+  .word{ background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999; padding:10px 12px; }
+  .word .wg{ font-size:31px; line-height:1.3; }
+  .word .wr{ font-weight:700; font-size:15px; }
+  .word .we{ font-size:13px; color:#333; }
+  /* cards */
+  .flashwrap{ text-align:center; }
+  .flash{ background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999, 3px 3px 0 rgba(0,0,0,.3);
+    max-width:430px; margin:14px auto; padding:30px 14px 26px; cursor:pointer; min-height:215px;
+    display:flex; flex-direction:column; justify-content:center; align-items:center; gap:8px; }
+  .flash .front{ font-size:110px; line-height:1.2; }
+  .flash .front.sound{ font-size:54px; font-weight:700; font-family:"Courier New",monospace; }
+  .flash .back{ font-size:30px; font-weight:700; min-height:38px; }
+  .flash .back .chr{ font-size:44px; }
+  .flash .tap{ font-size:12px; color:#666; }
+  /* drill */
+  .chips{ display:flex; flex-wrap:wrap; gap:6px; margin:6px 0 12px; }
+  .chips button{ border-radius:0; padding:5px 11px; }
+  .pcontrols{ display:flex; flex-wrap:wrap; gap:14px 18px; align-items:end; }
+  .stats{ display:flex; gap:18px; flex-wrap:wrap; font-size:13px; font-weight:700; margin:10px 0; }
+  .prog{ height:14px; border:1px solid #000; background:#fff; box-shadow:inset 1px 1px 0 #999; margin:8px 0 14px; }
+  .prog i{ display:block; height:100%; background:#000; width:0%; transition:width .25s; }
+  .qbox{ background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999; padding:22px 14px; text-align:center; }
+  .qbig{ font-size:96px; line-height:1.2; margin:2px 0 12px; }
+  .qbig input{ width:190px; font-family:"Courier New",monospace; font-size:32px; font-weight:700; text-align:center; border:none; border-bottom:4px solid #000; box-shadow:none; outline:none; }
+  .qprompt{ font-size:14px; font-weight:700; margin-bottom:8px; }
+  .choices{ display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+  .choices button{ font-family:"Courier New",monospace; font-size:22px; padding:10px 22px; border-radius:0; }
+  .feedback{ min-height:30px; font-size:17px; font-weight:700; margin-top:12px; }
+  .feedback.good{ color:#006400; } .feedback.bad{ color:#8b0000; }
+  .summary{ background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999; padding:14px; margin-top:14px; display:none; }
+  .summary.show{ display:block; }
+  .missed{ font-size:15px; line-height:1.8; }
+  /* print sheet preview */
+  #sheetWrap{ overflow:auto; background:#fff; border:1px solid #000; box-shadow:5px 5px 0 rgba(0,0,0,.35); }
+  .mac-bar.sheet-bar{ margin:0; }
+  .sheet{ background:#fff; width:100%; aspect-ratio:8.5/11; container-type:inline-size; padding:4cqw 5cqw 5cqw; margin:0 auto; color:#000; }
+  .sheet-inst{ color:#555; font-size:2cqw; margin-bottom:3cqw; }
+  table.psyl{ border-collapse:collapse; width:100%; }
+  table.psyl td, table.psyl th{ border:1px solid #000; text-align:center; padding:.5cqw 0 .7cqw; }
+  table.psyl th{ font-weight:700; background:#eee; -webkit-print-color-adjust:exact; print-color-adjust:exact; font-size:1.9cqw; }
+  table.psyl th.rh{ font-size:1.5cqw; }
+  table.psyl .pg{ font-size:3.1cqw; line-height:1.25; display:block; }
+  table.psyl .ps{ font-size:1.65cqw; font-weight:700; display:block; }
+  table.psyl .pblank{ display:block; border-bottom:.28cqw dotted #000; height:2.2cqw; margin:.4cqw 1.2cqw 0; }
+  .pquiz{ display:grid; grid-template-columns:repeat(4,1fr); gap:3.2cqw 2.5cqw; align-content:start; }
+  .pq{ text-align:center; }
+  .pq .num{ font-size:1.7cqw; color:#555; display:block; }
+  .pq .pg{ font-size:4.6cqw; line-height:1.3; display:block; }
+  .pq .pblank{ display:block; border-bottom:.28cqw solid #000; height:2.6cqw; margin:.5cqw 1cqw 0; }
+  .pq .pans{ font-size:2.4cqw; font-weight:700; display:block; margin-top:.5cqw; }
+  @media print{
+    @page{ size:Letter portrait; margin:0; }
+    html,body{ margin:0; padding:0; background:#fff; }
+    .no-print{ display:none !important; }
+    .wrap{ max-width:none; padding:0; }
+    #printView{ display:block !important; }
+    #sheetWrap{ overflow:visible; border:none; box-shadow:none; margin:0; }
+    .sheet{ width:8.5in !important; height:11in !important; margin:0; }
+  }
+</style>
+</head>
+<body>
+<div class="mac-menubar no-print" data-up='[["Homeschool Wiki","../index.html"],["boccbo.cc","https://boccbo.cc/"]]'>
+  <span class="mb-app">Cherokee Syllabary Tool</span>
+</div>
+<div class="wrap">
+  <h1>Cherokee Syllabary Tool</h1>
+  <p class="sub no-print">Sequoyah's syllabary — all 85 characters, Oklahoma dialect (Cherokee Nation). <strong>Learn</strong> shows the full chart: click any character to see it big. <strong>Cards</strong> flips through flashcards. <strong>Drill</strong> quizzes you, and any character you miss comes back until you get it. <strong>Print</strong> makes a clean chart, a fill-in practice chart, or a quiz sheet.</p>
+
+  <div class="tabs no-print">
+    <button id="tab-learn" class="on" type="button">📖 Learn</button>
+    <button id="tab-cards" type="button">🃏 Cards</button>
+    <button id="tab-drill" type="button">✏️ Drill</button>
+    <button id="tab-print" type="button">🖨 Print</button>
+  </div>
+
+  <!-- ============ LEARN ============ -->
+  <div class="view active" id="learnView">
+    <div class="card no-print">
+      <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Character</span></span><span class="mac-zoom"></span></div>
+      <div class="detail">
+        <div class="bigchar chr" id="bigChar">Ꭰ</div>
+        <div>
+          <div class="bigsound" id="bigSound">a</div>
+          <div class="drow" id="bigRow"></div>
+          <div class="drow" id="bigHint"></div>
+          <div class="rowstrip" id="rowStrip"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card no-print">
+      <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>The syllabary — click any character</span></span><span class="mac-zoom"></span></div>
+      <div class="chartscroll"><table class="chart" id="fullChart"></table></div>
+      <p class="hint">Read each row across: the columns are the vowel sounds <strong>a e i o u v</strong>. The last column, <strong>v</strong>, is not the English letter — it is a nasal vowel, like the <em>u</em> in "but" said through the nose. Two rows hold extra characters in the <em>a</em> column: Ꭷ <strong>ka</strong> beside Ꭶ <strong>ga</strong>, and Ꮏ <strong>hna</strong> and Ꮐ <strong>nah</strong> beside Ꮎ <strong>na</strong>. The old character Ᏽ (mv) is no longer used, so it is not on the chart.</p>
+      <p class="hint">One honest note: the syllabary does not mark tone or long vowels, and pairs like <strong>ga/ka</strong> and <strong>da/ta</strong> are voicing variants — the first of each pair is softer (between g and k, or between d and t) and the second is stronger, with a puff of air. This chart follows the Oklahoma (Cherokee Nation) conventions.</p>
+    </div>
+    <div class="card no-print">
+      <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>First words</span></span><span class="mac-zoom"></span></div>
+      <div class="words" id="wordBox"></div>
+      <p class="hint">Read each word one character at a time — every character is one syllable. Words from Cherokee Nation language materials and the Cherokee–English Dictionary.</p>
+    </div>
+  </div>
+
+  <!-- ============ CARDS ============ -->
+  <div class="view" id="cardsView">
+    <div class="card no-print">
+      <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Flashcards</span></span><span class="mac-zoom"></span></div>
+      <div class="pcontrols">
+        <label class="field">Cards from
+          <select id="cardGroup"></select>
+        </label>
+        <label class="field">Show first
+          <select id="cardDir">
+            <option value="chr" selected>Character → sound</option>
+            <option value="snd">Sound → character</option>
+          </select>
+        </label>
+        <button id="cardShuffleBtn" type="button">🔀 Shuffle deck</button>
+      </div>
+      <div class="flashwrap">
+        <div class="flash" id="flashBox" title="Click to reveal">
+          <div class="front chr" id="flashFront">Ꭰ</div>
+          <div class="back" id="flashBack"></div>
+          <div class="tap" id="flashTap">click the card to reveal</div>
+        </div>
+        <div>
+          <button id="cardPrevBtn" type="button">← Back</button>
+          <button id="cardRevealBtn" type="button">Reveal</button>
+          <button id="cardNextBtn" type="button">Next →</button>
+        </div>
+        <div class="stats" style="justify-content:center"><span id="cardPos">Card 1 of 85</span></div>
+      </div>
+      <p class="hint">Work through the deck in chart order, or shuffle it. Click the card (or Reveal) to see the other side. Switch "Show first" to practise reading a sound and picturing its character.</p>
+    </div>
+  </div>
+
+  <!-- ============ DRILL ============ -->
+  <div class="view" id="drillView">
+    <div class="card no-print">
+      <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Drill controls</span></span><span class="mac-zoom"></span></div>
+      <div class="chips" id="drillChips"></div>
+      <div class="pcontrols">
+        <label class="field">Questions
+          <select id="qCount">
+            <option value="10">10</option>
+            <option value="20" selected>20</option>
+            <option value="30">30</option>
+            <option value="85">All in the set</option>
+          </select>
+        </label>
+        <label class="field">Answer by
+          <select id="answerBy">
+            <option value="choice" selected>Choosing (4 options)</option>
+            <option value="type">Typing the sound</option>
+          </select>
+        </label>
+        <button id="startBtn" type="button">▶ Start drill</button>
+      </div>
+      <div class="stats">
+        <span>Score: <span id="stScore">0</span></span>
+        <span>Streak: <span id="stStreak">0</span> 🔥</span>
+        <span>Question: <span id="stQ">–</span></span>
+      </div>
+      <div class="prog"><i id="progBar"></i></div>
+      <div class="qbox">
+        <div class="qprompt" id="qPrompt">Press Start drill</div>
+        <div class="qbig chr" id="qBig"></div>
+        <div class="choices" id="choiceBox" style="display:none"></div>
+        <div style="margin-top:12px"><button id="checkBtn" type="button">Check</button> <button id="nextBtn" type="button" disabled>Next →</button></div>
+        <div class="feedback" id="feedback" aria-live="polite"></div>
+      </div>
+      <div class="summary" id="summaryBox">
+        <div style="font-size:17px;font-weight:700" id="summaryTitle"></div>
+        <p style="margin:8px 0 4px;font-weight:700">Characters to keep practising:</p>
+        <div class="missed" id="missedList"></div>
+        <div style="margin-top:12px"><button id="retryMissedBtn" type="button">↻ Drill just those characters</button> <button id="againBtn" type="button">New drill</button></div>
+      </div>
+      <p class="hint">Each drill asks every picked character once at most — the pool is built from the rows you tick, with no repeats. The only repeats are characters you miss: a missed character is shown with its sound, then comes back a few questions later until you get it right on your own. Typing answers: type the sound exactly as the chart writes it (ga, tli, quv, s…).</p>
+    </div>
+  </div>
+
+  <!-- ============ PRINT ============ -->
+  <div class="view" id="printView">
+    <div class="card no-print">
+      <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>Print controls</span></span><span class="mac-zoom"></span></div>
+      <div class="pcontrols">
+        <label class="field">Sheet type
+          <select id="sheetType">
+            <option value="chart" selected>Syllabary chart — filled in</option>
+            <option value="practice">Practice chart — write the sounds</option>
+            <option value="quiz">Quiz sheet — random characters</option>
+          </select>
+        </label>
+        <label class="field">Quiz questions
+          <select id="printCount">
+            <option value="12">12</option>
+            <option value="20" selected>20</option>
+            <option value="28">28</option>
+          </select>
+        </label>
+        <label class="field check"><input type="checkbox" id="printAnswers"> Show answers</label>
+        <button id="printNewBtn" type="button">🎲 New quiz sheet</button>
+        <button id="pdfBtn" type="button">⬇ Export as PDF</button>
+      </div>
+      <p class="hint"><strong>Export as PDF:</strong> choose <em>Save as PDF</em>, paper <em>Letter</em>, orientation <em>Portrait</em>, margins <em>None</em>, scale <em>100%</em>. The sheet itself is clean — just an instruction line and the work, no title and no name line, same as your other makers.</p>
+    </div>
+    <div id="sheetWrap">
+      <div class="mac-bar sheet-bar no-print"><span class="mac-close"></span><span class="mac-title"><span>untitled</span></span><span class="mac-zoom"></span></div>
+      <div class="sheet" id="sheet">
+        <div class="sheet-inst" id="sheetInst"></div>
+        <div id="sheetBody"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const shuffle = a => { a=[...a]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+
+/* ---------- DATA ----------
+   The 85 characters of Sequoyah's syllabary, Oklahoma (Cherokee Nation)
+   conventions, in traditional chart order — the same order as the Unicode
+   block U+13A0–U+13F4. Cross-checked pair by pair against the Cherokee
+   Nation syllabary chart (cherokee.org) and Wikipedia's Cherokee
+   syllabary chart; both agree on every entry below.
+   Columns: a e i o u v. A few rows hold extra characters in a column:
+   ka beside ga; hna and nah beside na; s beside sa; ta/te/ti beside da/de/di;
+   tla beside dla. The obsolete Ᏽ (mv) is not part of the modern 85. */
+const COLS = ["a","e","i","o","u","v"];
+const ROWS = [
+  { id:"vowels", name:"Vowels", head:"—",
+    note:"The six vowel sounds on their own.",
+    cells:{ a:[["Ꭰ","a"]], e:[["Ꭱ","e"]], i:[["Ꭲ","i"]], o:[["Ꭳ","o"]], u:[["Ꭴ","u"]], v:[["Ꭵ","v"]] } },
+  { id:"gk", name:"G / K", head:"g · k",
+    note:"Mostly a soft g, between g and k. Ꭷ ka is the strong one, with a puff of air.",
+    cells:{ a:[["Ꭶ","ga"],["Ꭷ","ka"]], e:[["Ꭸ","ge"]], i:[["Ꭹ","gi"]], o:[["Ꭺ","go"]], u:[["Ꭻ","gu"]], v:[["Ꭼ","gv"]] } },
+  { id:"h", name:"H", head:"h",
+    note:"h as in English.",
+    cells:{ a:[["Ꭽ","ha"]], e:[["Ꭾ","he"]], i:[["Ꭿ","hi"]], o:[["Ꮀ","ho"]], u:[["Ꮁ","hu"]], v:[["Ꮂ","hv"]] } },
+  { id:"l", name:"L", head:"l",
+    note:"l as in English.",
+    cells:{ a:[["Ꮃ","la"]], e:[["Ꮄ","le"]], i:[["Ꮅ","li"]], o:[["Ꮆ","lo"]], u:[["Ꮇ","lu"]], v:[["Ꮈ","lv"]] } },
+  { id:"m", name:"M", head:"m",
+    note:"m as in English. There is no mv character any more — the old Ᏽ fell out of use.",
+    cells:{ a:[["Ꮉ","ma"]], e:[["Ꮊ","me"]], i:[["Ꮋ","mi"]], o:[["Ꮌ","mo"]], u:[["Ꮍ","mu"]], v:[] } },
+  { id:"n", name:"N", head:"n",
+    note:"n as in English. Ꮏ hna starts with a breathy h, and Ꮐ nah ends with one.",
+    cells:{ a:[["Ꮎ","na"],["Ꮏ","hna"],["Ꮐ","nah"]], e:[["Ꮑ","ne"]], i:[["Ꮒ","ni"]], o:[["Ꮓ","no"]], u:[["Ꮔ","nu"]], v:[["Ꮕ","nv"]] } },
+  { id:"qu", name:"Qu", head:"qu",
+    note:"Said as kw, like the start of “quick”.",
+    cells:{ a:[["Ꮖ","qua"]], e:[["Ꮗ","que"]], i:[["Ꮘ","qui"]], o:[["Ꮙ","quo"]], u:[["Ꮚ","quu"]], v:[["Ꮛ","quv"]] } },
+  { id:"s", name:"S", head:"s",
+    note:"s as in English. Ꮝ is the sound s all on its own — the only character with no vowel.",
+    cells:{ a:[["Ꮜ","sa"],["Ꮝ","s"]], e:[["Ꮞ","se"]], i:[["Ꮟ","si"]], o:[["Ꮠ","so"]], u:[["Ꮡ","su"]], v:[["Ꮢ","sv"]] } },
+  { id:"dt", name:"D / T", head:"d · t",
+    note:"d is soft, between d and t. t (Ꮤ ta, Ꮦ te, Ꮨ ti) is stronger, with a puff of air.",
+    cells:{ a:[["Ꮣ","da"],["Ꮤ","ta"]], e:[["Ꮥ","de"],["Ꮦ","te"]], i:[["Ꮧ","di"],["Ꮨ","ti"]], o:[["Ꮩ","do"]], u:[["Ꮪ","du"]], v:[["Ꮫ","dv"]] } },
+  { id:"dltl", name:"Dl / Tl", head:"dl · tl",
+    note:"One quick sound made with the tip of the tongue — English has no exact match. Ꮬ dla is the soft one, Ꮭ tla the strong one.",
+    cells:{ a:[["Ꮬ","dla"],["Ꮭ","tla"]], e:[["Ꮮ","tle"]], i:[["Ꮯ","tli"]], o:[["Ꮰ","tlo"]], u:[["Ꮱ","tlu"]], v:[["Ꮲ","tlv"]] } },
+  { id:"ts", name:"Ts", head:"ts",
+    note:"ts as in “cats”, said as one sound.",
+    cells:{ a:[["Ꮳ","tsa"]], e:[["Ꮴ","tse"]], i:[["Ꮵ","tsi"]], o:[["Ꮶ","tso"]], u:[["Ꮷ","tsu"]], v:[["Ꮸ","tsv"]] } },
+  { id:"w", name:"W", head:"w",
+    note:"w as in English.",
+    cells:{ a:[["Ꮹ","wa"]], e:[["Ꮺ","we"]], i:[["Ꮻ","wi"]], o:[["Ꮼ","wo"]], u:[["Ꮽ","wu"]], v:[["Ꮾ","wv"]] } },
+  { id:"y", name:"Y", head:"y",
+    note:"y as in “yes”.",
+    cells:{ a:[["Ꮿ","ya"]], e:[["Ᏸ","ye"]], i:[["Ᏹ","yi"]], o:[["Ᏺ","yo"]], u:[["Ᏻ","yu"]], v:[["Ᏼ","yv"]] } },
+];
+/* Flat list in chart order: {ch, s, row, rowName, col} */
+const ALL = [];
+for(const r of ROWS) for(const c of COLS) for(const [ch,s] of r.cells[c]) ALL.push({ch, s, row:r.id, rowName:r.name, col:c});
+const BY_CH = {}; for(const e of ALL) BY_CH[e.ch]=e;
+/* Vowel hints from the Cherokee Nation chart's own pronunciation key. */
+const VHINT = {
+  a:"a as in “father” (or short, as in “rival”)",
+  e:"a as in “hate”, or short e as in “met”",
+  i:"i as in “pique”, or short i as in “pit”",
+  o:"o as in “note”, almost the aw in “law”",
+  u:"oo as in “fool”, or short u as in “pull”",
+  v:"u as in “but”, said through the nose (a nasal vowel)"
+};
+function hintFor(e){
+  if(e.s==="s") return "Just the sound s, with no vowel after it — the only one of its kind on the chart.";
+  if(e.s==="nah") return "Sounds like “nah” — na with an h breathed at the end, plus the vowel: " + VHINT.a + ".";
+  if(e.s==="hna") return "Starts with a breathy h — “h-na” — plus the vowel: " + VHINT.a + ".";
+  const row = ROWS.find(r=>r.id===e.row);
+  return row.note + " The vowel is " + VHINT[e.col] + ".";
+}
+/* First words — syllabary, romanization, English. Each word's syllabary
+   spelling breaks exactly into the chart sounds of its romanization.
+   Sources: Cherokee Nation language materials (language.cherokee.org,
+   incl. osiyo = ᎣᏏᏲ in the Nation's own typing guide) and the
+   Cherokee–English Dictionary (cherokeedictionary.net / Wikibooks CED). */
+const WORDS = [
+  { w:"ᎣᏏᏲ", r:"osiyo",  en:"hello",            parts:["o","si","yo"] },
+  { w:"ᏩᏙ",   r:"wado",   en:"thank you",        parts:["wa","do"] },
+  { w:"ᎩᏟ",   r:"gitli",  en:"dog",              parts:["gi","tli"] },
+  { w:"ᏪᏌ",   r:"wesa",   en:"cat",              parts:["we","sa"] },
+  { w:"ᎠᏣᏗ", r:"atsadi", en:"fish",             parts:["a","tsa","di"] },
+  { w:"ᏥᏍᏆ", r:"tsisqua",en:"bird",             parts:["tsi","s","qua"] },
+  { w:"ᏩᎦ",   r:"waga",   en:"cow",              parts:["wa","ga"] },
+  { w:"ᏏᏆ",   r:"siqua",  en:"pig",              parts:["si","qua"] },
+  { w:"ᏎᎷ",   r:"selu",   en:"corn",             parts:["se","lu"] },
+  { w:"ᎡᎶᎯ", r:"elohi",  en:"the earth, world", parts:["e","lo","hi"] },
+];
+
+/* ---------- tabs ---------- */
+const TABS = [["learn","learnView"],["cards","cardsView"],["drill","drillView"],["print","printView"]];
+for(const [name,view] of TABS){
+  $("tab-"+name).addEventListener("click", ()=>{
+    for(const [n,v] of TABS){ $("tab-"+n).classList.toggle("on", n===name); $(v).classList.toggle("active", v===view); }
+  });
+}
+
+/* ---------- LEARN ---------- */
+let selected = ALL[0];
+const chart=$("fullChart");
+(function buildChart(){
+  let html="<tr><th></th>"; for(const c of COLS) html+=`<th>${c}</th>`; html+="</tr>";
+  for(const r of ROWS){
+    html+=`<tr><th class="rowhead">${r.head}</th>`;
+    for(const c of COLS){
+      html+="<td>";
+      for(const [ch,s] of r.cells[c]) html+=`<span class="cell" data-ch="${ch}"><span class="g chr">${ch}</span><span class="s">${s}</span></span>`;
+      html+="</td>";
+    }
+    html+="</tr>";
+  }
+  chart.innerHTML=html;
+  chart.addEventListener("click", e=>{
+    const cell=e.target.closest(".cell"); if(!cell) return;
+    selectChar(BY_CH[cell.dataset.ch], true);
+  });
+})();
+function selectChar(e, scroll){
+  selected=e;
+  $("bigChar").textContent=e.ch;
+  $("bigSound").textContent=e.s;
+  $("bigRow").textContent=`Row: ${e.rowName} · column: ${e.col}`;
+  $("bigHint").textContent="Sounds like: " + hintFor(e);
+  const strip=$("rowStrip"); strip.innerHTML="";
+  const row=ROWS.find(r=>r.id===e.row);
+  for(const c of COLS) for(const [ch,s] of row.cells[c]){
+    const b=document.createElement("button"); b.type="button";
+    b.innerHTML=`<span class="chr">${ch}</span><small>${s}</small>`;
+    b.classList.toggle("on", ch===e.ch);
+    b.addEventListener("click", ()=>selectChar(BY_CH[ch], false));
+    strip.appendChild(b);
+  }
+  chart.querySelectorAll(".cell").forEach(cell=>cell.classList.toggle("sel", cell.dataset.ch===e.ch));
+  if(scroll) document.querySelector("#learnView .card").scrollIntoView({behavior:"smooth", block:"start"});
+}
+/* words */
+(function buildWords(){
+  const box=$("wordBox");
+  for(const wd of WORDS){
+    const d=document.createElement("div"); d.className="word";
+    d.innerHTML=`<div class="wg chr">${wd.w}</div><div class="wr">${wd.r}</div><div class="we">${wd.en} — ${wd.parts.join(" · ")}</div>`;
+    box.appendChild(d);
+  }
+})();
+
+/* ---------- CARDS ---------- */
+let deck=[...ALL], deckIdx=0, cardShown=false;
+const cardGroupSel=$("cardGroup");
+{ const o=document.createElement("option"); o.value="all"; o.textContent="All 85 characters"; cardGroupSel.appendChild(o);
+  for(const r of ROWS){ const op=document.createElement("option"); op.value=r.id; op.textContent=`${r.name} row`; cardGroupSel.appendChild(op); } }
+function setDeck(){
+  const g=cardGroupSel.value;
+  deck = g==="all" ? [...ALL] : ALL.filter(e=>e.row===g);
+  deckIdx=0; drawCard();
+}
+function drawCard(){
+  const e=deck[deckIdx], dir=$("cardDir").value;
+  cardShown=false;
+  const front=$("flashFront"), back=$("flashBack");
+  if(dir==="chr"){ front.textContent=e.ch; front.className="front chr"; back.innerHTML=""; }
+  else{ front.textContent=e.s; front.className="front sound"; back.innerHTML=""; }
+  $("flashTap").textContent="click the card to reveal";
+  $("cardPos").textContent=`Card ${deckIdx+1} of ${deck.length}`;
+}
+function revealCard(){
+  if(cardShown) return; cardShown=true;
+  const e=deck[deckIdx], dir=$("cardDir").value, back=$("flashBack");
+  back.innerHTML = dir==="chr" ? e.s : `<span class="chr">${e.ch}</span>`;
+  $("flashTap").textContent = `${e.rowName} row · column ${e.col}`;
+}
+$("flashBox").addEventListener("click", revealCard);
+$("cardRevealBtn").addEventListener("click", revealCard);
+$("cardNextBtn").addEventListener("click", ()=>{ deckIdx=(deckIdx+1)%deck.length; drawCard(); });
+$("cardPrevBtn").addEventListener("click", ()=>{ deckIdx=(deckIdx-1+deck.length)%deck.length; drawCard(); });
+$("cardShuffleBtn").addEventListener("click", ()=>{ deck=shuffle(deck); deckIdx=0; drawCard(); });
+cardGroupSel.addEventListener("change", setDeck);
+$("cardDir").addEventListener("change", drawCard);
+
+/* ---------- DRILL ---------- */
+let drillRows = new Set(ROWS.map(r=>r.id));
+const drillChips=$("drillChips");
+for(const r of ROWS){
+  const b=document.createElement("button"); b.type="button"; b.textContent=r.name; b.dataset.row=r.id; b.className="on";
+  b.addEventListener("click", ()=>{
+    drillRows.has(r.id)?drillRows.delete(r.id):drillRows.add(r.id);
+    b.classList.toggle("on", drillRows.has(r.id));
+  });
+  drillChips.appendChild(b);
+}
+{ const b=document.createElement("button"); b.type="button"; b.textContent="All / none";
+  b.addEventListener("click", ()=>{
+    if(drillRows.size===ROWS.length) drillRows.clear(); else drillRows=new Set(ROWS.map(r=>r.id));
+    [...drillChips.children].forEach(c=>{ if(c.dataset.row) c.classList.toggle("on", drillRows.has(c.dataset.row)); });
+  });
+  drillChips.appendChild(b); }
+
+let queue=[], current=null, score=0, streak=0, asked=0, totalPlanned=0, missed=new Map(), answered=false, retryOnly=null;
+
+/* Build the drill pool from the picked rows. Every character appears at
+   most once: the pool is keyed by character, so no build order can sneak
+   a duplicate in. A retry-missed pool dedupes the same way. */
+function buildPool(){
+  let pool;
+  if(retryOnly) pool=[...retryOnly];
+  else pool=ALL.filter(e=>drillRows.has(e.row));
+  pool=[...new Map(pool.map(e=>[e.ch,e])).values()];
+  return shuffle(pool);
+}
+function startDrill(onlyMissed){
+  if(!onlyMissed) retryOnly=null;
+  if(!retryOnly && drillRows.size===0){ const fb=$("feedback"); fb.textContent="Pick at least one row first."; fb.className="feedback bad"; return; }
+  const pool=buildPool();
+  const count = retryOnly ? pool.length : Math.min(+$("qCount").value, pool.length);
+  queue = pool.slice(0, count).map(e=>({ch:e.ch, s:e.s}));
+  totalPlanned=queue.length; score=0; streak=0; asked=0; missed=new Map();
+  $("summaryBox").classList.remove("show");
+  nextQuestion();
+}
+function nextQuestion(){
+  if(queue.length===0){ finishDrill(); return; }
+  current=queue.shift(); answered=false;
+  const fb=$("feedback"); fb.textContent=""; fb.className="feedback";
+  $("nextBtn").disabled=true; $("checkBtn").disabled=false;
+  $("qPrompt").textContent="What sound does this character make?";
+  const by=$("answerBy").value;
+  if(by==="type"){
+    $("choiceBox").style.display="none";
+    $("qBig").innerHTML=`${current.ch} <input id="ansInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Type the sound">`;
+    const inp=$("ansInput"); inp.focus();
+    inp.addEventListener("keydown", e=>{ if(e.key==="Enter"){ answered? nextQuestion() : checkAnswer(); } });
+  } else {
+    $("qBig").textContent=current.ch;
+    $("choiceBox").style.display="flex"; $("checkBtn").disabled=true;
+    /* Distractors: prefer the same row (the confusable ones), then others.
+       A Set guarantees 4 different options, answer included exactly once. */
+    const sameRow = shuffle(ALL.filter(e=>e.row===BY_CH[current.ch].row && e.s!==current.s).map(e=>e.s));
+    const others  = shuffle(ALL.filter(e=>e.row!==BY_CH[current.ch].row).map(e=>e.s));
+    const opts=new Set([current.s]);
+    for(const s of [...sameRow, ...others]){ if(opts.size>=4) break; opts.add(s); }
+    $("choiceBox").innerHTML="";
+    shuffle([...opts]).forEach(v=>{
+      const b=document.createElement("button"); b.type="button"; b.textContent=v;
+      b.addEventListener("click", ()=>checkAnswer(v));
+      $("choiceBox").appendChild(b);
+    });
+  }
+  updateStats();
+}
+function checkAnswer(chosen){
+  if(answered || !current) return;
+  const val = chosen!==undefined ? chosen : ($("ansInput") ? $("ansInput").value.trim().toLowerCase() : "");
+  if(chosen===undefined && val==="") return;
+  answered=true; asked++;
+  const fb=$("feedback");
+  if(val===current.s){
+    score++; streak++;
+    fb.innerHTML=`✓ Correct! <span class="chr">${current.ch}</span> = ${current.s}`;
+    fb.className="feedback good";
+  } else {
+    streak=0;
+    if(!missed.has(current.ch)) missed.set(current.ch,{ch:current.ch, s:current.s});
+    fb.innerHTML=`Not quite — <span class="chr">${current.ch}</span> = ${current.s}`;
+    fb.className="feedback bad";
+    /* A missed character returns after 3 more questions — but only if a
+       copy isn't already waiting later in this drill, so repeats can
+       never stack up. */
+    if(!queue.some(q=>q.ch===current.ch)){
+      queue.splice(Math.min(3, queue.length), 0, {...current});
+      totalPlanned++;
+    }
+  }
+  $("checkBtn").disabled=true; $("nextBtn").disabled=false;
+  $("nextBtn").focus();
+  updateStats();
+}
+function updateStats(){
+  $("stScore").textContent=score; $("stStreak").textContent=streak;
+  $("stQ").textContent = totalPlanned? `${Math.min(asked+1,totalPlanned)} of ${totalPlanned}` : "–";
+  $("progBar").style.width = totalPlanned? `${asked/totalPlanned*100}%` : "0%";
+}
+function finishDrill(){
+  current=null;
+  $("qPrompt").textContent="All done! 🎉";
+  $("qBig").textContent="";
+  $("choiceBox").style.display="none"; $("checkBtn").disabled=true; $("nextBtn").disabled=true;
+  $("feedback").textContent=""; updateStats(); $("progBar").style.width="100%";
+  const m=[...missed.values()];
+  $("summaryTitle").textContent=`You scored ${score} out of ${asked} — ${m.length===0? "every character right on the way through!" : "the characters below came back until the end of the drill."}`;
+  $("missedList").innerHTML = m.length? m.map(f=>`<span class="chr">${f.ch}</span> ${f.s}`).join(" &nbsp;•&nbsp; ") : "None — nothing missed. 🎉";
+  $("retryMissedBtn").disabled = m.length===0;
+  $("summaryBox").classList.add("show");
+}
+$("startBtn").addEventListener("click", ()=>startDrill(false));
+$("againBtn").addEventListener("click", ()=>startDrill(false));
+$("retryMissedBtn").addEventListener("click", ()=>{ retryOnly=[...missed.values()].map(f=>BY_CH[f.ch]); startDrill(true); });
+$("checkBtn").addEventListener("click", ()=>checkAnswer());
+$("nextBtn").addEventListener("click", nextQuestion);
+
+/* ---------- PRINT ---------- */
+let quizChars=[];
+function genQuiz(){
+  quizChars = shuffle(ALL).slice(0, +$("printCount").value);
+}
+function drawSheet(){
+  const type=$("sheetType").value, show=$("printAnswers").checked, body=$("sheetBody"), inst=$("sheetInst");
+  if(type==="chart" || type==="practice"){
+    inst.textContent = type==="chart"
+      ? "Cherokee syllabary chart (Oklahoma dialect) — use it to check your work."
+      : "Write the sound of each character.";
+    let html=`<table class="psyl"><tr><th></th>`;
+    for(const c of COLS) html+=`<th>${c}</th>`; html+="</tr>";
+    for(const r of ROWS){
+      html+=`<tr><th class="rh">${r.head}</th>`;
+      for(const c of COLS){
+        html+="<td>";
+        for(const [ch,s] of r.cells[c]){
+          html+=`<span class="pg chr">${ch}</span>`;
+          html+= (type==="chart" || show) ? `<span class="ps">${s}</span>` : `<span class="pblank"></span>`;
+        }
+        html+="</td>";
+      }
+      html+="</tr>";
+    }
+    body.innerHTML=html+"</table>";
+  } else {
+    if(quizChars.length===0) genQuiz();
+    inst.textContent="Write the sound of each character.";
+    let html=`<div class="pquiz">`;
+    quizChars.forEach((e,i)=>{
+      html+=`<div class="pq"><span class="num">${i+1}</span><span class="pg chr">${e.ch}</span>${show? `<span class="pans">${e.s}</span>` : `<span class="pblank"></span>`}</div>`;
+    });
+    body.innerHTML=html+"</div>";
+  }
+}
+for(const id of ["sheetType","printAnswers"]) $(id).addEventListener("input", drawSheet);
+$("printCount").addEventListener("input", ()=>{ genQuiz(); drawSheet(); });
+$("printNewBtn").addEventListener("click", ()=>{ genQuiz(); drawSheet(); });
+$("pdfBtn").addEventListener("click", ()=>{ document.title="Cherokee Syllabary Sheet"; window.print(); });
+
+/* init */
+selectChar(ALL[0], false);
+drawCard();
+genQuiz();
+drawSheet();
+</script>
+<script src="../menubar.js"></script>
+</body>
+</html>

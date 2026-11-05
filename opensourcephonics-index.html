@@ -3,94 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <title>Open Source Phonics — Site Index</title>
+<link rel="stylesheet" href="system7.css">
 <style>
-@font-face{font-family:"Lexend";font-style:normal;font-weight:100 900;src:local("Lexend"),url("fonts/Lexend.woff2") format("woff2");font-display:swap}
-
-  :root {
-    --bg: #f2f6f5;
-    --card: #ffffff;
-    --ink: #202826;
-    --muted: #6b7674;
-    --accent: #1f6f78;
-    --accent-soft: #dcefef;
-    --border: #dde6e4;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    line-height: 1.4;
-  }
-  header { padding: 2rem 1.5rem 1rem; text-align: center; }
-  header h1 { margin: 0 0 .25rem; font-size: 1.8rem; }
-  header p { margin: 0; color: var(--muted); font-size: 1rem; }
-  .search-box { max-width: 480px; margin: 1rem auto 0; padding: 0 1.5rem; }
-  #filter {
-    width: 100%; padding: .6rem .9rem; font-size: 1rem;
-    border: 1px solid var(--border); border-radius: 8px;
-    background: var(--card); color: var(--ink);
-  }
-  main {
-    max-width: 1100px; margin: 0 auto; padding: 1.5rem;
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;
-  }
-  section.card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 10px; padding: 1rem 1.2rem 1.2rem;
-  }
-  section.card h2 {
-    font-size: 1.05rem; margin: 0 0 .3rem; color: var(--accent);
-    border-bottom: 1px solid var(--accent-soft); padding-bottom: .4rem;
-  }
-  section.card .sub { color: var(--muted); font-size: 0.875rem; margin: 0 0 .5rem; }
-  ul { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 1rem; }
-  section.wide ul { columns: 3; }
-  li a {
-    display: block; padding: .25rem .3rem; color: var(--ink);
-    text-decoration: none; border-radius: 5px; font-size: 0.875rem;
-    break-inside: avoid;
-  }
-  li a:hover { background: var(--accent-soft); color: var(--accent); }
-  li[hidden] { display: none; }
-  section.card[hidden] { display: none; }
-  .full-pdf {
-    margin-top: .8rem; padding-top: .6rem; border-top: 1px dashed var(--border);
-  }
-  footer { text-align: center; color: var(--muted); font-size: 0.875rem; padding: 2rem 1rem 3rem; }
-  .back-link { display: inline-block; margin-top: .5rem; font-size: 0.875rem; color: var(--accent); text-decoration: none; }
-  .back-link:hover { text-decoration: underline; }
-
-  /* boccbo.cc look (shared with index.html) */
-  :root { --bg:#fff; --card:#fff; --ink:#000; --muted:#666; --accent:#8B4513; --accent-soft:rgba(139,69,19,.1); --border:#ccc; --brown:#8B4513; }
-  body { font-family: 'Lexend', system-ui, sans-serif; font-size: 16px; background:#fff; padding: 20px; line-height:1.45; }
-  header { text-align: left; max-width: 1100px; margin: 0 auto 10px; padding: 0 0 10px; border-bottom: 2px dashed var(--brown); }
-  header h1 { font-size: 18px; color: var(--brown); text-transform: uppercase; }
-  header p { font-size: 16px; }
-  .back-link { color: #0000EE; text-decoration: underline; font-size: 16px; }
-  .back-link:visited { color: #551A8B; }
-  .search-box { margin: 14px 0 0; padding: 0; max-width: 1100px; margin-left: auto; margin-right: auto; }
-  #filter { max-width: 420px; display: block; border: 2px dashed var(--brown); border-radius: 0; font: inherit; padding: 5px 8px; background:#fff; }
-  main { padding: 20px 0; }
-  section.card, .cat { border: 2px dashed var(--brown); border-radius: 0; background: rgba(139,69,19,.05); }
-  section.card h2 { font-size: 16px; text-transform: uppercase; color: var(--brown); border-bottom: 2px dashed var(--brown); }
-  li a, .cat a { color: #0000EE; text-decoration: underline; border-radius: 0; font-size: 16px; }
-  li a:visited, .cat a:visited { color: #551A8B; }
-  li a:hover, .cat a:hover { background: rgba(139,69,19,.15); color: #0000EE; }
-  .note { text-align: left; max-width: 1100px; font-size: 14px; padding: 0; }
-  .full-pdf { border-top: 2px dashed var(--brown); }
-  footer { max-width: 1100px; margin: 0 auto; text-align: left; border-top: 2px dashed var(--brown); padding: 10px 0 0; font-size: 14px; }
-  footer a { color: #0000EE; }
+.wrap{ max-width:1100px; }
+.search-box{ margin:0 0 14px; }
+#filter{ display:block; width:100%; max-width:420px; font:inherit; font-size:13px; padding:4px 7px; border:1px solid #000; border-radius:0;
+  background:#fff; box-shadow:inset 1px 1px 0 #999; }
+#filter:focus{ outline:none; }
+main{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; align-items:start; }
+section.card{ margin:0; }
+section.card h2{ position:relative; display:block; margin:-14px -14px 10px; padding:3px 24px; text-align:center;
+  border-bottom:1px solid #000; background:repeating-linear-gradient(to bottom,#f4f4f4 0 2px,#b9b9b9 2px 4px);
+  font-family:"Chicago","Charcoal","Geneva",sans-serif; font-size:13px; font-weight:700; }
+section.card h2::before, section.card h2::after{ content:""; position:absolute; top:50%; margin-top:-4.5px; width:9px; height:9px; background:#000; border-radius:50%; }
+section.card h2::before{ left:7px; } section.card h2::after{ right:7px; }
+section.card .sub{ font-size:12px; margin:0 0 8px; background:none; border:none; box-shadow:none; padding:0; }
+ul{ list-style:none; margin:0; padding:0; }
+li[hidden], section.card[hidden], .cat[hidden]{ display:none; }
+li a, .cat a{ display:block; padding:3px 4px; color:#000; text-decoration:underline; font-size:13px; }
+li a:hover, .cat a:hover{ background:#000; color:#fff; }
+section.wide{ grid-column:1 / -1; }
+section.wide ul{ columns:3; }
+.full-pdf a{ color:#000 !important; font-weight:700; font-size:13px !important; }
+.full-pdf{ margin-top:10px; padding-top:8px; border-top:1px dotted #000; }
+.cat{ background:#dddddd; border:1px solid #000; box-shadow:2px 2px 0 rgba(0,0,0,.4), inset 1px 1px 0 #fff, inset -1px -1px 0 #999; }
+.cat a{ padding:6px 10px; text-decoration:none; font-weight:700; }
+footer, .note{ font-size:12px; text-align:center; margin-top:14px; }
+@media(max-width:700px){ section.wide ul{ columns:1; } }
 </style>
 </head>
 <body>
 
-<header>
-  <a class="back-link" href="index.html">← Back to Directory</a> &nbsp; <a class="back-link" href="https://boccbo.cc/">← boccbo.cc</a>
-  <h1>Open Source Phonics — Site Index</h1>
-  <p>Free 120-lesson phonics program + decodable stories</p>
-</header>
+<div class="mac-menubar" data-up='[["Homeschool Wiki","index.html"],["boccbo.cc","https://boccbo.cc/"]]'>
+  <span class="mb-app">Open Source Phonics — Site Index</span>
+</div>
+<div class="wrap">
+<h1>Open Source Phonics — Site Index</h1>
+<p class="sub">Free 120-lesson phonics program + decodable stories</p>
 
 <div class="search-box">
   <input id="filter" type="text" placeholder="Filter (e.g. silent e, lesson 40, soft c)...">
@@ -260,6 +209,7 @@
 <footer>
   Personal index built from opensourcephonics.org navigation. Not affiliated with the site.
 </footer>
+</div>
 
 <script>
 document.getElementById('filter').addEventListener('input', function(e) {
@@ -280,5 +230,6 @@ document.getElementById('filter').addEventListener('input', function(e) {
 });
 </script>
 
+<script src="menubar.js"></script>
 </body>
 </html>
