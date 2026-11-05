@@ -4,119 +4,39 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Shelf List</title>
+<link rel="stylesheet" href="system7.css">
 <style>
-@font-face{font-family:"Lexend";font-style:normal;font-weight:100 900;src:local("Lexend"),url("fonts/Lexend.woff2") format("woff2");font-display:swap}
-
-:root{
-  --paper:#E9ECE1; --paper-alt:#F5F6EF; --paper-raised:#FFFFFF;
-  --ink:#2B3226; --ink-soft:#5B6350; --rule:#C9CFB9; --rule-strong:#A9B096;
-  --shadow: 0 1px 2px rgba(43,50,38,0.07), 0 3px 10px rgba(43,50,38,0.06);
-  --c-reading:#3E6E8E; --c-languagearts:#6B5AA0; --c-mathematics:#B8862B;
-  --c-science:#2E7D74; --c-socialstudies:#A8552E; --c-art:#A24B5E;
-  --c-music:#4C7A5E; --c-foreignlanguage:#4763A3; --c-healthandpe:#C2703F;
-  --c-lifeskills:#8A6A35; --c-religion:#7A4B73; --c-other:#6B7280;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --paper:#1E2420; --paper-alt:#242B25; --paper-raised:#2A322B;
-    --ink:#E9ECE1; --ink-soft:#AAB39B; --rule:#3B4438; --rule-strong:#4B5646;
-    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.28);
-    --c-reading:#7FB0CE; --c-languagearts:#A594D1; --c-mathematics:#D7A94B;
-    --c-science:#6FC2B8; --c-socialstudies:#D98A5C; --c-art:#D08A9A;
-    --c-music:#8AC49C; --c-foreignlanguage:#8098D6; --c-healthandpe:#E2A177;
-    --c-lifeskills:#C6A567; --c-religion:#C08AB8; --c-other:#A8AEB8;
-  }
-}
-:root[data-theme="dark"]{
-  --paper:#1E2420; --paper-alt:#242B25; --paper-raised:#2A322B;
-  --ink:#E9ECE1; --ink-soft:#AAB39B; --rule:#3B4438; --rule-strong:#4B5646;
-  --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.28);
-  --c-reading:#7FB0CE; --c-languagearts:#A594D1; --c-mathematics:#D7A94B;
-  --c-science:#6FC2B8; --c-socialstudies:#D98A5C; --c-art:#D08A9A;
-  --c-music:#8AC49C; --c-foreignlanguage:#8098D6; --c-healthandpe:#E2A177;
-  --c-lifeskills:#C6A567; --c-religion:#C08AB8; --c-other:#A8AEB8;
-}
-*{box-sizing:border-box;}
-body{
-  margin:0; background:var(--paper); color:var(--ink);
-  font-family:'Lexend', system-ui, sans-serif;
-  font-size:18px; line-height:1.5;
-}
-.wrap{max-width:920px; margin:0 auto; padding:2.5rem 1.25rem 4rem;}
-header{border-bottom:2px solid var(--rule-strong); padding-bottom:1.25rem; margin-bottom:1.5rem;}
-.eyebrow{
-  font-family:'Lexend', system-ui, sans-serif; font-size:0.875rem;
-  letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 0.5rem;
-}
-h1{font-size:clamp(1.8rem,4vw,2.5rem); margin:0 0 0.4rem; letter-spacing:-0.01em;}
-.dek{color:var(--ink-soft); margin:0; max-width:60ch;}
-
-.controls{position:sticky; top:0; background:var(--paper); padding:1rem 0 0.85rem; z-index:5;}
-.searchbox{
-  display:block; width:100%; font-size:1.05rem; font-family:inherit;
-  padding:0.7rem 1rem; border-radius:8px; border:1px solid var(--rule-strong);
-  background:var(--paper-raised); color:var(--ink); margin-bottom:0.85rem;
-}
-.searchbox:focus{outline:2px solid var(--c-reading); outline-offset:1px;}
-.chips{display:flex; flex-wrap:wrap; gap:0.45rem;}
-.chip{
-  font-family:'Lexend', system-ui, sans-serif; font-size:0.875rem;
-  letter-spacing:0.03em; text-transform:uppercase; font-weight:600;
-  border:1px solid var(--rule-strong); background:var(--paper-raised); color:var(--ink-soft);
-  padding:0.35rem 0.7rem; border-radius:999px; cursor:pointer; user-select:none;
-}
-.chip[aria-pressed="true"]{ color:#fff; border-color:transparent; }
-.count{color:var(--ink-soft); font-size:0.875rem; margin:0.9rem 0 0.6rem; font-family:'Lexend', system-ui, sans-serif;}
-
-ul.list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.5rem;}
-li.item{
-  display:flex; align-items:baseline; gap:0.75rem;
-  background:var(--paper-raised); border:1px solid var(--rule); border-left:4px solid var(--accent,var(--ink));
-  border-radius:6px; padding:0.6rem 0.9rem; box-shadow:var(--shadow);
-}
-li.item .title{flex:1; font-size:1rem;}
-li.item .badge{
-  font-family:'Lexend', system-ui, sans-serif; font-size:0.875rem; letter-spacing:0.05em;
-  text-transform:uppercase; font-weight:600; color:var(--accent,var(--ink-soft)); white-space:nowrap;
-}
-.empty{color:var(--ink-soft); padding:2rem 0; text-align:center; font-style:italic;}
-footer{margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:0.875rem;}
-
-li.item{flex-wrap:wrap;}
-li.item .title-group{flex:1; min-width:0;}
-li.item .author{display:block; font-size:0.875rem; color:var(--ink-soft); font-style:italic;}
-.shelf-tag{
-  font-family:'Lexend', system-ui, sans-serif; font-size:0.875rem; letter-spacing:0.04em;
-  text-transform:uppercase; font-weight:600; color:var(--ink-soft);
-  border:1px solid var(--rule-strong); border-radius:999px; padding:0.1rem 0.45rem; white-space:nowrap;
-}
-
-/* boccbo.cc look */
-:root:root{ --paper:#fff; --paper-alt:#fff; --paper-raised:rgba(139,69,19,.05); --ink:#000; --ink-soft:#666; --rule:#ccc; --rule-strong:#8B4513; --shadow:none; }
-body{ font-size:16px; padding:20px; }
-.wrap{ max-width:920px; padding:0 0 2rem; }
-header{ border-bottom:2px dashed #8B4513; }
-h1{ font-size:18px; text-transform:uppercase; color:#8B4513; letter-spacing:0; }
-.eyebrow{ color:#8B4513; }
-.searchbox{ border:2px dashed #8B4513; border-radius:0; font-size:16px; background:#fff; padding:5px 8px; }
-.searchbox:focus{ outline:none; background:rgba(139,69,19,.05); }
-.chip{ border:1px dashed #8B4513; border-radius:0; color:#8B4513; background:#fff; }
-.chip[aria-pressed="true"]{ background:#8B4513; color:#fff; border-color:#8B4513; }
-li.item{ border:1px dashed #8B4513; border-left:4px solid var(--accent,#8B4513); border-radius:0; box-shadow:none; }
-li.item .title{ font-size:16px; }
-.shelf-tag{ border-radius:0; border:1px dashed #8B4513; }
-footer{ border-top:2px dashed #8B4513; }
+.wrap{ max-width:920px; }
+.controls{ display:block; position:sticky; top:30px; z-index:5; background:#dddddd; padding:0 0 8px; }
+.searchbox{ display:block; width:100%; font:inherit; font-size:13px; padding:4px 7px; border:1px solid #000; border-radius:0;
+  background:#fff; box-shadow:inset 1px 1px 0 #999; margin-bottom:10px; }
+.searchbox:focus{ outline:none; }
+.chips{ display:flex; flex-wrap:wrap; gap:6px; }
+.chip{ font-size:12px; padding:3px 9px; }
+.chip[aria-pressed="true"]{ background:#000 !important; color:#fff; border-color:#000 !important; }
+.count{ font-size:12px; margin:6px 0; }
+ul.list{ list-style:none; margin:0; padding:0; background:#fff; border:1px solid #000; box-shadow:inset 1px 1px 0 #999; }
+li.item{ --accent:#000 !important; display:flex; flex-wrap:wrap; align-items:baseline; gap:10px; padding:5px 10px; border-bottom:1px dotted #999; }
+li.item:last-child{ border-bottom:none; }
+li.item:hover{ background:#000; color:#fff; }
+li.item .title-group{ flex:1; min-width:0; }
+li.item .title{ font-size:13px; font-weight:700; }
+li.item .author{ display:block; font-size:12px; font-style:italic; }
+li.item .badge{ font-size:11px; text-transform:uppercase; white-space:nowrap; }
+.shelf-tag{ font-size:11px; border:1px solid currentColor; padding:0 5px; white-space:nowrap; }
+.empty{ text-align:center; font-style:italic; padding:16px 0; }
+footer{ font-size:12px; margin-top:4px; }
 </style>
 </head>
 <body>
+<div class="mac-menubar" data-up='[["Homeschool Wiki","index.html"],["boccbo.cc","https://boccbo.cc/"]]'>
+  <span class="mb-app">Library Catalog</span>
+</div>
 <div class="wrap">
-  <header>
-    <p class="eyebrow"><a href="index.html">← Directory</a> · <a href="https://boccbo.cc/">← boccbo.cc</a></p>
-    <p class="eyebrow">Homeschool Library</p>
-    <h1>The Shelf List</h1>
-    <p class="dek">Every book in your Homeschool folder, plus the ones cataloged from your shelves — search by title/author or filter by subject.</p>
-  </header>
-
+  <h1>The Shelf List</h1>
+  <p class="sub">Every book in your Homeschool folder, plus the ones cataloged from your shelves — search by title/author or filter by subject.</p>
+  <div class="card">
+  <div class="mac-bar"><span class="mac-close"></span><span class="mac-title"><span>The Shelf List</span></span><span class="mac-zoom"></span></div>
   <div class="controls">
     <input class="searchbox" id="search" type="search" placeholder="Search titles…" autocomplete="off">
     <div class="chips" id="chips"></div>
@@ -126,6 +46,7 @@ footer{ border-top:2px dashed #8B4513; }
   <ul class="list" id="list"></ul>
   <p class="empty" id="empty" hidden>No titles match.</p>
 
+  </div>
   <footer>Generated from your Homeschool folder. Edit <code>sort_report.csv</code> in the same folder if you move things around, and re-run the catalog builder to refresh this page.</footer>
 </div>
 
@@ -220,5 +141,6 @@ document.getElementById('search').addEventListener('input', renderList);
 renderChips();
 renderList();
 </script>
+<script src="menubar.js"></script>
 </body>
 </html>

@@ -1,0 +1,53 @@
+/* System 7 look shared by every page. Screen only; print rules stay in each page. */
+*{ box-sizing:border-box; }
+body{ margin:0; font-family:"Geneva","Tahoma","Verdana",sans-serif; color:#000;
+  background-color:#8b8b8b;
+  background-image:radial-gradient(#7c7c7c 1px, transparent 1.4px), radial-gradient(#9c9c9c 1px, transparent 1.4px);
+  background-size:4px 4px; background-position:0 0, 2px 2px; }
+.mac-menubar{ position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:18px;
+  background:#fff; border-bottom:2px solid #000; padding:3px 12px;
+  font-family:"Chicago","Charcoal","Geneva",sans-serif; font-size:14px; }
+.mac-menubar .mb-app{ font-weight:700; }
+.mac-menubar a{ color:#000; text-decoration:none; } .mac-menubar a:hover{ background:#000; color:#fff; }
+.wrap{ max-width:1000px; margin:0 auto; padding:18px 14px 40px; }
+h1{ display:none; }
+.sub{ font-size:13px; margin:0 0 14px; background:#dddddd; border:1px solid #000;
+  box-shadow:inset 1px 1px 0 #fff, inset -1px -1px 0 #999; padding:6px 9px; line-height:1.45; }
+.card{ background:#dddddd; border:1px solid #000; border-radius:0;
+  box-shadow:2px 2px 0 rgba(0,0,0,.4), inset 1px 1px 0 #fff, inset -1px -1px 0 #999;
+  padding:14px; margin-bottom:16px; }
+.mac-bar{ display:flex; align-items:center; gap:8px; margin:-14px -14px 12px; padding:3px 7px;
+  border-bottom:1px solid #000;
+  background:repeating-linear-gradient(to bottom,#f4f4f4 0 2px,#b9b9b9 2px 4px);
+  font-family:"Chicago","Charcoal","Geneva",sans-serif; font-size:13px; }
+.mac-bar .mac-title{ flex:1; text-align:center; font-weight:700; }
+.mac-bar .mac-title span{ background:#dddddd; padding:0 10px; }
+.mac-close,.mac-zoom{ width:9px; height:9px; background:#000; border-radius:50%; flex:none; }
+button{ font-family:"Chicago","Charcoal","Geneva",sans-serif; font-size:13px; font-weight:700; color:#000;
+  background:#eeeeee; border:1px solid #000; border-radius:7px; padding:4px 14px; cursor:pointer;
+  box-shadow:inset 1px 1px 0 #fff, inset -1px -1px 0 #aaaaaa, 1px 1px 0 rgba(0,0,0,.3); }
+button:active, button.on{ background:#555; color:#fff; }
+#pdfBtn{ box-shadow:0 0 0 2px #dddddd, 0 0 0 3px #000, inset 1px 1px 0 #fff, inset -1px -1px 0 #aaaaaa; }
+button:disabled{ opacity:.45; cursor:default; }
+select, input[type="number"]{ font:inherit; font-weight:400; font-size:13px; padding:3px 6px; border:1px solid #000; border-radius:0; background:#fff; box-shadow:inset 1px 1px 0 #999; }
+input[type="number"]{ width:84px; }
+.field{ display:flex; flex-direction:column; gap:5px; font-size:12px; font-weight:700; }
+.field input[type="checkbox"]{ accent-color:#000; width:14px; height:14px; }
+.check{ flex-direction:row; align-items:center; gap:7px; padding-bottom:8px; }
+.hint{ font-size:12.5px; color:#222; margin:10px 0 0; line-height:1.45; }
+.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+.tabs button{ font-size:14px; padding:7px 18px; }
+.view{ display:none; } .view.active{ display:block; }
+.controls{ display:flex; flex-wrap:wrap; gap:14px 18px; align-items:end; }
+
+/* menu bar title drop-down (see menubar.js) */
+.mac-menubar .mb-app.has-menu{ position:relative; cursor:pointer; user-select:none; padding:0 6px; margin-left:-6px; }
+.mac-menubar .mb-app.has-menu.open{ background:#000; color:#fff; }
+.mb-chev{ display:inline-block; margin-left:7px; vertical-align:middle; width:0; height:0;
+  border-left:4px solid transparent; border-right:4px solid transparent; border-top:6px solid currentColor; }
+.mb-menu{ position:absolute; left:0; top:100%; margin:2px 0 0; padding:2px 0; min-width:170px; list-style:none; z-index:60;
+  background:#fff; color:#000; border:1px solid #000; box-shadow:2px 2px 0 rgba(0,0,0,.5); font-weight:400; }
+.mb-menu[hidden]{ display:none; }
+.mb-menu li{ display:block; }
+.mb-menu a{ display:block; padding:2px 14px; color:#000; text-decoration:none; white-space:nowrap; }
+.mb-menu a:hover{ background:#000; color:#fff; }

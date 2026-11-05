@@ -6,6 +6,7 @@
     
     <link rel="icon" href="data:," />
     <title>Interactive Math Visualization</title>
+    <link rel="stylesheet" href="../system7.css">
     <style>
 @font-face{font-family:"Lexend";font-style:normal;font-weight:100 900;src:local("Lexend"),url("../fonts/Lexend.woff2") format("woff2");font-display:swap}
 
@@ -494,40 +495,48 @@
         .progress > div, .lane { transition: none; }
       }
 
-      /* boccbo.cc look */
+      /* System 7 look (chrome from ../system7.css) */
       :root:root {
-        --bg:#fff; --panel:rgba(139,69,19,.05); --panel-2:#fff; --ink:#000; --ink-soft:#666;
-        --line:#ccc; --line-strong:#8B4513; --accent:#8B4513; --accent-ink:#8B4513; --accent-soft:rgba(139,69,19,.15);
-        --accent-solid:#8B4513; --chip:#fff; --shadow:none; --answer-bg:#fff;
-        --lane-a:rgba(139,69,19,.04); --lane-b:rgba(139,69,19,.09); --lane-line:rgba(139,69,19,.2); --lane-hi:rgba(139,69,19,.25);
-        --teal:#2E6F5E; --teal-soft:#e3f0ec;
+        --bg:#8b8b8b; --panel:#dddddd; --panel-2:#fff; --ink:#000; --ink-soft:#333;
+        --line:#777; --line-strong:#000; --accent:#000; --accent-ink:#000; --accent-soft:#bbbbbb;
+        --accent-solid:#000; --chip:#eeeeee; --shadow:none; --answer-bg:#fff;
+        --lane-a:rgba(0,0,0,.04); --lane-b:rgba(0,0,0,.09); --lane-line:rgba(0,0,0,.25); --lane-hi:rgba(0,0,0,.22);
+        --teal:#000; --teal-soft:#eeeeee;
       }
-      body { background-image:none; background-color:#fff; font-size:16px; padding:20px 4px; }
-      .wrap { padding:0 16px 40px; }
-      .topnav { margin:0 0 10px; font-size:16px; }
-      .topnav a { color:#0000EE; } .topnav a:visited { color:#551A8B; }
-      .intro { border-bottom:2px dashed #8B4513; padding-bottom:10px; }
-      .intro h1 { font-size:18px; text-transform:uppercase; color:#8B4513; letter-spacing:0; }
-      .intro p { font-size:16px; }
-      .card { border:2px dashed #8B4513; border-radius:0; box-shadow:none; }
-      .field input, .op-toggle, .btn, .narration { border-radius:0; }
-      .field input { border:2px dashed #8B4513; font-size:1.6rem; }
-      .op-toggle { border:2px dashed #8B4513; }
-      .btn { border:2px dashed #8B4513; color:#8B4513; font-size:16px; }
-      .btn.primary { background:#8B4513; color:#fff; border-style:solid; }
+      body { font-family:"Geneva","Tahoma","Verdana",sans-serif; font-size:14px; padding:0;
+        background-color:#8b8b8b;
+        background-image:radial-gradient(#7c7c7c 1px, transparent 1.4px), radial-gradient(#9c9c9c 1px, transparent 1.4px);
+        background-size:4px 4px; background-position:0 0, 2px 2px; }
+      .wrap { padding:18px 14px 40px; }
+      .intro { max-width:none; margin:0 0 14px; background:#dddddd; border:1px solid #000;
+        box-shadow:inset 1px 1px 0 #fff, inset -1px -1px 0 #999; padding:6px 9px; }
+      .intro h1 { display:block; font-size:14px; font-family:"Chicago","Charcoal","Geneva",sans-serif; margin:0 0 2px; text-transform:none; letter-spacing:0; }
+      .intro p { font-size:13px; color:#000; }
+      .card { background:#dddddd; border:1px solid #000; border-radius:0;
+        box-shadow:2px 2px 0 rgba(0,0,0,.4), inset 1px 1px 0 #fff, inset -1px -1px 0 #999; }
+      .field input, .op-toggle, .narration { border-radius:0; border:1px solid #000; box-shadow:inset 1px 1px 0 #999; }
+      .field input { font-size:1.4rem; }
+      .op-toggle button { border-radius:0; box-shadow:none; background:#eeeeee; color:#000; }
+      .op-toggle button.active { background:#000; color:#fff; }
+      .btn { font-family:"Chicago","Charcoal","Geneva",sans-serif; border:1px solid #000; border-radius:7px; background:#eeeeee; color:#000;
+        font-size:13px; padding:4px 14px; box-shadow:inset 1px 1px 0 #fff, inset -1px -1px 0 #aaaaaa, 1px 1px 0 rgba(0,0,0,.3); }
+      .btn.primary { background:#eeeeee; color:#000; box-shadow:0 0 0 2px #dddddd, 0 0 0 3px #000, inset 1px 1px 0 #fff, inset -1px -1px 0 #aaaaaa; }
+      .btn:active, .btn.primary:active { background:#555; color:#fff; }
       .preset, .place-tag, .progress, .progress > div { border-radius:0; }
-      .preset { border:1px dashed #8B4513; color:#8B4513; font-size:14px; }
-      .place-tag { font-size:14px; }
-      .field label, .presets .lbl, .note, .narr-label, .step-count, .board-head .t, .explainer { font-size:16px; }
-      .narration { border:1px dashed #8B4513; font-size:18px; }
+      .preset { border:1px solid #000; color:#000; font-size:12px; background:#eeeeee; }
+      .place-tag { font-size:12px; color:#fff; background:#000; }
+      .field label, .presets .lbl, .note, .narr-label, .step-count, .board-head .t, .explainer { font-size:12px; color:#000; }
+      .narration { background:#fff; font-size:14px; }
       .answer-row .cell.first, .answer-row .cell.last { border-radius:0; }
       .lane-label { font-size:max(11px,0.205em); }
       .digtok, .digtok.transfer, .cell, .cell .borrowed, .borrow-tag { border-radius:0; box-shadow:none; }
     </style>
   </head>
   <body>
+    <div class="mac-menubar" data-up='[["Homeschool Wiki","../index.html"],["boccbo.cc","https://boccbo.cc/"]]'>
+  <span class="mb-app">Math Visualization</span>
+</div>
     <main class="wrap">
-      <p class="topnav"><a href="../index.html">← Directory</a> · <a href="https://boccbo.cc/">← boccbo.cc</a></p>
       <div class="intro">
         <h1>Addition &amp; Subtraction</h1>
         <p>Type two numbers, pick + or −, then press Step.</p>
@@ -1639,5 +1648,6 @@
       })();
     </script>
 
-  </body>
+  <script src="../menubar.js"></script>
+</body>
 </html>
